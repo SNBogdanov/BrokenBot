@@ -245,6 +245,7 @@ Func Standard_Search()
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
 					GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
+					GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 					If _Sleep(1000) Then Return -1
 				ElseIf _ColorCheck(_GetPixelColor(36, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
@@ -261,7 +262,6 @@ Func Standard_Search()
 			EndIf
 		WEnd
 		GUICtrlSetData($lblresultvillagesattacked, GUICtrlRead($lblresultvillagesattacked) + 1)
-		GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 		If IsChecked($chkAlertSearch) Then
 			TrayTip("Match Found!", "Gold: " & $BaseData[2] & "; Elixir: " & $BaseData[3] & "; Dark: " & $BaseData[4] & "; Trophy: " & $BaseData[5] & "; Townhall: " & $BaseData[1] & ", " & $THLoc, 0)
 			If FileExists(@WindowsDir & "\media\Windows Exclamation.wav") Then
