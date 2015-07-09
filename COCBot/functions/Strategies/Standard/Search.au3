@@ -16,11 +16,11 @@ Func Standard_Search()
 
 	While 1
 		$calculateCondition = False
-		GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 		If $TakeAllTownSnapShot = 1 Then SetLog(GetLangText("msgWillSaveAll"), $COLOR_GREEN)
 
 		_BlockInputEx(3, "", "", $HWnD)
 		While 1
+		        GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 			; Make sure end battle button is visible
 			If Not _WaitForColor(36, 523, Hex(0xEE5056, 6), 50, 10) Then
 				ChkDisconnection()
@@ -245,7 +245,6 @@ Func Standard_Search()
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
 					GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
-					GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 					If _Sleep(1000) Then Return -1
 				ElseIf _ColorCheck(_GetPixelColor(36, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
