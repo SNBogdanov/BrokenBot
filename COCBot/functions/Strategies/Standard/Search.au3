@@ -245,7 +245,6 @@ Func Standard_Search()
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
 					GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
-					GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 					If _Sleep(1000) Then Return -1
 				ElseIf _ColorCheck(_GetPixelColor(36, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
