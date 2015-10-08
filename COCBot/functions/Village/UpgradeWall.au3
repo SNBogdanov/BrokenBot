@@ -2,25 +2,45 @@ Global $wallbuild
 Global $walllowlevel
 
 Func UpgradeWall()
+	SetLog(GetLangText("msgCheckWalls"))
 	If Not IsChecked($chkWalls) Then Return
 
-	VillageReport()
-	SetLog(GetLangText("msgCheckWalls"))
+        $FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
+	If $FreeBuilder = 0 Then
+		SetLog(GetLangText("msgNoBuilders"), $COLOR_RED)
+		Click(1, 1) ; Click Away
+		Return
+	EndIf
+
+;	VillageReport()
+	$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+	$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+	If $res>1 Then $ElixirCount = $res
 	$itxtWallMinGold = GUICtrlRead($txtWallMinGold)
 	$itxtWallMinElixir = GUICtrlRead($txtWallMinElixir)
-	Local $MinWallGold = Number($GoldCount) > Number($itxtWallMinGold)
-	Local $MinWallElixir = Number($ElixirCount) > Number($itxtWallMinElixir)
 
-	If IsChecked($UseGold) Then
-		If $MinWallGold Then
+
+
+
+	$GoldRequired=$UPWall[$icmbWalls+4]+$itxtWallMinGold
+	If $GoldRequired > $MaxGold And $MaxGold > 0 Then $GoldRequired=$MaxGold
+
+	$ElixirRequired=$UPWall[$icmbWallsE+8]+$itxtWallMinElixir
+	If $ElixirRequired > $MaxElixir And $MaxElixir > 0 Then $ElixirRequired=$MaxElixir
+
+	Local $MinWallGold = Number($GoldCount) > $GoldRequired
+	Local $MinWallElixir = Number($ElixirCount) > $ElixirRequired
+
+	If IsChecked($UseGold) Or isGoldFull() Then
+		If $MinWallGold  Or isGoldFull() Then
 			SetLog(GetLangText("msgWallUpGold"), $COLOR_BLUE)
 			UpgradeWallGold()			
 		Else
 			SetLog(GetLangText("msgGoldBelowMin"), $COLOR_RED)
 		EndIf
 	EndIf
-	If IsChecked($UseElixir) Then
-		If $MinWallElixir Then
+	If IsChecked($UseElixir) Or isElixirFull() Then
+		If $MinWallElixir Or isElixirFull() Then
 			Setlog(GetLangText("msgWallUpElix"), $COLOR_BLUE)
 			UpgradeWallelix()			
 		Else
@@ -32,11 +52,6 @@ EndFunc   ;==>UpgradeWall
 
 
 Func UpgradeWallelix()
-	If $FreeBuilder = 0 Then
-		SetLog(GetLangText("msgNoBuilders"), $COLOR_RED)
-		Click(1, 1) ; Click Away
-		Return
-	EndIf
 
 	checkWallE()
 	If $checkwalllogic Then
@@ -64,11 +79,6 @@ EndFunc   ;==>UpgradeWallelix
 
 
 Func UpgradeWallGold()
-	If $FreeBuilder = 0 Then
-		SetLog(GetLangText("msgNoBuilders"), $COLOR_RED)
-		Click(1, 1) ; Click Away
-		Return
-	EndIf
 
 	checkWall()
 	If $checkwalllogic Then

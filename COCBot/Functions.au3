@@ -20,7 +20,9 @@
 #include "functions\Notification\PushBullet.au3"
 
 #include "functions\Other\_Sleep.au3"
+#include "functions\Other\_PowerKeepAlive.au3"
 #include "functions\Other\Click.au3"
+#include "functions\Other\UpdateStat.au3"
 #include "functions\Other\CreateLogFile.au3"
 #include "functions\Other\FindPos.au3"
 #include "functions\Other\getBSPos.au3"
@@ -40,6 +42,7 @@
 #include "functions\Other\Pause.au3"
 #include "functions\Other\RedLineDeploy.au3"
 #include "functions\Other\ClickDrag.au3"
+#include "functions\Other\TaskBarControl.au3"
 
 #include "functions\Pixels\_CaptureRegion.au3"
 #include "functions\Pixels\_ColorCheck.au3"
@@ -89,3 +92,8 @@
 #include "functions\Village\CheckCostPerSearch.au3"
 #include "functions\Village\UpTroops.au3"
 #include "functions\Village\UpgradeHeroes.au3" ;==>upgradeHeroes
+#include "functions\Village\IdentifyBuilding.au3"
+
+#include "functions\Custom Functions\customized.au3" ; custom functions
+#include "functions\Custom Functions\Tesseract.au3"
+#include "functions\Custom Functions\SnipeWhileTraining.au3"

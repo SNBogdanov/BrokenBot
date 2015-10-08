@@ -181,7 +181,13 @@ Func DonateCC($Check = False)
 			If _Sleep(500) Then Return
 			Click($CCPos[0], $CCPos[1]) ; click clan castle
 			If _Sleep(500) Then Return
-			Click(459, 600) ; open clan page
+			_CaptureRegion()
+			If _ColorCheck(_GetPixelColor(516, 601), Hex(0xd85c57, 6), 10) Then
+			   Click(516, 601) ; tests if clan castle is not max level, then clicks the clan button
+			Else 
+			   Click(459, 600); if previous check fails, assumes CC is max level and try's to open clan page
+			EndIf
+			;Click(520, 600) ; open clan page old code			Click(459, 600) ; open clan page
 			If _Sleep(5000) Then Return ; wait for it to load
 			$Scroll = 0
 			While 1

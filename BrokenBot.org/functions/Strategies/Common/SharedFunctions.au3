@@ -9,6 +9,7 @@
 ;Check Out of Sync or Disconnection, if detected, bump speedBump by 0.5 seconds
 Func ChkDisconnection($disconnected = False)
 	_CaptureRegion()
+	Local $x, $y
 	Local $dummyX = 0
 	Local $dummyY = 0
 	If _ImageSearch(@ScriptDir & "\images\Client.bmp", 1, $dummyX, $dummyY, 50) = 1 Then
@@ -23,11 +24,11 @@ Func ChkDisconnection($disconnected = False)
 			EndIf
 		EndIf
 	EndIf
-	If _ImageSearch(@ScriptDir & "\images\Lost.bmp", 1, $dummyX, $dummyY, 50) = 1 Then
-		If $dummyX > 320 and $dummyX < 350 and $dummyY > 330 and $dummyY < 350 Then
+	If _ImageSearch(@ScriptDir & "\images\Lost.bmp", 1, $dummyX, $dummyY, 50) = 1 And Not $disconnected Then
+		If $dummyX > 320 And $dummyX < 350 And $dummyY > 330 And $dummyY < 350 Then
 			$disconnected = True
 			;Looks like lost connection is not related to search speed, test run without bump
-			SetLog("Lost Connection!", $COLOR_RED)
+;			SetLog("Lost Connection!", $COLOR_RED)
 ;~ 			$speedBump += 500
 ;~ 			If $speedBump > 5000 Then
 ;~ 				$speedBump=5000
@@ -37,90 +38,102 @@ Func ChkDisconnection($disconnected = False)
 ;~ 			EndIf
 		EndIf
 	EndIf
+	_CaptureRegion()
+	If _ImageSearchArea($device, 0, 237, 321, 293, 346, $x, $y, 80) And Not $disconnected Then
+;		SetLog(GetLangText("msgAnotherDev") & $itxtReconnect & GetLangText("msgAnotherDevMinutes"), $COLOR_RED)
+		$disconnected = True
+	EndIf
+
+	If _ImageSearch($break, 0, $x, $y, 80) And Not $disconnected Then
+;		SetLog(GetLangText("msgTakeBreak"), $COLOR_RED)
+		$disconnected = True
+	EndIf
+
+	If _ImageSearch($connectionlost, 0, $x, $y, 80) And Not $disconnected Then
+
+;        	SetLog(GetLangText("msgConnectionLost"), $COLOR_RED)
+		$disconnected = True
+	    EndIf
+	If _ImageSearch($maintenance, 0, $x, $y, 80) And Not $disconnected Then
+
+;		SetLog(GetLangText("msgMaintenance"), $COLOR_RED)
+		$disconnected = True
+	EndIf
+	
+	$Message = _PixelSearch(457, 300, 458, 330, Hex(0x33B5E5, 6), 10)
+	If IsArray($Message) And Not $disconnected  And Not $disconnected Then
+		$disconnected = True
+	EndIf
+
+	If _ColorCheck(_GetPixelColor(71, 530), Hex(0xC00000, 6), 20)  And Not $disconnected Then
+		$disconnected = True
+	EndIf
+
+	If _ColorCheck(_GetPixelColor(36, 523), Hex(0xEE5056, 6), 50)   And Not $disconnected Then
+		$disconnected = True
+	EndIf
 
 	If $disconnected = True Then
 		;increase disconnect counts
 		GUICtrlSetData($lblresultsearchdisconnected, GUICtrlRead($lblresultsearchdisconnected) + 1)
 		If $DebugMode = 1 Then _GDIPlus_ImageSaveToFile($hBitmap, $dirDebug & "DisConnt-" & @HOUR & @MIN & @SEC & ".png")
 
-		If $PushBulletEnabled = 1 and IsChecked($lbldisconnect) Then
+		If $PushBulletEnabled = 1 And IsChecked($lbldisconnect) Then
 			Local $iCount = _FileCountLines($sLogPath)
 			Local $myLines = ""
 			Local $i
-			For $i = 1 to 5
-				$myLines = $myLines &  FileReadLine($sLogPath, ($iCount - 5 + $i)) & "\n"
+			For $i = 1 To 5
+				$myLines = $myLines & FileReadLine($sLogPath, ($iCount - 5 + $i)) & "\n"
 			Next
 			_Push("Disconnected", "Your bot got disconnected while searching for enemy, total disconnections:" & GUICtrlRead($lblresultsearchdisconnected) & "\n" & _
-				GetLangText("pushLast5Lines") & $myLines)
+					GetLangText("pushLast5Lines") & $myLines)
 		EndIf
 	EndIf
 	Return $disconnected
-EndFunc
+EndFunc   ;==>ChkDisconnection
 
 
-Func ChkKingAvailability()
 
-	$KingAvailable = False
-	$KingUG = False
-	ClickP($TopLeftClient) ;Click Away
-	If $KingPos[0] = "" Then
-		Return False
-	Else
-		if _sleep(500) Then Return
-		Click($KingPos[0], $KingPos[1]) ;Click King Altar
-	EndIf
+Func ChkHeroesAvailability()
+	Local $result[3]=[False,False,False]
+	Local $Tab[4]=[149, 148, 0xA1CC41, 8]
 
-	If _Sleep(500) Then Return
+	$KingAvailable = False ; 470, 455 0xEBCB5F
+	$QueenAvailable = False; 529, 455 1. 0x402458 2. 0x7A41D4
+	If Not TryToOpenArmyOverview() Then Return $result
+;	TryToOpenArmyOverview() 
+	If _Sleep(150) Then Return $result
+	Click(150, 550, 2, 100) ; Try To return main page if its on other
+
 	_CaptureRegion()
+	Local $Hero1 = _GetPixelColor(470, 455)
+	Local $Hero2 = _GetPixelColor(529, 455)
 
-	Local $KingInfoPos = _WaitForPixel(260, 581, 350, 583, Hex(0x4084B8, 6), 5, 2) ;Finds Info button, wait max 2 seconds
-	If IsArray($KingInfoPos) = False Then
-		SetLog(GetLangText("msgKAUnavailable"), $COLOR_RED)
-	Else ;check if king is available for battle
-		$KingInfoPos =  _PixelSearch(510, 589, 585, 591, Hex(0xD13D08, 6), 5) ;Finds Healing button
-		If IsArray($KingInfoPos) = False Then
-			$KingInfoPos =  _PixelSearch(510, 589, 585, 591, Hex(0xD0EC75, 6), 5) ;Finds Finish now button, when under upgrading
-			If IsArray($KingInfoPos) Then
-				$KingUG = True
-			Else
-				$KingAvailable = True
-			EndIf
-		EndIf
-	EndIf
-	Setlog (GetLangText("msgKingAvail") & $KingAvailable)
-	Return $KingAvailable
-EndFunc
 
-Func ChkQueenAvailability()
 
-	$QueenAvailable = False
-	$QueenUG = False
+	If _ColorCheck($Hero1, Hex(0xEBCB5F, 6), 8) Then ; king
 
-	ClickP($TopLeftClient) ;Click Away
-	If $QueenPos[0] = "" Then
-		Return False
+		$KingAvailable = True
+		If _ColorCheck($Hero2, Hex(0x7A41D4, 6), 8) Then $QueenAvailable = True
+
+
 	Else
-		if _sleep(500) Then Return
-		Click($QueenPos[0], $QueenPos[1]) ;Click Queen Altar
+		$KingUG = True
+		If _ColorCheck($Hero1, Hex(0x402458, 6), 8) Then $QueenAvailable = True;queen
+
+
 	EndIf
 
-	If _Sleep(500) Then Return
-	_CaptureRegion()
 
-	Local $QueenInfoPos = _WaitForPixel(260, 581, 350, 583, Hex(0x4084B8, 6), 5, 2) ;Finds Info button, wait max 2 seconds
-	If IsArray($QueenInfoPos) = False Then
-		SetLog(GetLangText("msgQAUnavailable"), $COLOR_RED)
-	Else ;check if king is available for battle
-		$QueenInfoPos =  _PixelSearch(510, 589, 585, 591, Hex(0xD13D08, 6), 5) ;Finds Healing button
-		If IsArray($QueenInfoPos) = False Then
-			$QueenInfoPos =  _PixelSearch(510, 589, 585, 591, Hex(0xD0EC75, 6), 5) ;Finds Finish now button, when under upgrading
-			If IsArray($QueenInfoPos) Then
-				$QueenUG = True
-			Else
-				$QueenAvailable = True
-			EndIf
-		EndIf
+
+
+	Setlog(GetLangText("msgKingAvail") & $KingAvailable)
+	Setlog(GetLangText("msgQueenAvail") & $QueenAvailable)
+	$result[0] = $KingAvailable
+	$result[1] = $QueenAvailable
+	$result[2] = CheckPixel($Tab)
+	If $result[2] Then 
+		Setlog("Army Camp is full")
 	EndIf
-	Setlog (GetLangText("msgQueenAvail") & $QueenAvailable)
-	Return $QueenAvailable
-EndFunc
+	Return $result
+EndFunc   ;==>ChkHerosAvailability

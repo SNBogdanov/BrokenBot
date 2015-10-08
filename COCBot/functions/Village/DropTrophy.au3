@@ -3,27 +3,30 @@
 
 Func DropTrophy()
 	Local $i
-	Local $TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+	Local $Result=False
+;	Local $TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
 	If Number($TrophyCount) > Number($itxtMaxTrophy) Then
 		SetLog(GetLangText("msgTrophyCount") & $TrophyCount, $COLOR_GREEN)
+		ClickP($TopLeftClient) ;Click Away
 		While Number($TrophyCount) > Number($itxtMinTrophy)
 			If Number($TrophyCount) > Number($itxtMinTrophy) Then
 				SetLog(GetLangText("msgDropTrophies"), $COLOR_BLUE)
-				If StatusCheck() Then Return False
+
+				If StatusCheck() Then Return $Result
 
 				PrepareSearch()
 
 				; Make sure end battle button is visible
 				If Not _WaitForColor(36, 523, Hex(0xEE5056, 6), 50, 10) Then
 					ChkDisconnection()
-					Return -1
+					Return $Result
 				EndIf
 
 				; Make sure clouds have cleared
 				If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then Return -1
 
 				; Wait just a bit extra
-				If _Sleep(100) Then Return
+				If _Sleep(100) Then Return $Result
 
 				$KingAt = -1
 				$QueenAt = -1
@@ -63,7 +66,7 @@ Func DropTrophy()
 					If $QueenAt <> -1 Then $DropTroop = $QueenAt
 					If $KingAt <> -1 Then $DropTroop = $KingAt
 					SelectDropTroupe($DropTroop)
-					If _Sleep(200) Then Return False
+					If _Sleep(200) Then Return $Result
 					_CaptureRegion()
 					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 720, _GDIPlus_ImageGetPixelFormat($hBitmap))
 					SeekEdges()
@@ -117,13 +120,16 @@ Func DropTrophy()
 				EndIf
 
 				ReturnHome(False, False) ;Return home no screenshot
-				If StatusCheck() Then Return False
+				$Raid=0
+				$Result=True
+				If StatusCheck() Then Return $Result
 				$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+				UpdateStat(0,0,0,$TrophyCount)
 				SetLog(GetLangText("msgTrophyCount") & $TrophyCount, $COLOR_GREEN)
 			Else
 				SetLog(GetLangText("msgDropComplete"), $COLOR_BLUE)
 			EndIf
 		WEnd
-		Return True
 	EndIf
+	Return $Result
 EndFunc   ;==>DropTrophy

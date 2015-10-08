@@ -4,7 +4,10 @@
 ; Author ........: Bunana123@obudu (2015)
 ; ===============================================================================================================================
 Func UpgradeHeroes()
-If $ichkUpgradeKing = 0 And $ichkUpgradeQueen = 0 Then Return
+	$ichkUpgradeKing=IsChecked($chkUpgradeKing)
+	$ichkUpgradeQueen=IsChecked($chkUpgradeQueen)
+	If $ichkUpgradeKing = 0 And $ichkUpgradeQueen = 0 Then Return
+	SetLog("Checking Upgrade Heroes...")
 
 			$FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
 			Setlog(GetLangText("msgNumFreeBuild") & $FreeBuilder, $COLOR_GREEN)

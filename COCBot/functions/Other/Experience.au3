@@ -1,15 +1,18 @@
 Func experience()
-		Local $totalLoops = 0
-		Local $successfulLoops = 0
-		Local $expGained = 0
+	Local $Result[3]
+		Local $localLoops = 0
 		Local $maxLoops = 30
 		If IsChecked($mixmodenormexp) Then $maxLoops = 15
 
-        While True And $totalLoops < $maxLoops
+        While True And $localLoops < $maxLoops
+				$localLoops += 1
 				$totalLoops += 1
 
                 ;if the AQ is available, attack Goblin Picnic with her
-                If ChkQueenAvailability() Then
+		$Result=ChkHeroesAvailability()
+		Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
+		If IsChecked($mixmodenormexp) And $Result[2] = True Then ExitLoop
+                If $QueenAvailable Then
                         Click(66 + Random(-5,5,1), 607+ Random(-5,5,1));attack button
 
                         Local $loadedGobScreen = _WaitForPixel(819, 17, 923, 21, Hex(0xF88488, 6), 5, 30) ;determines if gob attack is loaded, wait max 30 seconds
@@ -112,13 +115,17 @@ Func experience()
 								errorReturnHome()
 								ContinueLoop
                         EndIf
-						$successfulLoops += 1
-						$expGained += 5
+			$successfulLoops += 1
+			$expGained += 5
                         SetLog(GetLangText("msgVictory") & " " & $successfulLoops & " out of " & $totalLoops & " successful. " & $expGained & " Exp gained since start", $COLOR_BLUE)
-
+                        If _Sleep(500) Then Return
+                        If Not checkMainScreen() Then
+				If ChkDisconnection() Then ExitLoop
+			EndIf
+			If $Checkrearm Then ExitLoop
 
                 ;If the AQ is unavailable, attack the 2nd goblin base with the Barb King
-                ElseIf ChkKingAvailability() Then
+                ElseIf $KingAvailable Then
 
                         Click(66 + Random(-5,5,1), 607 + Random(-5,5,1));attack button
 						If Not _WaitForColorArea(287, 494, 5, 5, Hex(0xEEAC28, 6), 50) Then
@@ -182,18 +189,22 @@ Func experience()
 						Click(428 + Random(-5,5,1), 544 + Random(-5,5,1)) ;return home button
                         If _Sleep(1000) Then Return
 
-                        checkMainScreen()
 
-						$successfulLoops += 1
+			$successfulLoops += 1
                         $expGained += 1
                         SetLog(GetLangText("msgVictory") & " " & $successfulLoops & " out of " & $totalLoops & " successful. " & $expGained & " Exp gained since start", $COLOR_BLUE)
                         If _Sleep(500) Then Return
+                        If Not checkMainScreen() Then
+				If ChkDisconnection() Then ExitLoop
+			EndIf
+			If $Checkrearm Then ExitLoop
                 Else
 					;If in hybrid mode, break out of loop
+					Click(1, 1) ;Click away If things are open
+					$totalLoops -= 1
 					If IsChecked($mixmodenormexp) Then Return
 
 					;If neither hero is available, wait 30 seconds then check heroes again
-					$totalLoops -= 1
 					SetLog("Waiting for Hero...", $COLOR_BLUE)
 					If _Sleep(30000) Then Return
 				EndIf

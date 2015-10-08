@@ -109,7 +109,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	EndIf
 	IniWrite($config, "upgrade", "walllvlG", _GUICtrlComboBox_GetCurSel($cmbWalls))
 	IniWrite($config, "upgrade", "walllvlE", _GUICtrlComboBox_GetCurSel($cmbWallsE))
-	IniWrite($config, "upgrade", "walltolerance", _GUICtrlComboBox_GetCurSel($cmbTolerance))
+;	IniWrite($config, "upgrade", "walltolerance", _GUICtrlComboBox_GetCurSel($cmbTolerance))
 	If IsChecked($UseGold) Then
 		IniWrite($config, "upgrade", "wallusegold", 1)
 	Else
@@ -124,21 +124,21 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWrite($config, "upgrade", "minwallelixir", GUICtrlRead($txtWallMinElixir))
 
 	; Relics below...in save but not read
-	If IsChecked($chkUpgrade1) Then
-		IniWrite($config, "upgrade", "auto-upgrade1", 1)
-	Else
-		IniWrite($config, "upgrade", "auto-upgrade1", 0)
-	EndIf
-	If IsChecked($chkUpgrade2) Then
-		IniWrite($config, "upgrade", "auto-upgrade2", 1)
-	Else
-		IniWrite($config, "upgrade", "auto-upgrade2", 0)
-	EndIf
-	If IsChecked($chkUpgrade3) Then
-		IniWrite($config, "upgrade", "auto-upgrade3", 1)
-	Else
-		IniWrite($config, "upgrade", "auto-upgrade3", 0)
-	EndIf
+;	If IsChecked($chkUpgrade1) Then
+;		IniWrite($config, "upgrade", "auto-upgrade1", 1)
+;	Else
+;		IniWrite($config, "upgrade", "auto-upgrade1", 0)
+;	EndIf
+;	If IsChecked($chkUpgrade2) Then
+;		IniWrite($config, "upgrade", "auto-upgrade2", 1)
+;	Else
+;		IniWrite($config, "upgrade", "auto-upgrade2", 0)
+;	EndIf
+;	If IsChecked($chkUpgrade3) Then
+;		IniWrite($config, "upgrade", "auto-upgrade3", 1)
+;	Else
+;		IniWrite($config, "upgrade", "auto-upgrade3", 0)
+;	EndIf
 ;~ 	If IsChecked($chkUpgrade4) Then
 ;~ 		IniWrite($config, "upgrade", "auto-upgrade4", 1)
 ;~ 	Else
@@ -154,11 +154,11 @@ Func saveConfig() ;Saves the controls settings to the config
 ;~ 	Else
 ;~ 		IniWrite($config, "upgrade", "auto-upgrade6", 0)
 ;~ 	EndIf
-	IniWrite($config, "upgrade", "PosX1", GUICtrlRead($txtUpgradeX1))
-	IniWrite($config, "upgrade", "PosY2", GUICtrlRead($txtUpgradeY2))
-	IniWrite($config, "upgrade", "PosX2", GUICtrlRead($txtUpgradeX2))
-	IniWrite($config, "upgrade", "PosY3", GUICtrlRead($txtUpgradeY3))
-	IniWrite($config, "upgrade", "PosX3", GUICtrlRead($txtUpgradeX3))
+;~ 	IniWrite($config, "upgrade", "PosX1", GUICtrlRead($txtUpgradeX1))
+;~ 	IniWrite($config, "upgrade", "PosY2", GUICtrlRead($txtUpgradeY2))
+;~ 	IniWrite($config, "upgrade", "PosX2", GUICtrlRead($txtUpgradeX2))
+;~ 	IniWrite($config, "upgrade", "PosY3", GUICtrlRead($txtUpgradeY3))
+;~ 	IniWrite($config, "upgrade", "PosX3", GUICtrlRead($txtUpgradeX3))
 ;~ 	IniWrite($config, "upgrade", "PosY4", GUICtrlRead($txtUpgradeY4))
 ;~ 	IniWrite($config, "upgrade", "PosX4", GUICtrlRead($txtUpgradeX4))
 ;~ 	IniWrite($config, "upgrade", "PosY5", GUICtrlRead($txtUpgradeY5))
@@ -179,6 +179,8 @@ Func saveConfig() ;Saves the controls settings to the config
         IniWrite($config, "Upgrade", "UpQueen", 0)
     EndIf
     IniWrite($config, "Upgrade", "KeepFreeBuilder", GUICtrlRead($txtKeepFreeBuilder)) ;==>FreeBuilderBox
+    IniWrite($config, "Upgrade", "UpgradeMinimumGold",GUICtrlRead($inpUPMinimumGold))
+    IniWrite($config, "Upgrade", "UpgradeMinimumElixir",GUICtrlRead($inpUPMinimumElixir))
 
 	If IsChecked($chkLab) Then
 		IniWrite($config, "upgrade", "auto-uptroops", 1)
@@ -250,7 +252,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	Else
 		IniWrite($config, "notification", "attackimage", 0)
 	EndIf
-	IniWrite($config, "notification", "user", GUICtrlRead($inppushuser))
+	IniWrite($config, "notification", "user@"&@ComputerName, GUICtrlRead($inppushuser))
 ;~ 	If IsChecked($chkBBSendData) Then
 ;~ 		IniWrite($config, "brokenbot.org", "senddata", 1)
 ;~ 	Else
@@ -316,44 +318,45 @@ Func saveConfig() ;Saves the controls settings to the config
 	$array = _GUICtrlComboBox_GetListArray($cmbLanguage)
 	IniWrite($config, "config", "language", $array[_GUICtrlComboBox_GetCurSel($cmbLanguage) + 1])
 	If IsChecked($chkBackground) Then
-		IniWrite($config, "config", "Background", 1)
+		IniWrite($config, "config", "Background@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "Background", 0)
+		IniWrite($config, "config", "Background@"&@ComputerName, 0)
 	EndIf
 	If IsChecked($chkForceBS) Then
-		IniWrite($config, "config", "ForceBS", 1)
+		IniWrite($config, "config", "ForceBS@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "ForceBS", 0)
+		IniWrite($config, "config", "ForceBS@"&@ComputerName, 0)
 	EndIf
 	If IsChecked($chkUpdate) Then
-		IniWrite($config, "config", "chkUpdate", 1)
+		IniWrite($config, "config", "chkUpdate@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "chkUpdate", 0)
+		IniWrite($config, "config", "chkUpdate@"&@ComputerName, 0)
 	EndIf
 	If IsChecked($chkStayAlive) Then
-		IniWrite($config, "config", "stayalive", 1)
+		IniWrite($config, "config", "stayalive@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "stayalive", 0)
+		IniWrite($config, "config", "stayalive@"&@ComputerName, 0)
 	EndIf
 	If IsChecked($chkSpeedBoost) Then
-		IniWrite($config, "config", "speedboost", 1)
+		IniWrite($config, "config", "speedboost@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "speedboost", 0)
+		IniWrite($config, "config", "speedboost@"&@ComputerName, 0)
 	EndIf
 	If IsChecked($chkHelper) Then
-		IniWrite($config, "config", "usehelper", 1)
+		IniWrite($config, "config", "usehelper@"&@ComputerName, 1)
 	Else
-		IniWrite($config, "config", "usehelper", 0)
+		IniWrite($config, "config", "usehelper@"&@ComputerName, 0)
 	EndIf
-
+	IniWrite($config, "config", "LogFontName", GUICtrlRead($lblFontName))
+	IniWrite($config, "config", "LogFontSize", GUICtrlRead($lblFontSize))
 	;---------------------------------------------------------------------------------------
 	; Base location settings ---------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
 	IniWrite($config, "position", "xCCPos", $CCPos[0])
 	IniWrite($config, "position", "yCCPos", $CCPos[1])
 	Local $frmBotPos = WinGetPos($sBotTitle)
-	IniWrite($config, "position", "frmBotPosX", $frmBotPos[0])
-	IniWrite($config, "position", "frmBotPosY", $frmBotPos[1])
+	IniWrite($config, "position", "frmBotPosX@"&@ComputerName, $frmBotPos[0])
+	IniWrite($config, "position", "frmBotPosY@"&@ComputerName, $frmBotPos[1])
 	IniWrite($config, "position", "xTownHall", $TownHallPos[0])
 	IniWrite($config, "position", "yTownHall", $TownHallPos[1])
 	IniWrite($config, "position", "xArmy", $ArmyPos[0])
@@ -364,18 +367,20 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWrite($config, "position", "yKing", $KingPos[1])
 	IniWrite($config, "position", "xQueen", $QueenPos[0])
 	IniWrite($config, "position", "yQueen", $QueenPos[1])
-	For $i = 0 To 1 ;Cover 2 Dark Barracks
-		IniWrite($config, "position", "xDarkBarrack" & $i + 1, $DarkBarrackPos[$i][0])
-		IniWrite($config, "position", "yDarkBarrack" & $i + 1, $DarkBarrackPos[$i][1])
-	Next
-	For $i = 0 To 16 ;Covers all Collectors
-		IniWrite($config, "position", "xCollector" & $i + 1, $collectorPos[$i][0])
-		IniWrite($config, "position", "yCollector" & $i + 1, $collectorPos[$i][1])
-	Next
-	For $i = 0 To 3 ;Covers all 4 Barracks
-		IniWrite($config, "position", "xBarrack" & $i + 1, $barrackPos[$i][0])
-		IniWrite($config, "position", "yBarrack" & $i + 1, $barrackPos[$i][1])
-	Next
+;	For $i = 0 To 1 ;Cover 2 Dark Barracks
+;		IniWrite($config, "position", "xDarkBarrack" & $i + 1, $DarkBarrackPos[$i][0])
+;		IniWrite($config, "position", "yDarkBarrack" & $i + 1, $DarkBarrackPos[$i][1])
+;	Next
+;	For $i = 0 To 16 ;Covers all Collectors
+;		IniWrite($config, "position", "xCollector" & $i + 1, $collectorPos[$i][0])
+;		IniWrite($config, "position", "yCollector" & $i + 1, $collectorPos[$i][1])
+;	Next
+;	For $i = 0 To 3 ;Covers all 4 Barracks
+;		IniWrite($config, "position", "xBarrack" & $i + 1, $barrackPos[$i][0])
+;		IniWrite($config, "position", "yBarrack" & $i + 1, $barrackPos[$i][1])
+;	Next
 	IniWrite($config, "position", "LabPosX", $LabPos[0])
 	IniWrite($config, "position", "LabPosY", $LabPos[1])
+	ModSave()
+
 EndFunc   ;==>saveConfig

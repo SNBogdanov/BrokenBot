@@ -68,7 +68,7 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 	EndIf
 	_GUICtrlComboBox_SetCurSel($cmbWalls, $icmbWalls)
 	_GUICtrlComboBox_SetCurSel($cmbWallsE, $icmbWallsE)
-	_GUICtrlComboBox_SetCurSel($cmbTolerance, $icmbTolerance)
+;	_GUICtrlComboBox_SetCurSel($cmbTolerance, $icmbTolerance)
 
 	If $iWallUseGold = 1 Then
 		GUICtrlSetState($UseGold, $GUI_CHECKED)
@@ -84,6 +84,12 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 
 	GUICtrlSetData($txtWallMinGold, $itxtWallMinGold)
 	GUICtrlSetData($txtWallMinElixir, $itxtWallMinElixir)
+
+	If $ichkForceBS = 1 Then
+		GUICtrlSetState($chkForceBS, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkForceBS, $GUI_UNCHECKED)
+	EndIf
 
 	;Lab
 	If $ichkLab = 1 Then
@@ -107,6 +113,8 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 	EndIf
 
 	GUICtrlSetData($txtKeepFreeBuilder, $itxtKeepFreeBuilder) ;==>FreeBuilderBox
+	GUICtrlSetData($inpUPMinimumGold, $iinpUPMinimumGold)
+	GUICtrlSetData($inpUPMinimumElixir, $iinpUPMinimumElixir)
 
 
 ;General Settings--------------------------------------------------------------------------
@@ -274,5 +282,46 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 	Else
 		GUICtrlSetState($chkDonateOnly, $GUI_UNCHECKED)
 	EndIf
+
+;If $ichkUpgrade1 = 1 Then 
+;  GUICtrlSetState($chkUpgrade1, $GUI_CHECKED)
+;	GUICtrlSetState($txtUpgradeX1, $GUI_ENABLE)
+;	GUICtrlSetState($txtUpgradeY1, $GUI_ENABLE)
+;	GUICtrlSetData($txtUpgradeX1, $itxtUpgradeX1)
+;	GUICtrlSetData($txtUpgradeY1, $itxtUpgradeY1)
+;Else
+;  GUICtrlSetState($chkUpgrade1, $GUI_UNCHECKED)
+;	GUICtrlSetState($txtUpgradeX1, $GUI_DISABLE)
+;	GUICtrlSetState($txtUpgradeY1, $GUI_DISABLE)
+;EndIf
+
+;If $ichkUpgrade2 = 1 Then 
+;  GUICtrlSetState($chkUpgrade2, $GUI_CHECKED)
+;	GUICtrlSetState($txtUpgradeX2, $GUI_ENABLE)
+;	GUICtrlSetState($txtUpgradeY2, $GUI_ENABLE)
+;	GUICtrlSetData($txtUpgradeX2, $itxtUpgradeX2)
+;	GUICtrlSetData($txtUpgradeY2, $itxtUpgradeY2)
+;Else
+;  GUICtrlSetState($chkUpgrade2, $GUI_UNCHECKED)
+;	GUICtrlSetState($txtUpgradeX2, $GUI_DISABLE)
+;	GUICtrlSetState($txtUpgradeY2, $GUI_DISABLE)
+;EndIf
+
+;If $ichkUpgrade3 = 1 Then 
+;  GUICtrlSetState($chkUpgrade3, $GUI_CHECKED)
+;	GUICtrlSetState($txtUpgradeX3, $GUI_ENABLE)
+;	GUICtrlSetState($txtUpgradeY3, $GUI_ENABLE)
+;	GUICtrlSetData($txtUpgradeX3, $itxtUpgradeX3)
+;	GUICtrlSetData($txtUpgradeY3, $itxtUpgradeY3)
+;Else
+;  GUICtrlSetState($chkUpgrade3, $GUI_UNCHECKED)
+;	GUICtrlSetState($txtUpgradeX3, $GUI_DISABLE)
+;	GUICtrlSetState($txtUpgradeY3, $GUI_DISABLE)
+;EndIf
+
+
+	GUICtrlSetData($lblFontName,$ilblFontName)
+	GUICtrlSetData($lblFontSize,$ilblFontSize)
+
 
 EndFunc   ;==>applyConfig

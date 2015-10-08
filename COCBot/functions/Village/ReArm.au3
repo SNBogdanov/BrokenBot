@@ -1,6 +1,6 @@
 ;==>ReArm
 Func ReArm()
-	If $ichkTrap = 0 Then Return
+	If Not IsChecked($chkTrap) Then Return
 
 	SetLog(GetLangText("msgCheckRearm"), $COLOR_BLUE)
 

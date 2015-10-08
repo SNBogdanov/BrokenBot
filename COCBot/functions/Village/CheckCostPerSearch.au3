@@ -5,7 +5,10 @@ Func CheckCostPerSearch()
 		SetLog(GetLangText("msgCheckGold"), $COLOR_GREEN)
 
 		If $TownHallPos[0] = "" Then
-			If Not LocateTownHall() Then Return
+			If Not LocateTownHall() Then 
+				SetLog(GetLangText("msgFailedTH"), $COLOR_RED)
+				Return
+			EndIf
 			SaveConfig()
 		EndIf
 
@@ -26,6 +29,14 @@ Func CheckCostPerSearch()
 				Return
 			Else
 				$MenuBar = StringStripWS(ReadText(175, 138, 500, $textWindowTitles),3)
+				$THName = StringReplace(StringStripWS($MenuBar,3),"N","n")
+				$THName = StringReplace(StringRegExpReplace($THName,"[0-9]","")," (Level )","")
+				If $THName <> "Town Hall" Then
+					SetLog(GetLangText("msgFailedTH"), $COLOR_RED)
+					SetLog("Set language to English or locate Town Hall", $COLOR_RED)
+					ClickP($TopLeftClient, 2, 250)
+					Return
+				EndIf
 				$THLevel = Number(StringRegExpReplace(StringRight($MenuBar, 25),"[^0-9]",""))
 				If $THLevel = "1" Then
 					$SearchCost = 10

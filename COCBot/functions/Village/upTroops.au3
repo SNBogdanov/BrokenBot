@@ -33,10 +33,14 @@ Func Laboratory()
 		Return
 	EndIf
 	If $LabPos[0] = "" Or $LabPos[1] = "" Then
+		If Not LocateLab() Then Return
+		SaveConfig()
+		If _Sleep(1000) Then Return
 		SetLog(GetLangText("msgLabLocNotSet"), $COLOR_RED)
 		ClickP($TopLeftClient) ; Click Away
 		Return
 	EndIf
+	SetLog("Checking Upgrade Troops...")
 	Click($LabPos[0], $LabPos[1]);Click Laboratory
 	If _Sleep(1000) Then Return
 	SetLog(GetLangText("msgLabSearching") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_BLUE)

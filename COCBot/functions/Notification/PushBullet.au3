@@ -21,7 +21,22 @@ Func _RemoteControl()
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 				If StringLeft($title[$x], 8) = "BOT HELP" Then
 					SetLog(GetLangText("msgPBHelpSent"))
-					_Push(GetLangText("pushHRa"), GetLangText("pushHRb"))
+					_Push(GetLangText("pushHRa"), GetLangText("pushHRb") & _
+																			  "\n\n----Additional Commands----\n\n" & _
+																  "Warning: BrokenBot will follow these commands without considering what it is currently doing, even if it is in the middle of an ongoing attack\n\n" & _
+															"[o] Stop - Stop BrokenBot, close BlueStacks and leave BrokenBot open\n" & _
+															"[o] Start - Start BrokenBot. Bot must be left open to start it with this command.\n" & _
+															"[o] Reset - Reset statistics" & _
+															"[o] RestartBS - Restart BlueStacks\n" & _
+															"[o] RestartBot - Restart BrokenBot\n" & _
+															"[o] Restart - Restart BlueStacks and BrokenBot\n" & _
+															"[o] ManualRestart - Use this in case your logs show that a manual restart is required. This will fully close BrokenBot and BlueStacks and then start BrokenBot again. Be warned: bot will start with the first available strategy in alphabetical order.\n" & _
+															"[Note] The command ManualRestart will work with BrokenBot.au3 without any extra effort, but to use it with BrokenBot.exe, you need to compile the file RestartBrokenBot.au3 into RestartBrokenBot.exe"
+																			  "\n\n----Danger Zone----\n\n" & _
+																  "The following commands will make BrokenBot inaccessible\n\n" & _
+															"[o] Quit - Close BlueStacks and BrokenBot\n" & _
+															"[o] Sleep - Put your computer into sleep/suspend mode\n" & _
+															"[o] Shutdown - Shut down your computer" & _)
 					_DeleteMessage($iden[$x])
 				ElseIf StringLeft($title[$x], 9) = "BOT PAUSE" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
 					If $PauseBot = False Then
@@ -46,13 +61,120 @@ Func _RemoteControl()
 					_DeleteMessage($iden[$x])
 				ElseIf StringLeft($title[$x], 9) = "BOT STATS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
 					SetLog(GetLangText("msgPBStats"))
-					_Push(GetLangText("pushStatRa"), GetLangText("pushStatRb") & GUICtrlRead($lblresultgoldtstart) & GetLangText("pushStatRc") & GUICtrlRead($lblresultelixirstart) & GetLangText("pushStatRd") & GUICtrlRead($lblresultdestart) & GetLangText("pushStatRe") & GUICtrlRead($lblresulttrophystart) & GetLangText("pushStatRf") & GUICtrlRead($lblresultgoldnow) & GetLangText("pushStatRg") & GUICtrlRead($lblresultelixirnow) & GetLangText("pushStatRh") & GUICtrlRead($lblresultdenow) & GetLangText("pushStatRi") & GUICtrlRead($lblresulttrophynow) & GetLangText("pushStatRj") & GetLangText("pushStatRk") & GUICtrlRead($lblwallupgradecount) & GetLangText("pushStatRl") & GUICtrlRead($lblresultgoldgain) & GetLangText("pushStatRm") & GUICtrlRead($lblresultelixirgain) & GetLangText("pushStatRn") & GUICtrlRead($lblresultdegain) & GetLangText("pushStatRo") & GUICtrlRead($lblresulttrophygain) & GetLangText("pushStatRp") & GUICtrlRead($lblresultvillagesattacked) & GetLangText("pushStatRq") & GUICtrlRead($lblresultvillagesskipped) & GetLangText("pushStatRq1") & GUICtrlRead($lblresultsearchdisconnected) & GetLangText("pushStatRr") & GUICtrlRead($lblresultsearchcost) & GetLangText("pushStatRs") & StringFormat("%02i:%02i:%02i", $hour, $min, $sec))
+					_Push(GetLangText("pushStatRa"), _PushStatisticsString())
 					_DeleteMessage($iden[$x])
+				ElseIf StringLeft($title[$x], 9) = "BOT RESET" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+        				StatusCheck()
+					SetLog("Your request has been received. Resetting statistics.")
+					_Push("Request to Reset Statistics", "Report of status before resetting statistics:\n\n" & _PushStatisticsString())
+					$GoldStart=0
+					$GoldUpgraded=0
+					$ElixirStart=0
+					$ElixirUpgraded=0
+					$DarkStart=0
+					$DarkUpgraded=0
+					$TropyStart=0
+				        $GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+					$ElixirCount = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+				        If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+				        ; No DE
+						$GemCount = Number(ReadText(736, 124, 68, $textMainScreen, 0))
+        				Else
+            					$DarkCount = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+            					$GemCount = Number(ReadText(736, 173, 68, $textMainScreen, 0))
+        				EndIf
+        				$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+
+					GUICtrlSetData($lblwallupgradecount, 0)
+					GUICtrlSetData($lblresultsearchcost, 0)
+					GUICtrlSetData($lblresultvillagesskipped,0)
+					GUICtrlSetData($lblresultvillagesattacked,0)
+					GUICtrlSetData($lblresultsearchdisconnected,0)
+					UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
+					$PushBulletvillagereportTimer = TimerInit()
+					_DeleteMessage($iden[$x])
+					If IsChecked($lblpushbulletenabled) And IsChecked($lblpushbulletdelete) Then
+						_DeletePush()
+					EndIf
 				ElseIf StringLeft($title[$x], 8) = "BOT LOGS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
 					SetLog(GetLangText("msgPBLog"))
 					_PushFile($sLogFileName, "logs", "text/plain; charset=utf-8", "Current Logs", $sLogFileName)
 					_DeleteMessage($iden[$x])
-				EndIf
+			    ElseIf StringLeft($title[$x], 13) = "BOT RESTARTBS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 13), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Restarting BlueStacks now.")
+					_DeleteMessage($iden[$x])
+					restartBlueStack()
+				ElseIf StringLeft($title[$x], 14) = "BOT RESTARTBOT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 14), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Restarting BrokenBot now.")
+					_Push("Request to Restart", "Restarting BrokenBot")
+					_DeleteMessage($iden[$x])
+					btnStop()
+					btnStart()
+				 ElseIf StringLeft($title[$x], 11) = "BOT RESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 11), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Restarting BlueStacks and BrokenBot now.")
+					_Push("Request to Restart", "Restarting BlueStack and BrokenBot")
+					_DeleteMessage($iden[$x])
+					restartBlueStack()
+					btnStop()
+					btnStart()
+				 ElseIf StringLeft($title[$x], 9) = "BOT SLEEP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Putting your PC to Sleep.")
+					_Push("Request to Sleep", "Putting your computer to Sleep. No command can be accepted after this.")
+					_DeleteMessage($iden[$x])
+					Shutdown(32)
+					btnStop()
+				 ElseIf StringLeft($title[$x], 12) = "BOT SHUTDOWN" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 12), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Your computer will be switched off.")
+					_Push("Request to Shut down", "Switching off your computer. No command can be accepted after this.")
+					_DeleteMessage($iden[$x])
+					Shutdown(5)
+					btnStop()
+				 ElseIf StringLeft($title[$x], 8) = "BOT QUIT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. BrokenBot will close BlueStacks and quit.")
+					_Push("Request to Quit", "Closing BlueStacks and BrokenBot. No command can be accepted after this.")
+					_DeleteMessage($iden[$x])
+					ProcessClose("HD-Frontend.exe")
+					SetLog(GetLangText("msgExit"), $COLOR_ORANGE)
+					DllClose($KernelDLL)
+					_GDIPlus_Shutdown()
+					_Crypt_Shutdown()
+					btnUPsave()
+					ModSave()
+					Exit
+				 ElseIf StringLeft($title[$x], 17) = "BOT MANUALRESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 17), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. Attempting to close and start BrokenBot afresh.", $COLOR_ORANGE)
+					_DeleteMessage($iden[$x])
+					$restartBrokenBot = "not_set"
+					If (@Compiled) Then
+					   If FileExists(@ScriptDir & "\COCBot\functions\Notification\RestartBrokenBot.exe") Then
+						  $restartBrokenBot = '"' & @ScriptDir & "\COCBot\functions\Notification\RestartBrokenBot.exe" & '"' & " " & '"' & $sBotTitle & '"' & " " & '"' & @ScriptFullPath & '"' & " " & " 1"
+					   Else
+						  SetLog("BrokenBot could not perform the requested action. Please compile the file " & @ScriptDir & "\COCBot\functions\Notification\RestartBrokenBot.au3 if you want to use this command with the compiled version of BrokenBot.", $COLOR_ORANGE)
+;~ 						  _Push("BrokenBot could not perform the requested action.", "Please compile the file " & @ScriptDir & "\COCBot\functions\Notification\RestartBrokenBot.au3 if you want to use this command with the compiled version of BrokenBot.")
+					   EndIf
+					Else
+						$restartBrokenBot = '"' & @AutoItExe & '"' & " " & '"' & @ScriptDir & "\COCBot\functions\Notification\RestartBrokenBot.au3" & '"' & " " & '"' & $sBotTitle & '"' & " " & '"' & @ScriptFullPath & '"' & " " & " 0"
+					EndIf
+					If (Not ($restartBrokenBot = "not_set")) Then
+					   SetLog("Running command: " & $restartBrokenBot)
+					   _Push("Attempting to Restart", "The message 'Bot Start' will be automatically deleted if the Bot restarts successfully.")
+					   _PushStartMessage()
+					   Run($restartBrokenBot)
+					Else
+					   _Push("Request to Restart failed", "Please compile the file RestartBrokenBot.au3 if you want to use this command with the compiled version of BrokenBot.")
+					EndIf
+				 ElseIf StringLeft($title[$x], 8) = "BOT STOP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. BrokenBot will be stopped.")
+					_Push("Request to Stop", "Stopping BrokenBot, closing BlueStacks and leaving BrokenBot open.")
+					_DeleteMessage($iden[$x])
+					ProcessClose("HD-Frontend.exe")
+					btnStop()
+				 ElseIf StringLeft($title[$x], 9) = "BOT START" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					SetLog("Your request has been received. BrokenBot will be started.")
+					_Push("Request to Start", "Starting BrokenBot")
+					_DeleteMessage($iden[$x])
+					btnStart()
+				 EndIf
 				$title[$x] = ""
 				$iden[$x] = ""
 			EndIf
@@ -72,8 +194,8 @@ Func _PushBullet($pTitle = "", $pMessage = "")
 EndFunc   ;==>_PushBullet
 
 Func _Push($pTitle, $pMessage)
-	Local $Date = @MDAY & "." & @MON & "." & @YEAR
-	Local $Time = @HOUR & "." & @MIN & "." & @SEC
+	Local $Date = _NowDate()
+	Local $Time = _NowTime()
 	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $pTitle = "[" & StringStripWS(GUICtrlRead($inppushuser), 3) & "] " & $pTitle
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
@@ -81,7 +203,7 @@ Func _Push($pTitle, $pMessage)
 	$oHTTP.SetCredentials($access_token, "", 0)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$pMessage = $Date & " at " & $Time & "\n" & $pMessage
-	Local $pPush = '{"type": "note", "title": "' & $pTitle & '", "body": "' & $pMessage & '"}'
+	Local $pPush = '{"type": "note", "title": "' & $pTitle & '", "body": "' & $pMessage & '","dismissable": true}'
 	$oHTTP.Send($pPush)
 EndFunc   ;==>_Push
 
@@ -179,3 +301,60 @@ Func _DeleteMessage($iden)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
 EndFunc   ;==>_DeleteMessage
+
+Func _PushStartMessage()
+    $pMessage = "Bot Start"
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $pMessage = $pMessage & " " & StringStripWS(GUICtrlRead($inppushuser), 3)
+	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
+	$access_token = $PushBullettoken
+	$oHTTP.Open("Post", "https://api.pushbullet.com/v2/pushes", False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	Local $pPush = '{"type": "note", "title": "' & "" & '", "body": "' & $pMessage & '","dismissable": true}'
+	$oHTTP.Send($pPush)
+EndFunc   ;==>_PushStartMessage
+
+Func _PushStatisticsString()
+   If (StringInStr($sBotVersion,"SNBogdanov")) Then
+	  Return GetLangText("PushStatRb") & GUICtrlRead($lblresultgoldtstart)& _
+			GetLangText("pushStatRc") & GUICtrlRead($lblresultelixirstart) & _
+			GetLangText("pushStatRd") & GUICtrlRead($lblresultdestart) & _
+			GetLangText("pushStatRe") & GUICtrlRead($lblresulttrophystart) & _
+			GetLangText("pushStatRf") & GUICtrlRead($lblresultgoldnow) & _
+			GetLangText("pushStatRg") & GUICtrlRead($lblresultelixirnow) & _
+			GetLangText("pushStatRh") & GUICtrlRead($lblresultdenow) & _
+			GetLangText("pushStatRi") & GUICtrlRead($lblresulttrophynow) & _
+			GetLangText("pushStatRl") & GUICtrlRead($lblresultgoldgain) & _
+			"\nGold/hr:  " & GUICtrlRead($lblresultavggoldgain) & _
+			GetLangText("pushStatRm") & GUICtrlRead($lblresultelixirgain) & _
+			"\nElixir/hr:  " & GUICtrlRead($lblresultavgelixirgain) & _
+			GetLangText("pushStatRn") & GUICtrlRead($lblresultdegain) & _
+			"\nDark Elixir/hr:  " & GUICtrlRead($lblresultavgdegain) & _
+			GetLangText("pushStatRo") & GUICtrlRead($lblresulttrophygain) & _
+			GetLangText("pushStatRp") & GUICtrlRead($lblresultvillagesattacked) & _
+			GetLangText("pushStatRq") & GUICtrlRead($lblresultvillagesskipped) & _
+			GetLangText("pushStatRq1") & GUICtrlRead($lblresultsearchdisconnected) & _
+			GetLangText("pushStatRr") & GUICtrlRead($lblresultsearchcost) & _
+			GetLangText("pushStatRk") & GUICtrlRead($lblwallupgradecount) & _
+			GetLangText("pushStatRs") & StringFormat("%02i:%02i:%02i", $hour, $min, $sec)
+   Else
+	  Return GetLangText("PushStatRb") & GUICtrlRead($lblresultgoldtstart)& _
+			GetLangText("pushStatRc") & GUICtrlRead($lblresultelixirstart) & _
+			GetLangText("pushStatRd") & GUICtrlRead($lblresultdestart) & _
+			GetLangText("pushStatRe") & GUICtrlRead($lblresulttrophystart) & _
+			GetLangText("pushStatRf") & GUICtrlRead($lblresultgoldnow) & _
+			GetLangText("pushStatRg") & GUICtrlRead($lblresultelixirnow) & _
+			GetLangText("pushStatRh") & GUICtrlRead($lblresultdenow) & _
+			GetLangText("pushStatRi") & GUICtrlRead($lblresulttrophynow) & _
+			GetLangText("pushStatRl") & GUICtrlRead($lblresultgoldgain) & _
+			GetLangText("pushStatRm") & GUICtrlRead($lblresultelixirgain) & _
+			GetLangText("pushStatRn") & GUICtrlRead($lblresultdegain) & _
+			GetLangText("pushStatRo") & GUICtrlRead($lblresulttrophygain) & _
+			GetLangText("pushStatRp") & GUICtrlRead($lblresultvillagesattacked) & _
+			GetLangText("pushStatRq") & GUICtrlRead($lblresultvillagesskipped) & _
+			GetLangText("pushStatRq1") & GUICtrlRead($lblresultsearchdisconnected) & _
+			GetLangText("pushStatRr") & GUICtrlRead($lblresultsearchcost) & _
+			GetLangText("pushStatRk") & GUICtrlRead($lblwallupgradecount) & _
+			GetLangText("pushStatRs") & StringFormat("%02i:%02i:%02i", $hour, $min, $sec)
+   EndIf
+EndFunc   ;==>_PushStatisticsString

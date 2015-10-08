@@ -164,7 +164,7 @@ Func LocateTownHall()
 	While 1
 		$MsgBox = MsgBox(1 + 262144, GetLangText("boxTH"), GetLangText("boxTHb"), 0, $frmBot)
 		If $MsgBox = 1 Then
-			WinActivate($HWnD)
+			If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
 			$TownHallPos[0] = FindPos()[0]
 			$TownHallPos[1] = FindPos()[1]
 			SetLog(GetLangText("msgLocTH") & " =  " & "(" & $TownHallPos[0] & "," & $TownHallPos[1] & ")", $COLOR_GREEN)

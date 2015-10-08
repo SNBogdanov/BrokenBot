@@ -7,7 +7,7 @@ Func Standard_Search()
 	Local $DG, $DE, $DD, $DT, $DGE, $G, $E, $D, $T, $GE
 	Local $calculateCondition
 	Local $stuckSearchCount = 0
-	Local $OldBaseData[6] = ["","","","","",""]
+	Local $OldBaseData[6] = ["", "", "", "", "", ""]
 
 	_WinAPI_EmptyWorkingSet(WinGetProcess($Title)) ; Reduce BlueStacks Memory Usage
 
@@ -18,25 +18,31 @@ Func Standard_Search()
 
 	While 1
 		$calculateCondition = False
-		GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 		If $TakeAllTownSnapShot = 1 Then SetLog(GetLangText("msgWillSaveAll"), $COLOR_GREEN)
 
 		_BlockInputEx(3, "", "", $HWnD)
 		While 1
+
+
 			; Make sure end battle button is visible
 			If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 10) Then
-				ChkDisconnection()
+				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf
 
 			; Make sure clouds have cleared
-			If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then Return -1
+			If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then 
+				If ChkDisconnection() Then Return -2
+				Return -1
+			EndIf
+			GUICtrlSetData($lblresultsearchcost, _NumberFormat(Number(StringReplace(GUICtrlRead($lblresultsearchcost), " ", "")) + $SearchCost))
+			UpdateStat(-$SearchCost, 0, 0, 0)
 
-			;If _Sleep($speedBump) Then Return -1
+			If _Sleep($speedBump) Then Return -1
 			GUICtrlSetState($btnAtkNow, $GUI_ENABLE)
 
 			; Wait just a bit extra
-			If _Sleep(100) Then Return
+			If _Sleep(500) Then Return -1
 
 			If IsChecked($chkTakeTownSS) Then
 				Local $Date = @MDAY & "." & @MON & "." & @YEAR
@@ -63,222 +69,131 @@ Func Standard_Search()
 
 			$BaseData = GetResources()
 			If Not IsArray($BaseData) Then
-				SetLog(GetLangText("msgNoNextRestart"), $COLOR_RED)
-				ChkDisconnection()
+;				SetLog(GetLangText("msgNoNextRestart"), $COLOR_RED)
+				GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
+				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf
 
 			;Check Stuck
 			$flagSame = True
 			$i = 0
-			While ($flagSame = True) and ($i < 6)
+			While ($flagSame = True) And ($i < 6)
 				$flagSame = ($OldBaseData[$i] = $BaseData[$i])
 				$i += 1
 			WEnd
 			$stuckSearchCount = $flagSame ? $stuckSearchCount + 1 : 0
 
-			If $stuckSearchCount >= 3 Then	;same base several times, must be stuck
+			If $stuckSearchCount >= 3 Then ;same base several times, must be stuck
 				If $PushBulletEnabled = 1 Then
 					_Push("Stuck in search", "Your bot got stuck in search, restarting bot")
 				EndIf
-				ReturnHome(False, False, True)	;Abort search
+				GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
+				ReturnHome(False, False, True) ;Abort search
 				Return -1
 			EndIf
 
-			$SubmissionSearches += 1
-			If StringLen($SubmissionSGold) > 0 Then
-				$SubmissionSGold &= "|"
-				$SubmissionSElix &= "|"
-				$SubmissionSDE &= "|"
-				$SubmissionSTH &= "|"
-				$SubmissionSDead &= "|"
-			EndIf
-			$SubmissionSGold &= String($BaseData[2])
-			$SubmissionSElix &= String($BaseData[3])
-			$SubmissionSDE &= String($BaseData[4])
-			$SubmissionSTH &= String($BaseData[1])
-			$LastAttackTH = String($BaseData[1])
-			If $BaseData[0] Then
-				$SubmissionSDead &= "0"
-				$LastAttackDead = "0"
-			Else
-				$SubmissionSDead &= "1"
-				$LastAttackDead = "1"
-			EndIf
+			If $BaseData[6] = False Then ; if not skipping flag enabled
 
-			StatSubmission()
-
-			$DG = (Number($BaseData[2]) >= Number($MinDeadGold))
-			$DE = (Number($BaseData[3]) >= Number($MinDeadElixir))
-			$DD = (Number($BaseData[4]) >= Number($MinDeadDark))
-			$DT = (Number($BaseData[5]) >= Number($MinDeadTrophy))
-			$DGE = ((Number($BaseData[2]) + Number($BaseData[3])) >= (Number($MinDeadGold) + Number($MinDeadElixir)))
-			$G = (Number($BaseData[2]) >= Number($MinGold))
-			$E = (Number($BaseData[3]) >= Number($MinElixir))
-			$D = (Number($BaseData[4]) >= Number($MinDark))
-			$T = (Number($BaseData[5]) >= Number($MinTrophy))
-			$GE = ((Number($BaseData[2]) + Number($BaseData[3])) >= (Number($MinGold) + Number($MinElixir)))
-			$THL = -1
-			$THLO = -1
-
-			For $i = 0 To 4
-				If $BaseData[1] = $THText[$i] Then $THL = $i
-			Next
-
-			Switch $THLoc
-				Case "In"
-					$THLO = 0
-				Case "Out"
-					$THLO = 1
-			EndSwitch
-
-			If $THLoc = "Out" Then
-				If (Number(GUICtrlRead($lblresulttrophynow)) < Number(GUICtrlRead($txtSnipeBelow))) Or (IsChecked($chkDeadActivate) And IsChecked($chkDeadSnipe) And $BaseData[0]) Or (IsChecked($chkAnyActivate) And IsChecked($chkSnipe) And Not $BaseData[0]) Then
-					SetLog(GetLangText("msgSnipeFound"), $COLOR_PURPLE)
-					$AttackMethod = 3
-					ExitLoop
+				$SubmissionSearches += 1
+				If StringLen($SubmissionSGold) > 0 Then
+					$SubmissionSGold &= "|"
+					$SubmissionSElix &= "|"
+					$SubmissionSDE &= "|"
+					$SubmissionSTH &= "|"
+					$SubmissionSDead &= "|"
 				EndIf
-			EndIf
+				$SubmissionSGold &= String($BaseData[2])
+				$SubmissionSElix &= String($BaseData[3])
+				$SubmissionSDE &= String($BaseData[4])
+				$SubmissionSTH &= String($BaseData[1])
+				$LastAttackTH = String($BaseData[1])
+				If $BaseData[0] Then
+					$SubmissionSDead &= "0"
+					$LastAttackDead = "0"
+				Else
+					$SubmissionSDead &= "1"
+					$LastAttackDead = "1"
+				EndIf
 
-			; Variables to check whether to attack dead bases
-			Local $conditionDeadPass = True
+				StatSubmission()
 
-			If IsChecked($chkDeadActivate) And $fullArmy And _
-					(Not IsChecked($chkDeadKingAvail) Or $KingAvailable) And _
-					(Not IsChecked($chkDeadQueenAvail) Or $QueenAvailable) Then
-				If IsChecked($chkDeadGE) Then
-					$deadEnabled = True
-					If _GUICtrlComboBox_GetCurSel($cmbDead) = 0 Then ; And
-						If $DG = False Or $DE = False Then $conditionDeadPass = False
-					ElseIf _GUICtrlComboBox_GetCurSel($cmbDead) = 1 Then ; Or
-						If $DG = False And $DE = False Then $conditionDeadPass = False
-					Else ; +
-						If $DGE = False Then $conditionDeadPass = False
+				$DG = (Number($BaseData[2]) >= Number($MinDeadGold))
+				$DE = (Number($BaseData[3]) >= Number($MinDeadElixir))
+				$DD = (Number($BaseData[4]) >= Number($MinDeadDark))
+				$DT = (Number($BaseData[5]) >= Number($MinDeadTrophy))
+				$DGE = ((Number($BaseData[2]) + Number($BaseData[3])) >= (Number($MinDeadGold) + Number($MinDeadElixir)))
+				$G = (Number($BaseData[2]) >= Number($MinGold))
+				$E = (Number($BaseData[3]) >= Number($MinElixir))
+				$D = (Number($BaseData[4]) >= Number($MinDark))
+				$T = (Number($BaseData[5]) >= Number($MinTrophy))
+				$GE = ((Number($BaseData[2]) + Number($BaseData[3])) >= (Number($MinGold) + Number($MinElixir)))
+				$THL = -1
+				$THLO = -1
+
+				For $i = 0 To 4
+					If $BaseData[1] = $THText[$i] Then $THL = $i
+				Next
+
+				Switch $THLoc
+					Case "In"
+						$THLO = 0
+					Case "Out"
+						$THLO = 1
+				EndSwitch
+
+				If $THLoc = "Out" Then
+					If (Number(GUICtrlRead($lblresulttrophynow)) < Number(GUICtrlRead($txtSnipeBelow))) Or (IsChecked($chkDeadActivate) And IsChecked($chkDeadSnipe) And $BaseData[0]) Or (IsChecked($chkAnyActivate) And IsChecked($chkSnipe) And Not $BaseData[0]) Then
+						SetLog(GetLangText("msgSnipeFound"), $COLOR_PURPLE)
+						$AttackMethod = 3
+						ExitLoop
 					EndIf
 				EndIf
 
-				If IsChecked($chkDeadMeetDE) Then
-					If $DD = False Then $conditionDeadPass = False
-				EndIf
+				; Variables to check whether to attack dead bases
+				Local $conditionDeadPass = True
 
-				If IsChecked($chkDeadMeetTrophy) Then
-					If $DT = False Then $conditionDeadPass = False
-				EndIf
-
-				If IsChecked($chkDeadMeetTH) Then
-					If $THL = -1 Or $THL > _GUICtrlComboBox_GetCurSel($cmbDeadTH) Then $conditionDeadPass = False
-				EndIf
-
-				If IsChecked($chkDeadMeetTHO) Then
-					If $THLO <> 1 Then $conditionDeadPass = False
-				EndIf
-
-				If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 And $conditionDeadPass Then
-					;Focused Attack mode, make sure we can find the building
-					$focusBuildingX = 0
-					$focusBuildingY = 0
-					If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
-						;TH
-						If $THx <> 0 Then
-							$focusBuildingX = $THx
-							$focusBuildingY = $THy
-						Else
-							$conditionDeadPass = False
-						EndIf
-					ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
-						;DE Storage
-						If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-						$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-						If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
-
-						If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
-							If $res = $DLLLicense Then
-								SetLog(GetLangText("msgLicense"), $COLOR_RED)
-								$conditionDeadPass = False
-							ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
-								$expRet = StringSplit($res, "|", 2)
-
-								If $expRet[0] = 0 Then
-									; Finding building failed
-									$conditionDeadPass = False
-								Else
-									$focusBuildingX = $expRet[1]
-									$focusBuildingY = $expRet[2]
-								EndIf
-							Else
-								; Finding building failed
-								$conditionDeadPass = False
-							EndIf
-						Else
-							; Finding building failed
-							$conditionDeadPass = False
-						EndIf
-					EndIf
-
-					If IsChecked($chkFocusedIgnoreCenter) And $conditionDeadPass Then
-						SeekEdges()
-						If Not CloseToEdge($focusBuildingX, $focusBuildingY, 170) Then
-							;deep in base
-							SetLog(GetLangText("msgFocalBuildingBuried"), $COLOR_RED)
-							$conditionDeadPass = False
-							$focusBuildingX = 0
-							$focusBuildingY = 0
-						EndIf
-					ElseIf Not $conditionDeadPass Then
-						SetLog(GetLangText("msgCannotLocateFocalBuilding"), $COLOR_RED)
-					EndIf
-
-				EndIf
-
-				If $BaseData[0] And $conditionDeadPass Then
-					SetLog(GetLangText("msgDeadFound"), $COLOR_GREEN)
-					$GoodBase = True
-					$AttackMethod = 0
-				EndIf
-			EndIf
-
-			If Not $GoodBase Then
-				; Variables to check whether to attack non-dead bases
-				Local $conditionAnyPass = True
-				If IsChecked($chkAnyActivate) And $fullArmy And _
-						(Not IsChecked($chkKingAvail) Or $KingAvailable) And _
-						(Not IsChecked($chkQueenAvail) Or $QueenAvailable) Then
-					If IsChecked($chkMeetGE) Then
-						$anyEnabled = True
-						If _GUICtrlComboBox_GetCurSel($cmbAny) = 0 Then ; And
-							If $G = False Or $E = False Then $conditionAnyPass = False
-						ElseIf _GUICtrlComboBox_GetCurSel($cmbAny) = 1 Then ; Or
-							If $G = False And $E = False Then $conditionAnyPass = False
+				If IsChecked($chkDeadActivate) And $fullArmy And _
+						(Not IsChecked($chkDeadKingAvail) Or $KingAvailable) And _
+						(Not IsChecked($chkDeadQueenAvail) Or $QueenAvailable) Then
+					If IsChecked($chkDeadGE) Then
+						$deadEnabled = True
+						If _GUICtrlComboBox_GetCurSel($cmbDead) = 0 Then ; And
+							If $DG = False Or $DE = False Then $conditionDeadPass = False
+						ElseIf _GUICtrlComboBox_GetCurSel($cmbDead) = 1 Then ; Or
+							If $DG = False And $DE = False Then $conditionDeadPass = False
 						Else ; +
-							If $GE = False Then $conditionAnyPass = False
+							If $DGE = False Then $conditionDeadPass = False
 						EndIf
 					EndIf
 
-					If IsChecked($chkMeetDE) Then
-						If $D = False Then $conditionAnyPass = False
+					If IsChecked($chkDeadMeetDE) Then
+						If $DD = False Then $conditionDeadPass = False
 					EndIf
 
-					If IsChecked($chkMeetTrophy) Then
-						If $T = False Then $conditionAnyPass = False
+					If IsChecked($chkDeadMeetTrophy) Then
+						If $DT = False Then $conditionDeadPass = False
 					EndIf
 
-					If IsChecked($chkMeetTH) Then
-						If $THL = -1 Or $THL > _GUICtrlComboBox_GetCurSel($cmbTH) Then $conditionAnyPass = False
+					If IsChecked($chkDeadMeetTH) Then
+						If $THL = -1 Or $THL > _GUICtrlComboBox_GetCurSel($cmbDeadTH) Then $conditionDeadPass = False
 					EndIf
 
-					If IsChecked($chkMeetTHO) Then
-						If $THLO <> 1 Then $conditionAnyPass = False
+					If IsChecked($chkDeadMeetTHO) Then
+						If $THLO <> 1 Then $conditionDeadPass = False
 					EndIf
 
-					If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 And $conditionAnyPass Then
+					If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 And $conditionDeadPass Then
 						;Focused Attack mode, make sure we can find the building
+						$focusBuildingX = 0
+						$focusBuildingY = 0
 						If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
 							;TH
 							If $THx <> 0 Then
 								$focusBuildingX = $THx
 								$focusBuildingY = $THy
 							Else
-								$conditionAnyPass = False
+								$conditionDeadPass = False
 							EndIf
 						ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 							;DE Storage
@@ -289,191 +204,291 @@ Func Standard_Search()
 							If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 								If $res = $DLLLicense Then
 									SetLog(GetLangText("msgLicense"), $COLOR_RED)
-									$conditionAnyPass = False
+									$conditionDeadPass = False
 								ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
 									$expRet = StringSplit($res, "|", 2)
 
 									If $expRet[0] = 0 Then
 										; Finding building failed
-										$conditionAnyPass = False
+										$conditionDeadPass = False
 									Else
 										$focusBuildingX = $expRet[1]
 										$focusBuildingY = $expRet[2]
 									EndIf
 								Else
 									; Finding building failed
-									$conditionAnyPass = False
+									$conditionDeadPass = False
 								EndIf
 							Else
 								; Finding building failed
-								$conditionAnyPass = False
+								$conditionDeadPass = False
 							EndIf
-
 						EndIf
 
-						If IsChecked($chkFocusedIgnoreCenter) And $conditionAnyPass Then
+						If IsChecked($chkFocusedIgnoreCenter) And $conditionDeadPass Then
 							SeekEdges()
 							If Not CloseToEdge($focusBuildingX, $focusBuildingY, 170) Then
 								;deep in base
 								SetLog(GetLangText("msgFocalBuildingBuried"), $COLOR_RED)
-								$conditionAnyPass = False
+								$conditionDeadPass = False
 								$focusBuildingX = 0
 								$focusBuildingY = 0
 							EndIf
-						ElseIf Not $conditionAnyPass Then
+						ElseIf Not $conditionDeadPass Then
 							SetLog(GetLangText("msgCannotLocateFocalBuilding"), $COLOR_RED)
 						EndIf
 
 					EndIf
 
-					If $conditionAnyPass Then
-						SetLog(GetLangText("msgOtherFound"), $COLOR_GREEN)
+					If $BaseData[0] And $conditionDeadPass Then
+						SetLog(GetLangText("msgDeadFound"), $COLOR_GREEN)
 						$GoodBase = True
-						$AttackMethod = 1
+						$AttackMethod = 0
 					EndIf
 				EndIf
-			EndIf
 
-			If Not $GoodBase Then
-				; Variables to check whether to zap Dark elixir
-				If IsChecked($chkNukeOnly) And $fullSpellFactory And $iNukeLimit > 0 And $BaseData[0] Then
-					If Number($BaseData[4]) >= Number($iNukeLimit) Then
-						$NukeAttack = True
-						SetLog(GetLangText("msgZapFound"), $COLOR_GREEN)
-						$GoodBase = True
-						$AttackMethod = 2
+				If Not $GoodBase Then
+					; Variables to check whether to attack non-dead bases
+					Local $conditionAnyPass = True
+					If IsChecked($chkAnyActivate) And $fullArmy And _
+							(Not IsChecked($chkKingAvail) Or $KingAvailable) And _
+							(Not IsChecked($chkQueenAvail) Or $QueenAvailable) Then
+						If IsChecked($chkMeetGE) Then
+							$anyEnabled = True
+							If _GUICtrlComboBox_GetCurSel($cmbAny) = 0 Then ; And
+								If $G = False Or $E = False Then $conditionAnyPass = False
+							ElseIf _GUICtrlComboBox_GetCurSel($cmbAny) = 1 Then ; Or
+								If $G = False And $E = False Then $conditionAnyPass = False
+							Else ; +
+								If $GE = False Then $conditionAnyPass = False
+							EndIf
+						EndIf
+
+						If IsChecked($chkMeetDE) Then
+							If $D = False Then $conditionAnyPass = False
+						EndIf
+
+						If IsChecked($chkMeetTrophy) Then
+							If $T = False Then $conditionAnyPass = False
+						EndIf
+
+						If IsChecked($chkMeetTH) Then
+							If $THL = -1 Or $THL > _GUICtrlComboBox_GetCurSel($cmbTH) Then $conditionAnyPass = False
+						EndIf
+
+						If IsChecked($chkMeetTHO) Then
+							If $THLO <> 1 Then $conditionAnyPass = False
+						EndIf
+
+						If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 And $conditionAnyPass Then
+							;Focused Attack mode, make sure we can find the building
+							If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
+								;TH
+								If $THx <> 0 Then
+									$focusBuildingX = $THx
+									$focusBuildingY = $THy
+								Else
+									$conditionAnyPass = False
+								EndIf
+							ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
+								;DE Storage
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
+								$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+
+								If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
+									If $res = $DLLLicense Then
+										SetLog(GetLangText("msgLicense"), $COLOR_RED)
+										$conditionAnyPass = False
+									ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
+										$expRet = StringSplit($res, "|", 2)
+
+										If $expRet[0] = 0 Then
+											; Finding building failed
+											$conditionAnyPass = False
+										Else
+											$focusBuildingX = $expRet[1]
+											$focusBuildingY = $expRet[2]
+										EndIf
+									Else
+										; Finding building failed
+										$conditionAnyPass = False
+									EndIf
+								Else
+									; Finding building failed
+									$conditionAnyPass = False
+								EndIf
+
+							EndIf
+
+							If IsChecked($chkFocusedIgnoreCenter) And $conditionAnyPass Then
+								SeekEdges()
+								If Not CloseToEdge($focusBuildingX, $focusBuildingY, 170) Then
+									;deep in base
+									SetLog(GetLangText("msgFocalBuildingBuried"), $COLOR_RED)
+									$conditionAnyPass = False
+									$focusBuildingX = 0
+									$focusBuildingY = 0
+								EndIf
+							ElseIf Not $conditionAnyPass Then
+								SetLog(GetLangText("msgCannotLocateFocalBuilding"), $COLOR_RED)
+							EndIf
+
+						EndIf
+
+						If $conditionAnyPass Then
+							SetLog(GetLangText("msgOtherFound"), $COLOR_GREEN)
+							$GoodBase = True
+							$AttackMethod = 1
+						EndIf
 					EndIf
 				EndIf
-			EndIf
+
+				If Not $GoodBase Then
+					; Variables to check whether to zap Dark elixir
+					If IsChecked($chkNukeOnly) And $fullSpellFactory And $iNukeLimit > 0 And $BaseData[0] Then
+						If Number($BaseData[4]) >= Number($iNukeLimit) Then
+							$NukeAttack = True
+							SetLog(GetLangText("msgZapFound"), $COLOR_GREEN)
+							$GoodBase = True
+							$AttackMethod = 2
+						EndIf
+					EndIf
+				EndIf
 
 ;~ 			If $OverlayVisible Then DeleteOverlay()
-
+			EndIf
 			If $GoodBase Then
 				GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 				ExitLoop
 			Else
 				_CaptureRegion()
 				If _ColorCheck(_GetPixelColor(726, 497), Hex(0xF0AE28, 6), 20) Then
-					; Attack instantly if Attack Now button pressed
-					If $AttackNow Then
-						GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
-						$AttackNow = False
-						$searchBuilding = False
-						If $BaseData[0] Then
-							$AttackMethod = 0
-							If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 Then $searchBuilding = True
-						Else
-							$AttackMethod = 1
-							If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 Then $searchBuilding = True
-						EndIf
-						SetLog(GetLangText("msgAttackNowClicked"), $COLOR_GREEN)
+					If $BaseData[6] = False Then ; if not skipping flag enabled
 
-						If $searchBuilding Then
-							$focusBuildingX = 0
-							$focusBuildingY = 0
-							If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
-								;TH
-								If $THx <> 0 Then
-									$focusBuildingX = $THx
-									$focusBuildingY = $THy
-								EndIf
-							ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
-								;DE Storage
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-								$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+						; Attack instantly if Attack Now button pressed
+						If $AttackNow Then
+							GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
+							$AttackNow = False
+							$searchBuilding = False
+							If $BaseData[0] Then
+								$AttackMethod = 0
+								If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 Then $searchBuilding = True
+							Else
+								$AttackMethod = 1
+								If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 Then $searchBuilding = True
+							EndIf
+							SetLog(GetLangText("msgAttackNowClicked"), $COLOR_GREEN)
 
-								If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
-									If $res = $DLLLicense Then
-										SetLog(GetLangText("msgLicense"), $COLOR_RED)
-									ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
-										$expRet = StringSplit($res, "|", 2)
-										If $expRet[0] <> 0 Then
-											$focusBuildingX = $expRet[1]
-											$focusBuildingY = $expRet[2]
+							If $searchBuilding Then
+								$focusBuildingX = 0
+								$focusBuildingY = 0
+								If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
+									;TH
+									If $THx <> 0 Then
+										$focusBuildingX = $THx
+										$focusBuildingY = $THy
+									EndIf
+								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
+									;DE Storage
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
+									$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+
+									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
+										If $res = $DLLLicense Then
+											SetLog(GetLangText("msgLicense"), $COLOR_RED)
+										ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
+											$expRet = StringSplit($res, "|", 2)
+											If $expRet[0] <> 0 Then
+												$focusBuildingX = $expRet[1]
+												$focusBuildingY = $expRet[2]
+											EndIf
 										EndIf
 									EndIf
 								EndIf
 							EndIf
+
+							ExitLoop
 						EndIf
 
-						ExitLoop
-					EndIf
-
-					Local $fDiffNow = TimerDiff($hTimerClickNext) - $fdiffReadGold ;How long in attack prep mode
-					$RandomDelay = _Random_Gaussian($icmbSearchsp * 1500, ($icmbSearchsp * 1500) / 6)
-					If $fDiffNow < $speedBump + $RandomDelay Then ; Wait accoridng to search speed + speedBump
-						If _Sleep($speedBump + $RandomDelay - $fDiffNow) Then ExitLoop (2)
-					EndIf
-
-					If $AttackNow Then
-						GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
-						$AttackNow = False
-						$searchBuilding = False
-						If $BaseData[0] Then
-							$AttackMethod = 0
-							If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 Then $searchBuilding = True
-						Else
-							$AttackMethod = 1
-							If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 Then $searchBuilding = True
+						Local $fDiffNow = TimerDiff($hTimerClickNext) - $fdiffReadGold ;How long in attack prep mode
+						$RandomDelay = _Random_Gaussian($icmbSearchsp * 1500, ($icmbSearchsp * 1500) / 6)
+						If $fDiffNow < $speedBump + $RandomDelay Then ; Wait accoridng to search speed + speedBump
+							If _Sleep($speedBump + $RandomDelay - $fDiffNow) Then ExitLoop (2)
 						EndIf
-						SetLog(GetLangText("msgAttackNowClicked"), $COLOR_GREEN)
 
-						If $searchBuilding Then
-							$focusBuildingX = 0
-							$focusBuildingY = 0
-							If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
-								;TH
-								If $THx <> 0 Then
-									$focusBuildingX = $THx
-									$focusBuildingY = $THy
-								EndIf
-							ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
-								;DE Storage
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-								$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+						If $AttackNow Then
+							GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
+							$AttackNow = False
+							$searchBuilding = False
+							If $BaseData[0] Then
+								$AttackMethod = 0
+								If _GUICtrlComboBox_GetCurSel($cmbDeadDeploy) = 7 Then $searchBuilding = True
+							Else
+								$AttackMethod = 1
+								If _GUICtrlComboBox_GetCurSel($cmbDeploy) = 7 Then $searchBuilding = True
+							EndIf
+							SetLog(GetLangText("msgAttackNowClicked"), $COLOR_GREEN)
 
-								If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
-									If $res = $DLLLicense Then
-										SetLog(GetLangText("msgLicense"), $COLOR_RED)
-									ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
-										$expRet = StringSplit($res, "|", 2)
-										If $expRet[0] <> 0 Then
-											$focusBuildingX = $expRet[1]
-											$focusBuildingY = $expRet[2]
+							If $searchBuilding Then
+								$focusBuildingX = 0
+								$focusBuildingY = 0
+								If _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 0 Then
+									;TH
+									If $THx <> 0 Then
+										$focusBuildingX = $THx
+										$focusBuildingY = $THy
+									EndIf
+								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
+									;DE Storage
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
+									$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+
+									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
+										If $res = $DLLLicense Then
+											SetLog(GetLangText("msgLicense"), $COLOR_RED)
+										ElseIf $res <> $DLLNegative And StringLen($res) > 2 Then
+											$expRet = StringSplit($res, "|", 2)
+											If $expRet[0] <> 0 Then
+												$focusBuildingX = $expRet[1]
+												$focusBuildingY = $expRet[2]
+											EndIf
 										EndIf
 									EndIf
 								EndIf
 							EndIf
+
+							ExitLoop
 						EndIf
-
-						ExitLoop
 					EndIf
-
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 					Click(750, 500) ;Click Next
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
 					GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
-					GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 					If _Sleep(1000) Then Return -1
 				ElseIf _ColorCheck(_GetPixelColor(23, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 					SetLog(GetLangText("msgNoNextReturn"), $COLOR_RED)
-					ChkDisconnection(True)
+					If ChkDisconnection(True) Then Return -2
 					ReturnHome(False, False, True)
 					Return -1
 				Else
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 					SetLog(GetLangText("msgNoNextRestart"), $COLOR_RED)
-					ChkDisconnection()
+					If ChkDisconnection() Then Return -2
 					Return -1
+				EndIf
+				If StringReplace(GUICtrlRead($lblresultgoldnow), " ", "") < 10000 Then
+					SetLog("Gold level is below 10000, can not continue search", $COLOR_RED)
+					;				  _Sleep(20000)
+					Return -2
 				EndIf
 			EndIf
 		WEnd
 		GUICtrlSetData($lblresultvillagesattacked, GUICtrlRead($lblresultvillagesattacked) + 1)
-		GUICtrlSetData($lblresultsearchcost, GUICtrlRead($lblresultsearchcost) + $SearchCost)
 		If IsChecked($chkAlertSearch) Then
 			TrayTip("Match Found!", "Gold: " & $BaseData[2] & "; Elixir: " & $BaseData[3] & "; Dark: " & $BaseData[4] & "; Trophy: " & $BaseData[5] & "; Townhall: " & $BaseData[1] & ", " & $THLoc, 0)
 			If FileExists(@WindowsDir & "\media\Windows Exclamation.wav") Then
@@ -580,9 +595,9 @@ Func AdjustSearchCond()
 			(Not IsChecked($chkQueenAvail) Or $QueenAvailable) Then
 		$conditionlogstr = "Live Base ("
 		If IsChecked($chkMeetGE) Then
-			If _GUICtrlComboBox_GetCurSel($cmbDead) = 0 Then
+			If _GUICtrlComboBox_GetCurSel($cmbAny) = 0 Then
 				$conditionlogstr = $conditionlogstr & " Gold: " & $MinGold & " And " & "Elixir: " & $MinElixir
-			ElseIf _GUICtrlComboBox_GetCurSel($cmbDead) = 1 Then
+			ElseIf _GUICtrlComboBox_GetCurSel($cmbAny) = 1 Then
 				$conditionlogstr = $conditionlogstr & " Gold: " & $MinGold & " Or " & "Elixir: " & $MinElixir
 			Else
 				$conditionlogstr = $conditionlogstr & " Gold+Elixir: " & $MinGold + $MinElixir

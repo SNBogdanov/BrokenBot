@@ -1,7 +1,7 @@
 ;Checks whether something is blocking the pixel for mainscreen and tries to unblock
 ;Returns True when there is something blocking
 
-Func checkObstacles() ;Checks if something is in the way for mainscreen
+Func checkObstacles($Reset= true) ;Checks if something is in the way for mainscreen
 	Local $x, $y
 	_CaptureRegion()
 	If _ImageSearchArea($device, 0, 237, 321, 293, 346, $x, $y, 80) Then
@@ -23,6 +23,14 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 		Return True
 	EndIf
 
+	If _ImageSearch($connectionlost, 0, $x, $y, 80) Then
+
+        	SetLog(GetLangText("msgConnectionLost"), $COLOR_RED)
+	        If _Sleep(1000) Then Return ; 1 second
+	        Click(416, 399);Check for "Connection Lost" message
+	        $Checkrearm = True
+	        Return True
+	    EndIf
 	If _ImageSearch($maintenance, 0, $x, $y, 80) Then
 
 		SetLog(GetLangText("msgMaintenance"), $COLOR_RED)
@@ -47,6 +55,7 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 		Return True
 	EndIf
 
+	If $Reset Then
 	If _ColorCheck(_GetPixelColor(284, 28), Hex(0x215B69, 6), 20) Then
 		Click(1, 1) ;Click away If things are open
 		Return True
@@ -60,6 +69,7 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 	If _ColorCheck(_GetPixelColor(822, 48), Hex(0xD80408, 6), 20) Or _ColorCheck(_GetPixelColor(830, 59), Hex(0xD80408, 6), 20) Then
 		Click(822, 48) ;Clicks X
 		Return True
+	EndIf
 	EndIf
 
 	If _ColorCheck(_GetPixelColor(331, 330), Hex(0xF0A03B, 6), 20) Then
@@ -78,6 +88,10 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 		Return True
 	EndIf
 
+	If _ColorCheck(_GetPixelColor(36, 523), Hex(0xEE5056, 6), 50)  Then
+		ReturnHome(False, False) ;If End battle is available ?????
+		Return True
+	EndIf
 	$Message = _PixelSearch(19, 565, 104, 580, Hex(0xD9DDCF, 6), 10)
 	If IsArray($Message) Then
 		Click(67, 602);Check if Return Home button available

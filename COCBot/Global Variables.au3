@@ -45,6 +45,7 @@ Global $HWnD = WinGetHandle($Title) ;Handle for Bluestacks window
 
 Global $config = @ScriptDir & "\config\default.ini"
 Global $dirLogs = @ScriptDir & "\logs\"
+Global $dirStat = @ScriptDir & "\stat\"
 Global $dirLoots = @ScriptDir & "\Loots\"
 Global $dirAttack = @ScriptDir & "\Attacks\"
 Global $dirDebug = @ScriptDir & "\Debug\"
@@ -77,9 +78,9 @@ Global $SubmissionSTH = ""
 Global $SubmissionSDead = ""
 Global $SearchSubmitdelay = (1000 * 60 * 5)
 Global $AttackSubmitdelay = (1000 * 60 * 15)
-Global $LastAttackTH
-Global $LastAttackDead
-Global $TrophyCountOld
+Global $LastAttackTH=0
+Global $LastAttackDead=0
+Global $TrophyCountOld=0
 
 Global $ValidAuth = False
 Global $THLevel
@@ -302,11 +303,14 @@ Global $collectorPos[17][2] ;Positions of each collectors
 Global $break = @ScriptDir & "\images\break.bmp"
 Global $device = @ScriptDir & "\images\device.bmp"
 Global $maintenance = @ScriptDir & "\images\Maintenance.bmp"
+Global $connectionlost = @ScriptDir & "\images\Connection.bmp"
 
-Global $GoldCount = 0, $ElixirCount = 0, $DarkCount = 0, $GemCount = 0, $FreeBuilder = 0
+Global $GoldCount = 0, $ElixirCount = 0, $DarkCount = 0, $GemCount = 0, $FreeBuilder = 0, $TropHyCount=0
 Global $GoldGained = 0, $ElixirGained = 0, $DarkGained = 0, $TrophyGained = 0
+Global $GoldUpgraded = 0, $ElixirUpgraded = 0, $DarkUpgraded = 0
 Global $GoldCountOld = 0, $ElixirCountOld = 0, $DarkCountOld = 0, $TrophyOld = 0
 Global $GoldTotalLoot = 0, $ElixirTotalLoot = 0, $DarkTotalLoot = 0, $TrophyTotalLoot = 0
+Global $ElixirTrainCost = 0, $DarkTrainCost = 0
 Global $WallUpgrade = 0
 Global $resArmy = 0
 Global $FirstAttack = True
@@ -388,6 +392,25 @@ Global $iNukeLimit
 
 Global $ichkUpgradeKing, $ichkUpgradeQueen
 Global $itxtKeepFreeBuilder
+Global $iinpUPMinimumGold
+Global $iinpUPMinimumElixir
 Global $closetofull = False
 Global $anythingdarkadded = True
 Global $anythingadded = True
+
+Global $totalLoops = 0
+Global $successfulLoops = 0
+Global $expGained = 0
+
+
+Global $GoldStart=0
+Global $ElixirStart=0
+Global $DarkStart=0
+Global $TropyStart=0
+
+Global $MaxGold=0
+Global $MaxElixir=0
+Global $MaxDark=0
+
+Global $ilblFontName=""
+Global $ilblFontSize=0

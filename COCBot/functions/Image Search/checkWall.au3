@@ -1,126 +1,128 @@
 ; check Wall function | safar46
 Global $checkwalllogic
-Global $Wall[8]
-For $i = 0 To 7
-	$Wall[$i] = @ScriptDir & "\images\Walls\" & $i + 4 & ".png"
-Next
 
 Global $WallX = 0, $WallY = 0, $WallLoc = 0
 Global $Tolerance2
 
-Func checkWall()
-	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
-		Case 0
-			$Tolerance2 = 55
-		Case 1
-			$Tolerance2 = 35
-		Case 2
-			$Tolerance2 = 75
-	EndSwitch
 
-	If _Sleep(500) Then Return
-	For $i = 0 To 3
-		_CaptureRegion()
-		$WallLoc = _ImageSearch($Wall[$icmbWalls], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall Location
-		If $icmbWalls = 6 Then
-			If $WallLoc = 0 Then $WallLoc = _ImageSearch($Wall[$icmbWalls + 1], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall lvl 10 Location
-		EndIf
-		If $WallLoc = 1 Then
-			SetLog(GetLangText("msgWallFound") & $icmbWalls + 4 & ", " & GetLangText("msgUpgrading"), $COLOR_GREEN)
-			$checkwalllogic = True
-			Return True
-		EndIf
-	Next
+Global $Wall[7][3]
+$Wall[0][0] = @ScriptDir & "\images\Walls\4_1.bmp"
+$Wall[0][1] = @ScriptDir & "\images\Walls\4_2.bmp"
+$Wall[0][2] = @ScriptDir & "\images\Walls\4.png"
+
+$Wall[1][0] = @ScriptDir & "\images\Walls\5_1.bmp"
+$Wall[1][1] = @ScriptDir & "\images\Walls\5_2.bmp"
+$Wall[1][2] = @ScriptDir & "\images\Walls\5.png"
+
+$Wall[2][0] = @ScriptDir & "\images\Walls\6_1.bmp"
+$Wall[2][1] = @ScriptDir & "\images\Walls\6_2.bmp"
+$Wall[2][2] = @ScriptDir & "\images\Walls\6.png"
+
+$Wall[3][0] = @ScriptDir & "\images\Walls\7_1.bmp"
+$Wall[3][1] = @ScriptDir & "\images\Walls\7_2.bmp"
+$Wall[3][2] = @ScriptDir & "\images\Walls\7.png"
+
+$Wall[4][0] = @ScriptDir & "\images\Walls\8_1.bmp"
+$Wall[4][1] = @ScriptDir & "\images\Walls\8_2.bmp"
+$Wall[4][2] = @ScriptDir & "\images\Walls\8.png"
+
+$Wall[5][0] = @ScriptDir & "\images\Walls\9_1.bmp"
+$Wall[5][1] = @ScriptDir & "\images\Walls\9_2.bmp"
+$Wall[5][2] = @ScriptDir & "\images\Walls\9.png"
+
+$Wall[6][0] = @ScriptDir & "\images\Walls\10_1.bmp"
+$Wall[6][1] = @ScriptDir & "\images\Walls\10_2.bmp"
+$Wall[6][2] = @ScriptDir & "\images\Walls\10.png"
+
+Local $WallPos
+
+
+Func checkWall()
+	_CaptureRegion()
+	Local $listArrayPoint = ""
+	$ToleranceHere = 20
+	While $ToleranceHere < 91
+		$ToleranceHere = $ToleranceHere + 10
+			For $ImageIndex = 0 To 2
+				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				If $WallPos = 1 Then
+				$checkwalllogic = True
+				SetLog(GetLangText("msgWallFound") & $icmbWalls + 4 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+				Return True
+				EndIf
+			Next
+	WEnd
 	$checkwalllogic = False
 	SetLog(GetLangText("msgWallNotFound") & $icmbWalls + 4 & GetLangText("msgWallSkipUpgrade"), $COLOR_RED)
+	If $PushBulletEnabled = 1 Then
+		_Push(GetLangText("msgWallNotFound"),GetLangText("msgWallNotFound") & $icmbWalls + 4 & GetLangText("msgWallSkipUpgrade"))
+	EndIf
 	Return False
+
 EndFunc   ;==>checkWall
 
-Func FindWall()
-	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
-		Case 0
-			$Tolerance2 = 55
-		Case 1
-			$Tolerance2 = 35
-		Case 2
-			$Tolerance2 = 75
-	EndSwitch
 
-	_Sleep(500)
-	For $i = 0 To 3
-		_CaptureRegion()
-		$WallLoc = _ImageSearch($Wall[$icmbWalls], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall Location
-		If $icmbWalls = 6 Then
-			If $WallLoc = 0 Then $WallLoc = _ImageSearch($Wall[$icmbWalls + 1], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall lvl 10 Location
-		EndIf
-		If $WallLoc = 1 Then
-			WinActivate($HWnD)
-			Click($WallX, $WallY)
-			SetLog(GetLangText("msgWallFound") & $icmbWalls + 4 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
-			Return True
-		EndIf
-	Next
+
+Func FindWall()
+	_CaptureRegion()
+	Local $listArrayPoint = ""
+	$ToleranceHere = 20
+	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
+	While $ToleranceHere < 91
+		$ToleranceHere = $ToleranceHere + 10
+			For $ImageIndex = 0 To 2
+				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				If $WallPos = 1 Then
+				Click($WallX, $WallY)
+				SetLog(GetLangText("msgWallFound") & $icmbWalls + 4 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+				Return True
+				EndIf
+			Next
+	WEnd
 	SetLog(GetLangText("msgWallNotFound") & $icmbWalls + 4 & GetLangText("msgWallAdjustTol"), $COLOR_RED)
 	Return False
 EndFunc   ;==>FindWall
 
 Func checkWallE()
-	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
-		Case 0
-			$Tolerance2 = 55
-		Case 1
-			$Tolerance2 = 35
-		Case 2
-			$Tolerance2 = 75
-	EndSwitch
-	
-	$cmbWallsFudged = $icmbWallsE + 4
-	
-	If _Sleep(500) Then Return
-	For $i = 0 To 3
-		_CaptureRegion()
-		$WallLoc = _ImageSearch($Wall[$cmbWallsFudged], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall Location
-		If $cmbWallsFudged = 6 Then
-			If $WallLoc = 0 Then $WallLoc = _ImageSearch($Wall[$cmbWallsFudged + 1], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall lvl 10 Location
-		EndIf
-		If $WallLoc = 1 Then
-			SetLog(GetLangText("msgWallFound") & $cmbWallsFudged + 4 & ", " & GetLangText("msgUpgrading"), $COLOR_GREEN)
-			$checkwalllogic = True
-			Return True
-		EndIf
-	Next
+	_CaptureRegion()
+	Local $listArrayPoint = ""
+	$ToleranceHere = 20
+	While $ToleranceHere < 91
+		$ToleranceHere = $ToleranceHere + 10
+			For $ImageIndex = 0 To 2
+				$WallPos = _ImageSearch($Wall[$icmbWallsE + 4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				If $WallPos = 1 Then
+					$checkwalllogic = True
+					SetLog(GetLangText("msgWallFound") & $icmbWalls + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+					Return True
+				EndIf
+			Next
+	WEnd
 	$checkwalllogic = False
-	SetLog(GetLangText("msgWallNotFound") & $cmbWallsFudged + 4 & GetLangText("msgWallSkipUpgrade"), $COLOR_RED)
+	SetLog(GetLangText("msgWallNotFound") & $icmbWallsE + 8 & GetLangText("msgWallSkipUpgrade"), $COLOR_RED)
+	If $PushBulletEnabled = 1 Then
+		_Push(GetLangText("msgWallNotFound"),GetLangText("msgWallNotFound") & $icmbWalls + 4 & GetLangText("msgWallSkipUpgrade"))
+	EndIf
 	Return False
 EndFunc   ;==>checkWall
 
 Func FindWallE()
-	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
-		Case 0
-			$Tolerance2 = 55
-		Case 1
-			$Tolerance2 = 35
-		Case 2
-			$Tolerance2 = 75
-	EndSwitch
-	
-	$cmbWallsFudged = $icmbWallsE + 4
-
-	_Sleep(500)
-	For $i = 0 To 3
-		_CaptureRegion()
-		$WallLoc = _ImageSearch($Wall[$cmbWallsFudged], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall Location
-		If $cmbWallsFudged = 6 Then
-			If $WallLoc = 0 Then $WallLoc = _ImageSearch($Wall[$cmbWallsFudged + 1], 1, $WallX, $WallY, $Tolerance2) ; Getting Wall lvl 10 Location
-		EndIf
-		If $WallLoc = 1 Then
-			WinActivate($HWnD)
-			Click($WallX, $WallY)
-			SetLog(GetLangText("msgWallFound") & $cmbWallsFudged + 4 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
-			Return True
-		EndIf
-	Next
-	SetLog(GetLangText("msgWallNotFound") & $cmbWallsFudged + 4 & GetLangText("msgWallAdjustTol"), $COLOR_RED)
+	_CaptureRegion()
+	Local $listArrayPoint = ""
+	$ToleranceHere = 20
+	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
+	While $ToleranceHere < 91
+		$ToleranceHere = $ToleranceHere + 10
+			For $ImageIndex = 0 To 2
+				$WallPos = _ImageSearch($Wall[$icmbWallsE + 4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				If $WallPos = 1 Then
+				Click($WallX, $WallY)
+				SetLog(GetLangText("msgWallFound") & $icmbWalls + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+				Return True
+				EndIf
+			Next
+	WEnd
+	SetLog(GetLangText("msgWallNotFound") & $icmbWalls + 8 & GetLangText("msgWallAdjustTol"), $COLOR_RED)
 	Return False
 EndFunc   ;==>FindWall 
 

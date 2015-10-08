@@ -5,7 +5,8 @@ Global Const $DLLLicense = -2
 Global Const $DLLNegative = -1
 
 Func CallHelper($Command, $Timeout = 30)
-
+Global $exceptionFile = @ScriptDir & "\BrokenBotException1.log"
+Local $hDLL
 If IsChecked($chkHelper) Then
 	If StringInStr($Command, "BrokenBotRedLineCheck") Then
 		$FullCommand = '""' & @ScriptDir & "\BrokenBot.org\BrokenBotHelper.exe" & '""'
@@ -98,7 +99,9 @@ Else
 		$cl = $CmdLocal[11]
 		$cr = $CmdLocal[12]
 		$hCheckHBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hLocalBitmap)
-		$res = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotRedLineCheck", "ptr", $hCheckHBitmap, "int", $mH, "int", $mS, "int", $ci, "int", $cl, "int", $cr)
+		$hDLL = DllOpen(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll")
+		$res = DllCall($hDLL, "str", "BrokenBotRedLineCheck", "ptr", $hCheckHBitmap, "int", $mH, "int", $mS, "int", $ci, "int", $cl, "int", $cr)
+		DllClose($hDLL)
 	ElseIf $CmdLocal[1] = 2 Then
 		$x = $CmdLocal[8]
 		$y = $CmdLocal[9]
@@ -109,7 +112,9 @@ Else
 		$reversed = $CmdLocal[14]
 		$hClone = _GDIPlus_BitmapCloneArea($hLocalBitmap, $x, $y, $width, $height, _GDIPlus_ImageGetPixelFormat($hLocalBitmap))
 		$hCheckHBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hClone)
-		$res = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotReadText", "ptr", $hCheckHBitmap, "int", $type, "int", $leftaligned, "int", $reversed)
+		$hDLL = DllOpen(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll")
+		$res = DllCall($hDLL, "str", "BrokenBotReadText", "ptr", $hCheckHBitmap, "int", $type, "int", $leftaligned, "int", $reversed)
+		DllClose($hDLL)
 	ElseIf $CmdLocal[1] = 3 Then
 		$Function = $CmdLocal[7]
 		$ID = $CmdLocal[8]
@@ -118,8 +123,14 @@ Else
 		$SpeedBoost = $CmdLocal[11]
 
 		$hCheckHBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hLocalBitmap)
-		$res = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", $Function, "ptr", $hCheckHBitmap, "int", number($ID), "int", 3, "int", number($MaxNum), "int", number($Mask), "int", number($SpeedBoost))
+		$hDLL = DllOpen(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll")
+		$res = DllCall($hDLL, "str", $Function, "ptr", $hCheckHBitmap, "int", number($ID), "int", 3, "int", number($MaxNum), "int", number($Mask), "int", number($SpeedBoost))
+		DllClose($hDLL)
 	EndIf
+;   	If FileExists($exceptionFile) Then
+;		SetLog("Exception file found . . .")
+;		FileDelete($exceptionFile)
+;	EndIf
 
 	_WinAPI_DeleteObject($hCheckHBitmap)
 	_WinAPI_DeleteObject($hLocalHBitmap)

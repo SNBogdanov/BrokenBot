@@ -1,5 +1,6 @@
 Func getBSPos()
 	$aPos = ControlGetPos($Title, "", "[CLASS:BlueStacksApp; INSTANCE:1]")
+	if @error =1 Then return
 	$tPoint = DllStructCreate("int X;int Y")
 	DllStructSetData($tPoint, "X", $aPos[0])
 	DllStructSetData($tPoint, "Y", $aPos[1])

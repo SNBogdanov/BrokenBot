@@ -54,17 +54,76 @@ Func readConfig() ;Reads config and sets it to the variables
 	$iWallUseElixer = IniRead($config,"upgrade","walluseelix","0")
 	$itxtWallMinGold = IniRead($config, "upgrade", "minwallgold", "0")
 	$itxtWallMinElixir = IniRead($config, "upgrade", "minwallelixir", "0")
-	$icmbTolerance = IniRead($config, "upgrade", "walltolerance", "0")
+;	$icmbTolerance = IniRead($config, "upgrade", "walltolerance", "0")
 
 	;UpgradeHeroes
 	$ichkUpgradeKing = IniRead($config, "Upgrade", "UpKing", "0")	;==>upgradeking
 	$ichkUpgradeQueen = IniRead($config, "Upgrade", "UpQueen", "0")	;==>upgradequeen
 	$itxtKeepFreeBuilder = IniRead($config, "Upgrade", "KeepFreeBuilder", "1") ;==>FreeBuilderBox
 
+	$iinpUPMinimumGold= IniRead($config, "Upgrade", "UpgradeMinimumGold", "0") 
+	$iinpUPMinimumElixir= IniRead($config, "Upgrade", "UpgradeMinimumElixir", "0") 
+
 	;Laboratory
 	$ichkLab = IniRead($config, "upgrade", "auto-uptroops", "0")
 	$icmbLaboratory = IniRead($config, "upgrade", "troops-name", "0")
 
+
+;	$ichkUpgrade1 = IniRead($config, "upgrade", "auto-upgrade1", "0")
+;	$ichkUpgrade2 = IniRead($config, "upgrade", "auto-upgrade2", "0")
+;	$ichkUpgrade3 = IniRead($config, "upgrade", "auto-upgrade3", "0")
+;
+;	$itxtUpgradeX1 = IniRead($config, "upgrade", "PosX1", "")	
+;	$itxtUpgradeY1 = IniRead($config, "upgrade", "PosY1", "")	
+;	if $ichkUpgrade1=0 Or $itxtUpgradeX1 = "" Or $itxtUpgradeY1 ="" Then
+;		$ichkUpgrade1=0
+;		$itxtUpgradeX1 = ""
+;		$itxtUpgradeY1 ="" 
+;	EndIf
+;	$itxtUpgradeX2 = IniRead($config, "upgrade", "PosX2", "")	
+;	$itxtUpgradeY2 = IniRead($config, "upgrade", "PosY2", "")	
+;	if $ichkUpgrade2=0 Or $itxtUpgradeX2 = "" Or $itxtUpgradeY2 ="" Then
+;		$ichkUpgrade2=0
+;		$itxtUpgradeX2 = ""
+;		$itxtUpgradeY2 ="" 
+;	EndIf
+;	$itxtUpgradeX3 = IniRead($config, "upgrade", "PosX3", "")	
+;	$itxtUpgradeY3 = IniRead($config, "upgrade", "PosY3", "")	
+;	if $ichkUpgrade3=0 Or $itxtUpgradeX3 = "" Or $itxtUpgradeY3 ="" Then
+;		$ichkUpgrade3=0
+;		$itxtUpgradeX3 = ""
+;		$itxtUpgradeY3 ="" 
+;	EndIf
+;	If $ichkUpgrade1 = 1 Then 
+;       	GUICtrlSetState($chkUpgrade1, $GUI_CHECKED)
+;		GUICtrlSetState($btnLocateUp1, $GUI_ENABLE)
+;	Else
+;	        GUICtrlSetState($chkUpgrade1, $GUI_UNCHECKED)
+;		GUICtrlSetState($btnLocateUp1, $GUI_DISABLE)
+;	EndIf
+;	GUICtrlSetData($txtUpgradeX1, $itxtUpgradeX1)
+;	GUICtrlSetData($txtUpgradeY1, $itxtUpgradeY1)
+;
+;	If $ichkUpgrade2 = 1 Then 
+;	        GUICtrlSetState($chkUpgrade2, $GUI_CHECKED)
+;		GUICtrlSetState($btnLocateUp2, $GUI_ENABLE)
+;	Else
+;	        GUICtrlSetState($chkUpgrade2, $GUI_UNCHECKED)
+;		GUICtrlSetState($btnLocateUp2, $GUI_DISABLE)
+;	EndIf
+;	GUICtrlSetData($txtUpgradeX2, $itxtUpgradeX2)
+;	GUICtrlSetData($txtUpgradeY2, $itxtUpgradeY2)
+;
+;	If $ichkUpgrade3 = 1 Then 
+;	        GUICtrlSetState($chkUpgrade3, $GUI_CHECKED)
+;		GUICtrlSetState($btnLocateUp3, $GUI_ENABLE)
+;	Else
+;	        GUICtrlSetState($chkUpgrade3, $GUI_UNCHECKED)
+;		GUICtrlSetState($btnLocateUp3, $GUI_DISABLE)
+;	EndIf
+;	GUICtrlSetData($txtUpgradeX3, $itxtUpgradeX3)
+;	GUICtrlSetData($txtUpgradeY3, $itxtUpgradeY3)
+;
 	;---------------------------------------------------------------------------------------
 	; Notification settings ----------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
@@ -81,7 +140,8 @@ Func readConfig() ;Reads config and sets it to the variables
 	$PushBulletdelete = IniRead($config, "notification", "delete", "0")
 	$PushBulletfreebuilder = IniRead($config, "notification", "freebuilder", "0")
 	$PushBulletdisconnection = IniRead($config, "notification", "disconnection", "0")
-	GUICtrlSetData($inppushuser, IniRead($config, "notification", "user", ""))
+	GUICtrlSetData($inppushuser, IniRead($config, "notification", "user@"&@ComputerName, ""))
+
 ;~ 	If IniRead($config, "brokenbot.org", "senddata", "0") = 1 Then
 ;~ 		GUICtrlSetState($chkBBSendData, $GUI_CHECKED)
 ;~ 	Else
@@ -118,44 +178,42 @@ Func readConfig() ;Reads config and sets it to the variables
 	;---------------------------------------------------------------------------------------
 	; Config settings ----------------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
-	If IniRead($config, "config", "Background", "0") = 1 Then
+	If IniRead($config, "config", "Background@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkBackground, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkBackground, $GUI_UNCHECKED)
 	EndIf
-	If IniRead($config, "config", "ForceBS", "0") = 1 Then
-		GUICtrlSetState($chkForceBS, $GUI_CHECKED)
-	Else
-		GUICtrlSetState($chkForceBS, $GUI_UNCHECKED)
-	EndIf
-	If IniRead($config, "config", "chkUpdate", "0") = 1 Then
+	$ichkForceBS=IniRead($config, "config", "ForceBS@"&@ComputerName, "0") 
+	If IniRead($config, "config", "chkUpdate@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkUpdate, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkUpdate, $GUI_UNCHECKED)
 	EndIf
-	If IniRead($config, "config", "stayalive", "0") = 1 Then
+	If IniRead($config, "config", "stayalive@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkStayAlive, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkStayAlive, $GUI_UNCHECKED)
 	EndIf
-	If IniRead($config, "config", "speedboost", "0") = 1 Then
+	If IniRead($config, "config", "speedboost@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkSpeedBoost, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkSpeedBoost, $GUI_UNCHECKED)
 	EndIf
-	If IniRead($config, "config", "usehelper", "1") = 1 Then
+	If IniRead($config, "config", "usehelper@"&@ComputerName, "1") = 1 Then
 		GUICtrlSetState($chkHelper, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkHelper, $GUI_UNCHECKED)
 	EndIf
+	$ilblFontName=IniRead($config, "config", "LogFontName", "Lucida Console")
+	$ilblFontSize=IniRead($config, "config", "LogFontSize", "7.5")
 
 	;---------------------------------------------------------------------------------------
 	; Base location settings ---------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
 	$CCPos[0] = IniRead($config, "position", "xCCPos", "")
 	$CCPos[1] = IniRead($config, "position", "yCCPos", "")
-	$frmBotPosX = IniRead($config, "position", "frmBotPosX", "100")
-	$frmBotPosY = IniRead($config, "position", "frmBotPosY", "100")
+	$frmBotPosX = IniRead($config, "position", "frmBotPosX@"&@ComputerName, "920")
+	$frmBotPosY = IniRead($config, "position", "frmBotPosY@"&@ComputerName, "8")
 	$TownHallPos[0] = IniRead($config, "position", "xTownHall", "")
 	$TownHallPos[1] = IniRead($config, "position", "yTownHall", "")
 	$ArmyPos[0] = IniRead($config, "position", "xArmy", "")
@@ -166,18 +224,18 @@ Func readConfig() ;Reads config and sets it to the variables
 	$KingPos[1] = IniRead($config, "position", "yKing", "")
 	$QueenPos[0] = IniRead($config, "position", "xQueen", "")
 	$QueenPos[1] = IniRead($config, "position", "yQueen", "")
-	For $i = 0 To 3 ;Covers all 4 Barracks
-		$barrackPos[$i][0] = IniRead($config, "position", "xBarrack" & $i + 1, "")
-		$barrackPos[$i][1] = IniRead($config, "position", "yBarrack" & $i + 1, "")
-	Next
-	For $i = 0 To 1 ;Cover 2 Dark Barracks
-		$DarkBarrackPos[$i][0] = IniRead($config, "position", "xDarkBarrack" & $i + 1, "")
-		$DarkBarrackPos[$i][1] = IniRead($config, "position", "yDarkBarrack" & $i + 1, "")
-	Next
-	For $i = 0 To 16 ;Covers all Collectors
-		$collectorPos[$i][0] = IniRead($config, "position", "xCollector" & $i + 1, "")
-		$collectorPos[$i][1] = IniRead($config, "position", "yCollector" & $i + 1, "")
-	Next
+;	For $i = 0 To 3 ;Covers all 4 Barracks
+;		$barrackPos[$i][0] = IniRead($config, "position", "xBarrack" & $i + 1, "")
+;		$barrackPos[$i][1] = IniRead($config, "position", "yBarrack" & $i + 1, "")
+;	Next
+;	For $i = 0 To 1 ;Cover 2 Dark Barracks
+;		$DarkBarrackPos[$i][0] = IniRead($config, "position", "xDarkBarrack" & $i + 1, "")
+;		$DarkBarrackPos[$i][1] = IniRead($config, "position", "yDarkBarrack" & $i + 1, "")
+;	Next
+;	For $i = 0 To 16 ;Covers all Collectors
+;		$collectorPos[$i][0] = IniRead($config, "position", "xCollector" & $i + 1, "")
+;		$collectorPos[$i][1] = IniRead($config, "position", "yCollector" & $i + 1, "")
+;	Next
 	$LabPos[0] = IniRead($config, "position", "LabPosX", "")
 	$LabPos[1] = IniRead($config, "position", "LabPosY", "")
 
@@ -185,5 +243,5 @@ Func readConfig() ;Reads config and sets it to the variables
 	; Hidden settings ----------------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
 	; These settings can be read in from config but aren't found in the GUI
-	$FontSize = IniRead($config, "hidden", "fontsize", "8.5")
+	ModReload()
 EndFunc   ;==>readConfig

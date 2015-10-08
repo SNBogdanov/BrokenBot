@@ -7,7 +7,7 @@
 
 
 ;Check Out of Sync or Disconnection, if detected, bump speedBump by 0.5 seconds
-Func ChkDisconnection($disconnected = False)
+Func ChkDisconnection1($disconnected = False)
 	_CaptureRegion()
 	Local $dummyX = 0
 	Local $dummyY = 0

@@ -30,9 +30,21 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						_Crypt_Shutdown()
 						_GUICtrlRichEdit_Destroy($txtLog)
 						SaveConfig()
+						btnUPsave()
+						ModSave()
 						Exit
 					Case $btnStop
 						btnStop()
+					Case $btnModSave
+						ModSave()
+				  Case $btnModReload
+						ModReload()
+					Case $lblArmyOverviewURL
+						ShellExecute("http://forum.brokenbot.org/thread-1956.html")
+					Case $lblFastSearchURL
+						ShellExecute("http://forum.brokenbot.org/thread-2082.html")
+					Case $lblSnipeWaitingURL
+						ShellExecute("http://forum.brokenbot.org/thread-2386.html")
 					Case $btnAtkNow
 						btnAtkNow()
 					Case $btnHide
@@ -55,6 +67,12 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 							lblpushbulletenabled()
 						Else
 							GUICtrlSetState($lblpushbulletenabled, $GUI_ENABLE)
+						EndIf
+					Case $chkForceBS
+						If IsChecked($chkForceBS) Then
+							$ichkForceBS=True
+						Else
+							$ichkForceBS=False
 						EndIf
 					Case $chkDonateOnly
 						If IsChecked($chkDonateOnly) Then
@@ -82,18 +100,24 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						Else
 							GUICtrlSetState($lblpushbulletenabled, $GUI_ENABLE)
 						EndIf
-					Case $chkUpgrade1
-						chkUpgrade1()
-					Case $chkUpgrade2
-						chkUpgrade2()
-					Case $chkUpgrade3
-						chkUpgrade3()
-;~ 					Case $chkUpgrade4
-;~ 						chkUpgrade4()
-;~ 					Case $chkUpgrade5
-;~ 						chkUpgrade5()
-;~ 					Case $chkUpgrade6
-;~ 						chkUpgrade6()
+
+
+
+					Case $btnUPadd
+						btnUPadd()
+					Case $btnUPsave
+						btnUPsave()
+					Case $btnUPreload
+						btnUPreload()
+					Case $btnUPremove
+						btnUPremove()
+					Case $btnUPup
+						btnUPup()
+					Case $btnUPdown
+						btnUPdown()
+					Case $btnUPlocate
+						LocateMyBuilding()
+
 					Case $UseJPG
 						UseJPG()
 					Case $UseAttackJPG
@@ -162,9 +186,35 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						_Crypt_Shutdown()
 						_GUICtrlRichEdit_Destroy($txtLog)
 						SaveConfig()
+						ModSave()
+						btnUPsave()
 						Exit
 				EndSwitch
 		EndSwitch
+
+		$iIDFrom = BitAND($wParam, 0xFFFF) ; Low Word
+		$iCode = BitShift($wParam, 16) ; Hi Word
+
+
+
+				Switch $iIDFrom
+
+					Case $inpUPname
+						Switch $iCode
+							Case $EN_CHANGE
+								UPChangeName($UPCurSel)
+							Case $EN_KILLFOCUS
+								UPChangeName($UPCurSel)
+						EndSwitch
+
+					Case $lstUPlist
+						Switch $iCode
+							Case $LBN_SELCHANGE
+								UpdateQueueDesign()
+						EndSwitch
+				EndSwitch
+
+
 	Else
 		If IsArray($PluginEvents) Then
 			For $i = 1 To $PluginEvents[0][0]
@@ -183,6 +233,8 @@ Func btnStart()
 
 		GUICtrlSetState($btnStart, $GUI_HIDE)
 		If IsChecked($chkBackground) Then GUICtrlSetState($btnHide, $GUI_ENABLE)
+		If IsChecked($chkStayAlive) Then _PowerKeepAlive()
+		GUICtrlSetState($chkStayAlive, $GUI_DISABLE)
 		GUICtrlSetState($btnPause, $GUI_ENABLE)
 		GUICtrlSetData($btnPause, "Pause")
 		GUICtrlSetState($btnStop, $GUI_SHOW)
@@ -199,8 +251,14 @@ Func btnStart()
 		CreateLogFile()
 
 		SaveConfig()
+		ModSave()
+		btnUPsave()
+		btnUPreload()
+		_GUICtrlListBox_SetCurSel($lstUPlist, 0)
+		UpdateQueueDesign()
 		readConfig()
 		applyConfig()
+		ModReload()
 
 		_GUICtrlEdit_SetText($txtLog, "")
 
@@ -230,6 +288,7 @@ Func btnStop()
 		EnableBS($HWnD, $SC_MINIMIZE)
 		EnableBS($HWnD, $SC_CLOSE)
 		GUICtrlSetState($btnLocateBarracks, $GUI_ENABLE)
+		GUICtrlSetState($btnLab, $GUI_ENABLE)
 		GUICtrlSetState($btnLocateDarkBarracks, $GUI_ENABLE)
 		GUICtrlSetState($btnLocateSFactory, $GUI_ENABLE)
 		GUICtrlSetState($btnLocateTownHall, $GUI_ENABLE)
@@ -260,7 +319,30 @@ Func btnStop()
 
 		FileClose($hLogFileHandle)
 		SetLog(GetLangText("msgStopped"), $COLOR_ORANGE)
+		If IsChecked($chkStayAlive) Then _PowerResetState()
+		GUICtrlSetState($chkStayAlive, $GUI_ENABLE)
 		GUICtrlSetState($btnHide, $GUI_DISABLE)
+
+		GUICtrlSetState($lstUPlist, $GUI_ENABLE)
+		GUICtrlSetState($btnUPadd, $GUI_ENABLE)
+		GUICtrlSetState($btnUPremove, $GUI_ENABLE)
+		GUICtrlSetState($grpUPqueue, $GUI_ENABLE)
+		GUICtrlSetState($inpUPname, $GUI_ENABLE)
+		GUICtrlSetState($grpUPpos, $GUI_ENABLE)
+		GUICtrlSetState($btnUPlocate, $GUI_ENABLE)
+		GUICtrlSetState($inpUPMinimumGold, $GUI_ENABLE)
+		GUICtrlSetState($inpUPMinimumElixir, $GUI_ENABLE)
+		GUICtrlSetState($chkUPenable, $GUI_ENABLE)
+		GUICtrlSetState($grpUPqueueEnd, $GUI_ENABLE)
+		GUICtrlSetState($btnUPup, $GUI_ENABLE)
+		GUICtrlSetState($btnUPdown, $GUI_ENABLE)
+		GUICtrlSetState($btnUPsave, $GUI_ENABLE)
+		GUICtrlSetState($btnUPreload, $GUI_ENABLE)
+		GUICtrlSetState($chkUPHalt, $GUI_ENABLE)
+		UPRefreshControls()
+
+
+
 	EndIf
 EndFunc   ;==>btnStop
 
@@ -431,10 +513,10 @@ Func btnFindWall()
 	GUICtrlSetState($UseGold, $GUI_DISABLE)
 	GUICtrlSetState($UseElixir, $GUI_DISABLE)	
 	While 1
-		SaveConfig()
-		readConfig()
-		applyConfig()
-		ZoomOut()
+;		SaveConfig()
+;		readConfig()
+;		applyConfig()
+;		ZoomOut()
 		FindWall()
 		ExitLoop
 	WEnd
@@ -450,10 +532,10 @@ Func btnFindWallElix()
 	GUICtrlSetState($UseGold, $GUI_DISABLE)
 	GUICtrlSetState($UseElixir, $GUI_DISABLE)
 	While 1
-		SaveConfig()
-		readConfig()
-		applyConfig()
-		ZoomOut()
+;		SaveConfig()
+;		readConfig()
+;		applyConfig()
+;		ZoomOut()
 		FindWallE()
 	ExitLoop
 	WEnd
@@ -481,6 +563,7 @@ Func btnHide()
 			$botPos[0] = $window[0]
 			$botPos[1] = $window[1]
 			WinMove($Title, "", -32000, -32000)
+			_TaskBarControl($HWnD,0)
 			$Hide = True
 		Else
 			SetLog(GetLangText("msgBSHideFail"), $COLOR_RED)
@@ -491,6 +574,7 @@ Func btnHide()
 		If $botPos[0] = -32000 Then
 			WinMove($Title, "", 0, 0)
 		Else
+			_TaskBarControl($HWnD,1)
 			WinMove($Title, "", $botPos[0], $botPos[1])
 			WinActivate($Title)
 		EndIf
@@ -563,6 +647,8 @@ Func btnLoad($configfile)
 		readConfig()
 		applyConfig()
 		saveConfig()
+		btnUPreload()
+		btnUPsave()
 		MsgBox($MB_SYSTEMMODAL, "", GetLangText("boxLoadSuccess") & @CRLF & $sFileOpenDialog)
 		GUICtrlSetData($lblConfig, getfilename($config))
 	EndIf
@@ -821,4 +907,334 @@ EndFunc   ;==>_btnBBValidate
 
 Func lblBBRegister()
 	ShellExecute("http://www.brokenbot.org/page.php?p=register")
+EndFunc  ;==>lblBBRegister
+
+
+
+
+
+Global $ModConfig = @ScriptDir & "\config\ModConfig.ini"
+Func ModSave()
+	IniWrite($ModConfig, "FastSearch", "Enabled", Number(IsChecked($chkFastSearchEnable)))
+	IniWrite($ModConfig, "SinpeWaiting", "Enabled", Number(IsChecked($chkSnipeTrainingEnable)))
+	IniWrite($ModConfig, "ArmyOverview", "TrainingDelay", GUICtrlRead($inpTrainingDelay))
+	SetLog("Mod Configs Saved")
+EndFunc   ;==>ModSave
+
+
+
+
+Func ModReload()
+	GUICtrlSetState($chkFastSearchEnable, (Number(IniRead($ModConfig, "FastSearch", "Enabled", "0")) = 1) ? $GUI_CHECKED : $GUI_UNCHECKED)
+	$TrainingDelay = IniRead($ModConfig, "ArmyOverview", "TrainingDelay", "250")
+
+	GUICtrlSetData($inpTrainingDelay, $TrainingDelay)
+	GUICtrlSetState($chkSnipeTrainingEnable, (Number(IniRead($ModConfig, "SinpeWaiting", "Enabled", "0")) = 1) ? $GUI_CHECKED : $GUI_UNCHECKED)
+
+EndFunc   ;==>ModReload
+
+
+
+
+
+
+
+
+
+
+Global $UPConfig = @ScriptDir & "\config\upgrade.ini"
+Global $UPprevSel = 0
+Global $UPCurSel = 0
+Global $UpgradeQueue
+
+Func UpdateQueueDesign()
+
+	$UPCurSel = _GUICtrlListBox_GetCurSel($lstUPlist)
+	UPsave($UPprevSel)
+	UPApply($UPCurSel)
+	$UPprevSel = _GUICtrlListBox_GetCurSel($lstUPlist) ; just used above
+	UPRefreshControls()
+EndFunc   ;==>UpdateQueueDesign
+
+
+Func UPsave($myIndex)
+
+	IniWrite($UPConfig, "Building_" & $myIndex, "Enabled", Number(IsChecked($chkUPenable)))
+	IniWrite($UPConfig, "Building_" & $myIndex, "X", GUICtrlRead($inpUPx))
+	IniWrite($UPConfig, "Building_" & $myIndex, "Y", GUICtrlRead($inpUPy))
+	IniWrite($UPConfig, "Building_" & $myIndex, "ResourceType", Number(GUICtrlRead($lblResourceType) = "Elixir"))
+	IniWrite($UPConfig, "Building_" & $myIndex, "UpgradeCost", GUICtrlRead($inpUPCost))
+	IniWrite($UPConfig, "Building_" & $myIndex, "Name", GUICtrlRead($inpUPname))
+EndFunc   ;==>UPsave
+
+Func UPRead($myIndex)
+	Local $myBuilding[6]
+
+	$myBuilding[0] = Number(IniRead($UPConfig, "Building_" & $myIndex, "Enabled", 0))
+	$myBuilding[1] = IniRead($UPConfig, "Building_" & $myIndex, "X", "")
+	$myBuilding[2] = IniRead($UPConfig, "Building_" & $myIndex, "Y", "")
+	$myBuilding[3] = Number(IniRead($UPConfig, "Building_" & $myIndex, "ResourceType", 0))
+	$myBuilding[4] = IniRead($UPConfig, "Building_" & $myIndex, "UpgradeCost", 0)
+	$myBuilding[5] = IniRead($UPConfig, "Building_" & $myIndex, "Name", "New Building")
+	Return $myBuilding
+EndFunc   ;==>UPRead
+
+Func UPApply($myIndex)
+	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+
+	If $myIndex > $ListCount Then Return
+
+	Local $myBuilding = UPRead($myIndex)
+
+	GUICtrlSetState($chkUPenable, ($myBuilding[0] = 1) ? $GUI_CHECKED : $GUI_UNCHECKED)
+	GUICtrlSetData($inpUPx, $myBuilding[1])
+	GUICtrlSetData($inpUPy, $myBuilding[2])
+
+	If Number($myBuilding[3]) = 0 Then
+		GUICtrlSetData($lblResourceType,"Gold")
+	Else
+		GUICtrlSetData($lblResourceType,"Elixir")
+	EndIf
+
+	GUICtrlSetData($inpUPCost, $myBuilding[4])
+	GUICtrlSetData($inpUPname, $myBuilding[5])
+EndFunc   ;==>UPApply
+
+Func btnUPadd()
+	UPsave($UPCurSel) ; saves into new . it is a bug
+	_GUICtrlListBox_BeginUpdate($lstUPlist)
+	_GUICtrlListBox_InsertString($lstUPlist, "New Building")
+	_GUICtrlListBox_EndUpdate($lstUPlist)
+	$UPCurSel = _GUICtrlListBox_GetCount($lstUPlist) - 1
+	_GUICtrlListBox_SetCurSel($lstUPlist, $UPCurSel)
+	$UPprevSel = $UPCurSel
+	UPCleanDesigner()
+	UPsave($UPCurSel)
+	UPRefreshControls()
+EndFunc   ;==>btnUPadd
+
+
+
+Func btnUPsave()
+	UPsave($UPCurSel)
+	IniWrite($UPConfig, "Halt_Upgrade", "Enabled", Number(IsChecked($chkUPHalt)))
+	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+	Local $myNewQueue[$ListCount]
+
+
+	For $i = 0 To $ListCount - 1
+
+		$myNewQueue[$i] = UPRead($i)
+
+	Next
+	$UpgradeQueue = $myNewQueue
+EndFunc   ;==>btnUPsave
+
+
+Func btnUPreload()
+	_GUICtrlListBox_ResetContent($lstUPlist)
+
+	_GUICtrlListBox_BeginUpdate($lstUPlist)
+	For $i = 0 To 250
+		If IniReadSection($UPConfig, "Building_" & $i) <> @error Then
+			_GUICtrlListBox_InsertString($lstUPlist, IniRead($UPConfig, "Building_" & $i, "Name", "New Building"))
+		Else
+			ExitLoop
+		EndIf
+
+	Next
+	_GUICtrlListBox_EndUpdate($lstUPlist)
+	_GUICtrlListBox_SetCurSel($lstUPlist, $UPCurSel)
+	UPApply($UPCurSel)
+	GUICtrlSetState($chkUPHalt, (Number(IniRead($UPConfig, "Halt_Upgrade", "Enabled", "0")) = 1) ? $GUI_CHECKED : $GUI_UNCHECKED)
+	UPRefreshControls()
+EndFunc   ;==>btnUPreload
+
+
+
+
+Func btnUPremove()
+
+	$UPprevSel = -1 ; save to -1
+
+	UPremove($UPCurSel)
+
+	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+	_GUICtrlListBox_DeleteString($lstUPlist,$UPCurSel)
+	If $UPCurSel = $ListCount - 1 Then $UPCurSel -= 1
+	btnUPreload()
+EndFunc   ;==>btnUPremove
+
+Func UPremove($myIndex )
+
+	IniDelete($UPConfig, "Building_" & $myIndex)
+
+	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+
+	For $i = $myIndex + 1 To $ListCount
+		IniRenameSection($UPConfig, "Building_" & $i, "Building_" & ($i - 1))
+	Next
+EndFunc   ;==>UPremove
+
+Func btnUPup()
+	UPsave($UPCurSel)
+	Local $TempSection1 = "a" ; like temp = a, a= b, b = temp. swapping
+	Local $TempSection2 = "b"
+	If $UPCurSel = 0 Then Return
+
+	IniRenameSection($UPConfig, "Building_" & $UPCurSel, "Building_" & $TempSection1) ; current is a
+	IniRenameSection($UPConfig, "Building_" & ($UPCurSel - 1), "Building_" & $TempSection2); above is b
+
+	IniRenameSection($UPConfig, "Building_" & $TempSection2, "Building_" & $UPCurSel) ; above(b) = Current
+	IniRenameSection($UPConfig, "Building_" & $TempSection1, "Building_" & ($UPCurSel - 1)) ; current(a) = Above
+
+
+	$UPCurSel -= 1
+	$UPprevSel -= 1
+	btnUPreload()
+EndFunc   ;==>btnUPup
+
+Func btnUPdown()
+	UPsave($UPCurSel)
+	Local $TempSection1 = "a" ; like temp = a, a= b, b = temp. swapping
+	Local $TempSection2 = "b"
+	If $UPCurSel = _GUICtrlListBox_GetCount($lstUPlist) - 1 Then Return
+
+	IniRenameSection($UPConfig, "Building_" & $UPCurSel, "Building_" & $TempSection1)
+	IniRenameSection($UPConfig, "Building_" & ($UPCurSel + 1), "Building_" & $TempSection2)
+
+	IniRenameSection($UPConfig, "Building_" & $TempSection2, "Building_" & $UPCurSel)
+	IniRenameSection($UPConfig, "Building_" & $TempSection1, "Building_" & ($UPCurSel + 1))
+
+
+	$UPCurSel += 1
+	$UPprevSel += 1
+	btnUPreload()
+EndFunc   ;==>btnUPdown
+
+
+Func LocateMyBuilding()
+	$Name=""
+	$UpgradeCost=0
+	$UpgradeResource=0
+	checkMainScreen()
+	If Not ZoomOut() Then
+		SetLog(GetLangText("msgFailedZoomOut"), $COLOR_BLUE)
+		Return False
+	EndIf
+	ClickP($TopLeftClient, 2, 250); Click away twice with 250ms delay
+	While 1
+		$MsgBox = MsgBox(1 + 262144, GetLangText("boxUpgrade"), GetLangText("boxUpgradeb"), 0, $frmBot)
+		If $MsgBox = 1 Then
+			$BuildPos1[0] = FindPos()[0]
+			$BuildPos1[1] = FindPos()[1]
+			SetLog(GetLangText("msgLocBuilding") & " 1 =  " & "(" & $BuildPos1[0] & "," & $BuildPos1[1] & ")", $COLOR_GREEN)
+			Sleep(500)
+			If IdentifyBuilding($Name,$UpgradeCost,$UpgradeResource) Then
+				GUICtrlSetData($inpUPx, $BuildPos1[0])
+				GUICtrlSetData($inpUPy, $BuildPos1[1])
+				GUICtrlSetData($inpUPname,$Name)
+				UPChangeName($UPCurSel)
+				If $UpgradeResource = 0 Then
+					GUICtrlSetData($lblResourceType,"Gold")
+				Else
+					GUICtrlSetData($lblResourceType,"Elixir")
+				EndIf
+				GUICtrlSetData($inpUPCost, $UpgradeCost)
+			EndIf
+		EndIf
+		ExitLoop
+	WEnd
+	ClickP($TopLeftClient, 2, 250); Click away twice with 250ms delay
+EndFunc   ;==>LocateMyBuilding
+
+
+
+Func UPRefreshControls()
+
+	Local $myListCount = _GUICtrlListBox_GetCount($lstUPlist)
+	Local $mySelItem = _GUICtrlListBox_GetCurSel($lstUPlist)
+
+	If Not BitAND(GUICtrlGetState($btnStart), $GUI_SHOW) Then
+		GUICtrlSetState($lstUPlist, $GUI_DISABLE)
+		GUICtrlSetState($btnUPadd, $GUI_DISABLE)
+		GUICtrlSetState($btnUPremove, $GUI_DISABLE)
+		GUICtrlSetState($grpUPqueue, $GUI_DISABLE)
+		GUICtrlSetState($inpUPname, $GUI_DISABLE)
+		GUICtrlSetState($grpUPpos, $GUI_DISABLE)
+		GUICtrlSetState($btnUPlocate, $GUI_DISABLE)
+		GUICtrlSetState($inpUPMinimumGold, $GUI_DISABLE)
+		GUICtrlSetState($inpUPMinimumElixir, $GUI_DISABLE)
+		GUICtrlSetState($chkUPenable, $GUI_DISABLE)
+		GUICtrlSetState($grpUPqueueEnd, $GUI_DISABLE)
+		GUICtrlSetState($btnUPup, $GUI_DISABLE)
+		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
+		GUICtrlSetState($btnUPsave, $GUI_DISABLE)
+		GUICtrlSetState($btnUPreload, $GUI_DISABLE)
+		GUICtrlSetState($chkUPHalt, $GUI_DISABLE)
+		Return
+	EndIf
+	For $myGroupItem = $grpUPqueue To $grpUPqueueEnd
+		GUICtrlSetState($myGroupItem, $GUI_ENABLE)
+	Next
+	GUICtrlSetState($btnUPadd, $GUI_ENABLE)
+	GUICtrlSetState($btnUPup, $GUI_ENABLE)
+	GUICtrlSetState($btnUPdown, $GUI_ENABLE)
+	GUICtrlSetState($btnUPremove, $GUI_ENABLE)
+
+	If $myListCount = 0 Or $mySelItem = -1 Then ; if no item or none selected
+		UPCleanDesigner()
+		For $myGroupItem = $grpUPqueue To $grpUPqueueEnd
+			GUICtrlSetState($myGroupItem, $GUI_DISABLE)
+		Next
+		GUICtrlSetState($btnUPup, $GUI_DISABLE)
+		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
+		GUICtrlSetState($btnUPremove, $GUI_DISABLE)
+		Return
+	Else
+		If $myListCount = 1 Then ; just have one item
+			GUICtrlSetState($btnUPup, $GUI_DISABLE)
+			GUICtrlSetState($btnUPdown, $GUI_DISABLE)
+			Return
+
+		EndIf
+
+		If $mySelItem = $myListCount - 1 Then ; last item
+			GUICtrlSetState($btnUPdown, $GUI_DISABLE)
+			Return
+		EndIf
+
+		If $mySelItem = 0 Then ; first item
+			GUICtrlSetState($btnUPup, $GUI_DISABLE)
+			Return
+		EndIf
+
+	EndIf
+EndFunc   ;==>UPRefreshControls
+
+
+Func UPChangeName($myIndex)
+
+	_GUICtrlListBox_ReplaceString($lstUPlist, $myIndex, GUICtrlRead($inpUPname))
+	_GUICtrlListBox_SetCurSel($lstUPlist, $UPCurSel)
+EndFunc   ;==>UPChangeName
+
+Func UPCleanDesigner()
+	GUICtrlSetState($chkUPenable, $GUI_UNCHECKED)
+	GUICtrlSetData($inpUPx, "")
+	GUICtrlSetData($inpUPy, "")
+	GUICtrlSetData($inpUPname, "New Building" )
+	GUICtrlSetData($lblResourceType,"")
+	GUICtrlSetData($inpUPCost, "")
+
+EndFunc
+
+Func SetFont()
+	Global $a_font = _ChooseFont(GUICtrlRead($lblFontName), GUICtrlRead($lblFontSize))
+	If Not @Error Then
+		GUICtrlSetData($lblFontName,$a_font[2])
+		GUICtrlSetData($lblFontSize,$a_font[3])
+	Else
+		MsgBox($MB_SYSTEMMODAL, "Error", "Error Choosing Font")
+	EndIf
 EndFunc

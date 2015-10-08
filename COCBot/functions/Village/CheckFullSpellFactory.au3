@@ -1,37 +1,60 @@
 Func CheckFullSpellFactory()
+
+	Local $previousSpells = $curSpells
+
 	SetLog(GetLangText("msgCheckingSF"), $COLOR_BLUE)
 	$fullSpellFactory = False
+	$SpellsChanged = True
 
 	If _Sleep(100) Then Return
 
-	ClickP($TopLeftClient) ;Click Away
+	If Not TryToOpenArmyOverview() Then Return
 
-	If $SpellPos[0] = "" Then
-		If Not LocateSpellFactory() Then Return
-		SaveConfig()
-	Else
-		If _Sleep(100) Then Return
-		Click($SpellPos[0], $SpellPos[1]) ;Click Spell Factory
-	EndIf
 
-	Local $BSpellPos = _WaitForPixel(214, 581, 368, 583, Hex(0x4084B8, 6), 5, 1) ;Finds Info button
-	If IsArray($BSpellPos) = False Then
-		SetLog(GetLangText("msgSFUnavailable"), $COLOR_RED)
-		If $DebugMode = 2 Then _GDIPlus_ImageSaveToFile($hBitmap, $dirDebug & "SpellNA-" & @HOUR & @MIN & @SEC & ".png")
-	Else
-		Click($BSpellPos[0], $BSpellPos[1]) ;Click Info button
-		;If _Sleep(2000) Then Return
-		_WaitForPixel(690, 150, 710, 170, Hex(0xD80407, 6), 5, 1) ;Finds Red Cross button in new popup window
 
-		_CaptureRegion()
-		Local $Spellbar = _PixelSearch(707, 210, 709, 213, Hex(0x37A800, 6), 5)
-		ClickP($TopLeftClient) ;Click Away
-		If IsArray($Spellbar) Then
-			$fullSpellFactory = True
-			SetLog(GetLangText("msgSpellFull"), $COLOR_RED)
+
+	If _Sleep(100) Then Return
+
+	For $readattempts = 1 To 5
+		$curSpells = GetTroopCapacity(204, 389, 242, 404)
+;		$curSpells = _TesseractReadText(204, 389, 242, 404, "-threshold 55% ")
+		$curSpells = StringStripWS($curSpells, 8)
+
+		$itxtFactoryCap = StringMid($curSpells, StringInStr($curSpells, "/") + 1)
+		If Number($itxtFactoryCap) > 0 And Number($itxtFactoryCap) < 12 And StringIsDigit($itxtFactoryCap) Then
+			$curSpells = StringLeft($curSpells, StringInStr($curSpells, "/") - 1)
+			If Number($curSpells) >= 0 And Number($curSpells) <= $itxtFactoryCap And StringIsDigit($curSpells) Then
+				SetLog("Spells: " & $curSpells & "/" & $itxtFactoryCap, $COLOR_GREEN)
+				ExitLoop
+			EndIf
 		EndIf
-		ClickP($TopLeftClient) ;Click Away
-		Return $fullSpellFactory
+
+		If _Sleep(500) Then Return
+		If $readattempts = 5 Then
+			SetLog("Spells: " & GetLangText("lblUnknownCap"), $COLOR_GREEN)
+			$curSpells = -1
+			ExitLoop
+		EndIf
+	Next
+
+;	If  ($curSpells - $previousSpells) <> 0 Then $SpellsChanged = True
+
+	If $curSpells = -1 Then
+		SetLog(GetLangText("msgSFUnavailable"), $COLOR_RED)
+		Return -1
 	EndIf
 
+	If $curSpells + 1 >= $itxtFactoryCap Then
+		SetLog(GetLangText("msgSpellFull"), $COLOR_RED)
+		$fullSpellFactory = True
+	EndIf
+
+
+	If $DebugMode = 1 Then SetLog("Spell Factory Full: " & $fullSpellFactory)
+
+
+	Return False
+;	Return $fullSpellFactory
 EndFunc   ;==>CheckFullSpellFactory
+
+

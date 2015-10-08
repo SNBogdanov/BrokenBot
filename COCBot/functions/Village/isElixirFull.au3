@@ -1,6 +1,15 @@
 ;Checks if your Elixir Storages are maxed out
 
 Func isElixirFull()
+
+	If $MaxElixir >0 Then
+		If $ElixirCount = $MaxElixir Then
+			SetLog(GetLangText("msgElixirFull"), $COLOR_GREEN)
+			Return True
+		Else
+			Return False
+		EndIf
+	EndIf
 	_CaptureRegion()
 	;-----------------------------------------------------------------------------
 	If _ColorCheck(_GetPixelColor(658, 84), Hex(0x000000, 6), 6) Then ;Hex is black

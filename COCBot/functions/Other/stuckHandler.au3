@@ -46,6 +46,10 @@ Func restartBlueStack()	;Kill and Restart bluestack
 		Else
 			$restartBSAttemptedCount = 0
 			waitMainScreen()
+  		If $Hide = True Then
+		  	$Hide = False
+			  btnHide()
+		  EndIf
 		EndIf
 		
 	Else
@@ -62,10 +66,15 @@ Func handleBarracksError($i) ;Sets the text for the log
 	If $i = 1 Then $brerror[1] = True
 	If $i = 2 Then $brerror[2] = True
 	If $i = 3 Then $brerror[3] = True
+	If checkObstacles() Then 
+		resetBarracksError()
+		Return 
+	EndIf
 
 	If $brerror[0] = True And $brerror[1] = True And $brerror[2] = True And $brerror[3] = True Then
 		SetLog(GetLangText("msgRestartBarracks"), $COLOR_RED)
-		If Not restartBlueStack() Then Return
+		waitMainScreen()
+;		If Not restartBlueStack() Then Return
 	EndIf
 EndFunc   ;==>handleBarracksError
 

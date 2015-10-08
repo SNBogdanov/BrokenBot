@@ -340,8 +340,8 @@ Func Standard_Attack($AttackMethod = 1)
 
 		Local $CollectorDeployOrder[11] = [$Giant, $Hog, $Valk, $WB, $Barb, $Arch, $Gob, $Minion, $King, $Queen, $CC]
 		Local $SnipeWaveMax = 6
-		Local $SnipeWaveSizes[5] = [5, 5, 15, 15, 15]
-		Local $SnipeWaves[6][11] = [[-1, -1, -1, -1, $Barb, $Arch, -1, -1, -1, -1, -1], _
+		Local $SnipeWaveSizes[5] = [8, 8, 15, 15, 15]
+		Local $SnipeWaves[6][11] = [[-1, -1, -1, -1, -1, $Arch, -1, -1, -1, -1, -1], _
 				[-1, -1, -1, -1, $Barb, $Arch, -1, -1, -1, -1, -1], _
 				[$Giant, -1, -1, $WB, $Barb, $Arch, -1, -1, -1, -1, -1], _
 				[$Giant, $Hog, -1, $WB, $Barb, $Arch, -1, $Minion, -1, -1, -1], _
@@ -359,6 +359,11 @@ Func Standard_Attack($AttackMethod = 1)
 		Global $attackTH = ($AttackMethod = 0) ? _GUICtrlComboBox_GetCurSel($cmbDeadAttackTH) : _GUICtrlComboBox_GetCurSel($cmbAttackTH)
 		Global $OuterQuad
 		$OuterQuad = False
+;		If $THquadrant = 1 Then $OuterQuad = True
+;		If $THquadrant = 3 Then $OuterQuad = True
+;		If $THquadrant = 7 Then $OuterQuad = True
+;		If $THquadrant = 9 Then $OuterQuad = True
+
 		If $THquadrant >= 1 And $THquadrant <= 4 Then $OuterQuad = True
 		If $THquadrant >= 6 And $THquadrant <= 9 Then $OuterQuad = True
 		If $AttackMethod = 3 Then
@@ -610,13 +615,13 @@ Func Standard_Attack($AttackMethod = 1)
 							If GUICtrlRead($txtKingSkill) = 0 Then
 								_CaptureRegion()
 								If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-									SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+									SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 									SelectDropTroupe($King)
 									$KingPowerSnipe = True
 								EndIf
 							Else
 								If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-									SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+									SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 									SelectDropTroupe($King)
 									$KingPowerSnipe = True
 								EndIf
@@ -626,13 +631,13 @@ Func Standard_Attack($AttackMethod = 1)
 							If GUICtrlRead($txtQueenSkill) = 0 Then
 								_CaptureRegion()
 								If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-									SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+									SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 									SelectDropTroupe($Queen)
 									$QueenPowerSnipe = True
 								EndIf
 							Else
 								If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) Then
-									SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+									SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 									SelectDropTroupe($Queen)
 									$QueenPowerSnipe = True
 								EndIf
@@ -653,13 +658,13 @@ Func Standard_Attack($AttackMethod = 1)
 						If GUICtrlRead($txtKingSkill) = 0 Then
 							_CaptureRegion()
 							If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-								SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+								SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 								SelectDropTroupe($King)
 								$KingPowerSnipe = True
 							EndIf
 						Else
 							If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-								SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+								SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 								SelectDropTroupe($King)
 								$KingPowerSnipe = True
 							EndIf
@@ -669,13 +674,13 @@ Func Standard_Attack($AttackMethod = 1)
 						If GUICtrlRead($txtQueenSkill) = 0 Then
 							_CaptureRegion()
 							If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-								SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+								SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 								SelectDropTroupe($Queen)
 								$QueenPowerSnipe = True
 							EndIf
 						Else
 							If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) Then
-								SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+								SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 								SelectDropTroupe($Queen)
 								$QueenPowerSnipe = True
 							EndIf
@@ -705,8 +710,8 @@ Func Standard_Attack($AttackMethod = 1)
 			$RedLineWasOff = False
 			If GUICtrlRead($sldAcc) = 100 Then
 				$RedLineWasOff = True
-				GUICtrlSetData($sldAcc, 90)
-				SeekEdges()
+;				GUICtrlSetData($sldAcc, 90)
+;				SeekEdges()
 			EndIf
 
 			; Find all the collectors
@@ -922,13 +927,13 @@ Func Standard_Attack($AttackMethod = 1)
 									If GUICtrlRead($txtKingSkill) = 0 Then
 										_CaptureRegion()
 										If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-											SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+											SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 											SelectDropTroupe($King)
 											$KingPowerCollector = True
 										EndIf
 									Else
 										If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-											SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+											SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 											SelectDropTroupe($King)
 											$KingPowerCollector = True
 										EndIf
@@ -938,13 +943,13 @@ Func Standard_Attack($AttackMethod = 1)
 									If GUICtrlRead($txtQueenSkill) = 0 Then
 										_CaptureRegion()
 										If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-											SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+											SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 											SelectDropTroupe($Queen)
 											$QueenPowerCollector = True
 										EndIf
 									Else
 										If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) Then
-											SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+											SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 											SelectDropTroupe($Queen)
 											$QueenPowerCollector = True
 										EndIf
@@ -973,13 +978,13 @@ Func Standard_Attack($AttackMethod = 1)
 								If GUICtrlRead($txtKingSkill) = 0 Then
 									_CaptureRegion()
 									If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-										SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+										SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 										SelectDropTroupe($King)
 										$KingPowerCollector = True
 									EndIf
 								Else
 									If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-										SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+										SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 										SelectDropTroupe($King)
 										$KingPowerCollector = True
 									EndIf
@@ -989,13 +994,13 @@ Func Standard_Attack($AttackMethod = 1)
 								If GUICtrlRead($txtQueenSkill) = 0 Then
 									_CaptureRegion()
 									If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-										SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+										SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 										SelectDropTroupe($Queen)
 										$QueenPowerCollector = True
 									EndIf
 								Else
 									If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) Then
-										SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+										SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 										SelectDropTroupe($Queen)
 										$QueenPowerCollector = True
 									EndIf
@@ -1045,13 +1050,13 @@ Func Standard_Attack($AttackMethod = 1)
 								If GUICtrlRead($txtKingSkill) = 0 Then
 									_CaptureRegion()
 									If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-										SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+										SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 										SelectDropTroupe($King)
 										$KingPowerCollector = True
 									EndIf
 								Else
 									If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-										SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+										SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 										SelectDropTroupe($King)
 										$KingPowerCollector = True
 									EndIf
@@ -1061,13 +1066,13 @@ Func Standard_Attack($AttackMethod = 1)
 								If GUICtrlRead($txtQueenSkill) = 0 Then
 									_CaptureRegion()
 									If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-										SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+										SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 										SelectDropTroupe($Queen)
 										$QueenPowerCollector = True
 									EndIf
 								Else
 									If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) Then
-										SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+										SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 										SelectDropTroupe($Queen)
 										$QueenPowerCollector = True
 									EndIf
@@ -1309,9 +1314,9 @@ Func Standard_Attack($AttackMethod = 1)
 				$loop += 1
 				$gone = True
 				If $loop = 1 Then
-					Standard_PrepareAttack(True) ;Check remaining quantities
+					Standard_PrepareAttack(True,$AttackMethod) ;Check remaining quantities
 				Else
-					Standard_PrepareAttack(True, 1, True)
+					Standard_PrepareAttack(True, $AttackMethod, True)
 				EndIf
 				For $i = 0 To 8
 					If $atkTroops[$i][0] <> -1 Then
@@ -1348,13 +1353,13 @@ Func Standard_Attack($AttackMethod = 1)
 						If GUICtrlRead($txtKingSkill) = 0 Then
 							_CaptureRegion()
 							If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) And Not $KingGone Then
-								SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+								SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 								SelectDropTroupe($King)
 								$KingGone = True
 							EndIf
 						Else
 							If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) And Not $KingGone Then
-								SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+								SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 								SelectDropTroupe($King)
 								$KingGone = True
 							EndIf
@@ -1364,13 +1369,13 @@ Func Standard_Attack($AttackMethod = 1)
 						If GUICtrlRead($txtQueenSkill) = 0 Then
 							_CaptureRegion()
 							If (checkHealth($Queen) Or (TimerDiff($hHeroTimer) / 1000) > 60) And Not $QueenGone Then
-								SetLog(GetLangText("msgActivateQueen"), $COLOR_AQUA)
+								SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 								SelectDropTroupe($Queen)
 								$QueenGone = True
 							EndIf
 						Else
 							If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtQueenSkill))) And Not $QueenGone Then
-								SetLog(GetLangText("msgActivateQueen"), $COLOR_BLUE)
+								SetLog(GetLangText("msgActivateQueen"), $COLOR_GREEN)
 								SelectDropTroupe($Queen)
 								$QueenGone = True
 							EndIf
@@ -1988,9 +1993,9 @@ Func Standard_AttackBuilding($AttackMethod = 0)
 			$protect2 += 1
 
 			If $protect2 = 1 Then
-				Standard_PrepareAttack(True) ;Check remaining quantities
+				Standard_PrepareAttack(True,$AttackMethod) ;Check remaining quantities
 			Else
-				Standard_PrepareAttack(True, 1, True)
+				Standard_PrepareAttack(True, $AttackMethod, True)
 			EndIf
 
 			$AllGone = True
@@ -2058,13 +2063,13 @@ Func Standard_AttackBuilding($AttackMethod = 0)
 					If GUICtrlRead($txtKingSkill) = 0 Then
 						_CaptureRegion()
 						If (checkHealth($King) Or (TimerDiff($hHeroTimer) / 1000) > 60) Then
-							SetLog(GetLangText("msgActivateKing"), $COLOR_AQUA)
+							SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 							SelectDropTroupe($King)
 							$KingPowerBuilding = True
 						EndIf
 					Else
 						If ((TimerDiff($hHeroTimer) / 1000) > Number(GUICtrlRead($txtKingSkill))) Then
-							SetLog(GetLangText("msgActivateKing"), $COLOR_BLUE)
+							SetLog(GetLangText("msgActivateKing"), $COLOR_GREEN)
 							SelectDropTroupe($King)
 							$KingPowerBuilding = True
 						EndIf

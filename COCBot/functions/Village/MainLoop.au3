@@ -1,5 +1,46 @@
 Func runBot() ;Bot that runs everything in order
-	Local $AttackType
+	Global $AttackType
+	Global $AfterAttack=False
+	Local $GoldCountLocal,$ElixirCountLocal,$GemCountLocal,$DarkCountLocal
+	Local $GoldCountOldLocal,$ElixirCountOldLocal,$GemCountOldLocal,$DarkCountOldLocal
+	Click(1, 1, 2, 250) ;Click Away with 205ms delay
+
+	SaveConfig()
+	readConfig()
+	applyConfig()
+	If StatusCheck(True, True, 3) Then Return
+	If $MaxGold = 0 Then 
+		$Text=StringReplace(ReadText(690, 8, 140, 1, 1),"G","6")
+		$Text=StringReplace($Text,"O","0")
+		$MaxGold = Number(StringRegExpReplace($Text,"[^0-9]",""))
+		$Text=StringReplace(ReadText(690, 57, 140, 1, 1),"G","6")
+		$Text=StringReplace($Text,"O","0")
+		$MaxElixir = Number(StringRegExpReplace($Text,"[^0-9]",""))
+		If Not _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			$Text=StringReplace(ReadText(745, 106, 100, 1, 1),"G","6")
+			$Text=StringReplace($Text,"O","0")
+			$MaxDark = Number(StringRegExpReplace($Text,"[^0-9]",""))
+		EndIf
+
+		SetLog("Maximum gold in storage:"&_NumberFormat($MaxGold),$COLOR_GREEN)
+		SetLog("Maximum elixir in storage:"&_NumberFormat($MaxElixir),$COLOR_GREEN)
+		SetLog("Maximum dark elixir in storage:"&_NumberFormat($MaxDark),$COLOR_GREEN)
+		If $MaxGold = 0 Then
+			$res=MsgBox($MB_YESNOCANCEL,"Warning","Please check BS configuration, can not continue"&@CR&"If you want to continue for your own risk press Yes, Or press No to stop")
+			If $res=$IDCANCEL Or $res=$IDNO Then 
+				btnStop()
+				Return
+			EndIf
+		EndIf
+	EndIf
+	If $SearchCost = 0 Then
+		CheckCostPerSearch()
+		If StatusCheck() Then Return
+		If $SearchCost = 0 Then
+			btnStop()
+			Return
+		EndIf
+	EndIf
 	While 1
 		If TimerDiff($hUpdateTimer) > (1000 * 60 * 60 * 12) Then
 			checkupdate()
@@ -10,9 +51,6 @@ Func runBot() ;Bot that runs everything in order
 		; Configuration and cleanup
 		$Restart = False
 		LootLogCleanup(100)
-		SaveConfig()
-		readConfig()
-		applyConfig()
 		$strPlugInInUse = IniRead($dirStrat & GUICtrlRead($lstStrategies) & ".ini", "plugin", "name", "")
 
 		;Check attack mode
@@ -30,14 +68,29 @@ Func runBot() ;Bot that runs everything in order
 		EndIf
 
 		; Collect stats
+
+		$FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
+
 		VillageReport()
 		If StatusCheck() Then Return
 
-		CheckCostPerSearch()
-		If StatusCheck() Then Return
+		$GoldCountOldLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountOldLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			; No DE
+			$GemCountOldLocal = Number(ReadText(736, 124, 68, $textMainScreen, 0))
+		Else
+			$DarkCountOldLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+			$GemCountOldLocal = Number(ReadText(736, 173, 68, $textMainScreen, 0))
+		EndIf
+		UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,$DarkCountOldLocal,0)
 
 		clearField()
 		If StatusCheck() Then Return
+
+		$GoldCountOldLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountOldLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,0,0)
 
 		If $Checkrearm Then
 			ReArm()
@@ -45,56 +98,154 @@ Func runBot() ;Bot that runs everything in order
 		EndIf
 		If StatusCheck() Then Return
 
+		$GoldCountOldLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountOldLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			; No DE
+			UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,0,0)
+		Else
+			$DarkCountOldLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+			UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,$DarkCountOldLocal,0)
+		EndIf
+
 		DonateCC()
 		If StatusCheck() Then Return
 
-		RequestCC()
-		If StatusCheck() Then Return
+;		RequestCC()
+;		If StatusCheck() Then Return
 
 		BoostAllBuilding()
 		If StatusCheck() Then Return
 
 		collectResources()
 		If StatusCheck() Then Return
+		If _Sleep(1000) Then Return
+
+		$GoldCountOldLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountOldLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			; No DE
+			$GemCountOldLocal = Number(ReadText(736, 124, 68, $textMainScreen, 0))
+		Else
+			$DarkCountOldLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+			$GemCountOldLocal = Number(ReadText(736, 173, 68, $textMainScreen, 0))
+		EndIf
+		UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,$DarkCountOldLocal,0)
 
 		Laboratory()
 		If StatusCheck() Then Return
 
+		$ElixirCountLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			$DarkCountLocal=$DarkCount
+		Else
+			$DarkCountLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+		EndIf
+
+		If $ElixirCountOldLocal > $ElixirCountLocal Or $DarkCountOldLocal > $DarkCountLocal Then
+			If $ElixirCountLocal > 0 Then $ElixirUpgraded = $ElixirUpgraded + $ElixirCountOldLocal - $ElixirCountLocal
+			If $DarkCountLocal > 0 Then $DarkUpgraded = $DarkUpgraded + $DarkCountOldLocal - $DarkCountLocal
+			UpdateStat(0,$ElixirCountLocal,$DarkCountLocal,0)
+			$ElixirCountOldLocal = $ElixirCountLocal
+			$DarkCountOldLocal = $DarkCountLocal
+		EndIf
+
+		UpgradeHeroes()	;==> upgradeheroes
+		If StatusCheck() Then Return
+
+		If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			$DarkCountLocal=$DarkCount
+		Else
+			$DarkCountLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+		EndIf
+
+		If  $DarkCountOldLocal > $DarkCountLocal Then
+			If $DarkCountLocal > 0 Then $DarkUpgraded = $DarkUpgraded + $DarkCountOldLocal - $DarkCountLocal
+			UpdateStat(0,0,$DarkCountLocal,0)
+			$DarkCountOldLocal = $DarkCountLocal
+		EndIf
+
 		UpgradeBuilding()
 		If StatusCheck() Then Return
+
+		$GoldCountLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+
+		If $GoldCountOldLocal > $GoldCountLocal Or $ElixirCountOldLocal > $ElixirCountLocal  Then
+			If $GoldCountLocal > 0 Then $GoldUpgraded = $GoldUpgraded + $GoldCountOldLocal - $GoldCountLocal
+			If $ElixirCountLocal > 0 Then $ElixirUpgraded = $ElixirUpgraded + $ElixirCountOldLocal - $ElixirCountLocal
+			UpdateStat($GoldCountLocal,$ElixirCountLocal,0,0)
+			$GoldCountOldLocal = $GoldCountLocal
+			$ElixirCountOldLocal = $ElixirCountLocal
+		EndIf
 
 		UpgradeWall()
 		If StatusCheck() Then Return
 
-		UpgradeHeroes()	;==> upgradeheroes
-		If StatusCheck() Then Return
+		$GoldCountLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+		$ElixirCountLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+
+		If $GoldCountOldLocal > $GoldCountLocal Or $ElixirCountOldLocal > $ElixirCountLocal  Then
+			If $GoldCountLocal > 0 Then $GoldUpgraded = $GoldUpgraded + $GoldCountOldLocal - $GoldCountLocal
+			If $ElixirCountLocal > 0 Then $ElixirUpgraded = $ElixirUpgraded + $ElixirCountOldLocal - $ElixirCountLocal
+			UpdateStat($GoldCountLocal,$ElixirCountLocal,0,0)
+			$GoldCountOldLocal = $GoldCountLocal
+			$ElixirCountOldLocal = $ElixirCountLocal
+		EndIf
+
+		$GoldCount = $GoldCountLocal
+		$ElixirCount = $ElixirCountLocal
+		$DarkCount = $DarkCountLocal
+		$GemCount  = $GemCountLocal
+		UpdateStat($GoldCount,$ElixirCount,$DarkCount,0)
 
 		If $PushBulletEnabled = 1 And $PushBulletchatlog = 1 Then
 			ReadChatLog(Not $ChatInitialized)
 		EndIf
 		If StatusCheck() Then Return
-
+		$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+		
 		Switch $CurrentMode
 			Case $modeNormal
-				Idle($strPlugInInUse)
-				If StatusCheck() Then Return
-
 				If DropTrophy() Then ContinueLoop
-				If StatusCheck() Then Return False
+				If StatusCheck(False) Then Return False
+
+				If Idle($strPlugInInUse) Then ContinueLoop
+				If StatusCheck(False) Then Return
 
 				Call($strPlugInInUse & "_PrepNextBattle")
 
+				$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+				$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+				If $res>1 Then $ElixirCount = $res
+				If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+					; No DE
+					UpdateStat($GoldCount,$ElixirCount,0,0)
+				Else
+					$DarkCount = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+					UpdateStat($GoldCount,$ElixirCount,$DarkCount,0)
+				EndIf
+
 				While True
-					If StatusCheck() Then Return
+					If StatusCheck(False) Then Return
 
 					If Not Call($strPlugInInUse & "_miniReadyCheck") Then ExitLoop
 
+					Click(1, 1, 2, 250) ;Click Away with 205ms delay
+					$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+					UpdateStat(0,0,0,$TrophyCount)
 					If PrepareSearch() Then
+						If $GoldBeforeSearch=0 Then $GoldBeforeSearch=$GoldCount
 						$AttackType = Call($strPlugInInUse & "_Search")
 						If BotStopped(False) Then Return
 						If $AttackType = -1 Then
 							$SearchFailed = True
 							ContinueLoop
+						EndIf
+
+						If $AttackType = -2 Then
+							$SearchFailed = True
+							ExitLoop
 						EndIf
 
 						Call($strPlugInInUse & "_PrepareAttack", False, $AttackType)
@@ -106,6 +257,7 @@ Func runBot() ;Bot that runs everything in order
 
 						ReturnHome($TakeLootSnapShot)
 						If StatusCheck() Then Return
+						If _GUICtrlComboBox_GetCurSel($cmbTroopComp) = 8 And $AttackType <> 3 Then $AfterAttack=True
 					Else
 						If _ColorCheck(_GetPixelColor(820, 15), Hex(0xF88288, 6), 20) Then Click(820, 15) ;Click Red X
 						If StatusCheck() Then Return
@@ -139,16 +291,45 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 	Local $hTroopTimer = TimerInit()
 	Local $TimeSinceTroop = 0
 	While Not Call($Plugin & "_ReadyCheck", $TimeSinceTroop)
-		If StatusCheck() Then Return
+		If StatusCheck() Then Return False
 		SetLog(GetLangText("msgWaitingFull"), $COLOR_PURPLE)
+		DonateCC()
+		If StatusCheck() Then Return False ; Do not wait for main screen we need ArmyOverview open
+
+		_CaptureRegion()
+		$ElixirCountOld=$ElixirCount
+		$res= Number(ReadText(666, 76, 138, $textMainScreen, 0))
+		If $res>1 Then $ElixirCount = $res
+		If $ElixirCount >1 Then $ElixirTrainCost= $ElixirCountOld-$ElixirCount+$ElixirTrainCost
+		UpdateStat(0,$ElixirCount,0,0)
+		If Not _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+			$DarkCountOld=$DarkCount
+			$DarkCount = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+			If $DarkCount >1 Then $DarkTrainCost= $DarkCountOld-$DarkCount+$DarkTrainCost
+			UpdateStat(0,0,$DarkCount,0)
+		EndIf
 		If $iCollectCounter > $COLLECTATCOUNT Then ; This is prevent from collecting all the time which isn't needed anyway
 			collectResources()
-			If StatusCheck() Then Return
+			If StatusCheck() Then Return False
+			If _Sleep(1000) Then Return False
+
+			$GoldCountOldLocal = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+			$ElixirCountOldLocal = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+			If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+				; No DE
+				UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,0,0)
+			Else
+				$DarkCountOldLocal = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+				UpdateStat($GoldCountOldLocal,$ElixirCountOldLocal,$DarkCountOldLocal,0)
+			EndIf
 			$iCollectCounter = 0
+			$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
+
 		EndIf
 		$iCollectCounter += 1
-		DonateCC()
+
 		_BumpMouse()
+
 		$TimeIdle = Round(TimerDiff($hTimer) / 1000, 2) ;In Seconds
 		If $CurCamp <> $prevCamp Then
 			$prevCamp = $CurCamp
@@ -160,8 +341,17 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 		$TimeSinceTroop = TimerDiff($hTroopTimer) / 1000
 		SetLog(GetLangText("msgTimeIdle") & Floor(Floor($TimeIdle / 60) / 60) & GetLangText("msgTimeIdleHours") & Floor(Mod(Floor($TimeIdle / 60), 60)) & GetLangText("msgTimeIdleMin") & Floor(Mod($TimeIdle, 60)) & GetLangText("msgTimeIdleSec"), $COLOR_ORANGE)
 		$hIdle = TimerInit()
-		If IsChecked($mixmodenormexp) Then
+		If IsChecked($chkSnipeTrainingEnable) Then 
+			If SnipeWhileTraining() Then Return True
+		ElseIf IsChecked($mixmodenormexp) Then
 			Experience()
+;		ElseIf IsChecked($mixmodenormexp) And Not $closetofull Then
+;			$AfterAttack=False;
+;			Click(127,697)
+;			SetLog("Unbreakable mode, wait 12 minutes", $COLOR_PURPLE)
+;			If _Sleep(720000) Then Return
+;			If StatusCheck() Then Return False
+;			ReArm()
 		EndIf
 		If $closetofull Then
 			$loopdelay = 1000
@@ -170,10 +360,11 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 		EndIf
 		While TimerDiff($hIdle) < $loopdelay
 			DonateCC(True)
-			If _Sleep(1000) Then Return
+			If _Sleep(1000) Then Return False
 		WEnd
-		If StatusCheck() Then Return
+		If StatusCheck() Then Return False
 	WEnd
+
 EndFunc   ;==>Idle
 
 Func _ReduceMemory()

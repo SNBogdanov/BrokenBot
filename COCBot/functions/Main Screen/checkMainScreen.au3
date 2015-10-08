@@ -1,7 +1,7 @@
 ;This function checks whether the pixel, located in the eyes of the builder in mainscreen, is available
 ;If it is not available, it calls checkObstacles and also waitMainScreen.
 
-Func checkMainScreen($Check = False, $maxDelay = 1) ;Checks if in main screen
+Func checkMainScreen($Check = False, $maxDelay = 20) ;Checks if in main screen
 	If $Check = True Then SetLog(GetLangText("msgMSTry"), $COLOR_BLUE)
 	_WinAPI_EmptyWorkingSet(WinGetProcess($Title)) ; Reduce BlueStacks Memory Usage
 

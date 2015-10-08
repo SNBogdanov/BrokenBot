@@ -8,21 +8,35 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 	EndIf
 
 	If $OverlayVisible Then DeleteOverlay()
-
+	$AttackNow = False
 	$checkKPower = False
 	$checkQPower = False
 	SetLog(GetLangText("msgReturnHome"), $COLOR_BLUE)
+	GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 	If $Running = False Then Return
-	_CaptureRegion()
+	If _GUICtrlComboBox_GetCurSel($cmbTroopComp) <> 8 And $AttackType = 3 Then $FirstStart = True
+	If _Sleep(1500) Then Return	;wait until number stop changing.
+;	_CaptureRegion()
 	If _WaitForColorArea(19, 519, 100, 30, Hex(0xEE5056, 6), 50, 2) Then
 		Click(77, 529) ;Click Surrender
-		If _WaitForColorArea(280, 372, 130, 50, Hex(0xCF4010, 6), 30, 2) Then
+		If _Sleep(500) Then Return	
+;		_CaptureRegion()
+;		If _WaitForColorArea(280, 372, 130, 50, Hex(0xCF4010, 6), 30, 2) Then
+		If _WaitForColorArea(298, 413, 2, 2, Hex(0xCE4412, 6), 20, 2) Then
+;		If _ColorCheck(_GetPixelColor(298, 413), Hex(0xCE4412, 6), 20) Then ; Check for confirm button
 			Click(522, 384) ; Click confirm
+			If _Sleep(500) Then Return	
+;			_CaptureRegion()
+;			If _ColorCheck(_GetPixelColor(425, 531), Hex(0xCDE870, 6), 20) Then ; Check for Return Home button
+			If _WaitForColorArea(425, 531, Hex(0xCDE870, 6), 20,2) Then ; Check for Return Home button
+				Click(428, 544) ;Click Return Home Button
+			EndIf
+
+
 		EndIf
 	EndIf
 
 	If (_WaitForColor(304, 569, Hex(0x020202, 6), 30, 5) And $AbortSearch = False) Then
-		If _Sleep(1500) Then Return	;wait until number stop changing.
 		_CaptureRegion()
 		$Raid = 1
 		;Get Last Raid Resources
@@ -43,15 +57,19 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 		$DarkTotalLoot += $LastRaidDarkElixir
 		$TrophyTotalLoot += $LastRaidTrophy
 
-		If $TakeSS = 1 Then
+		If $TakeSS = 1 Or ( $PushBulletEnabled = 1 And IsChecked($UseJPG) )Then
 			SetLog(GetLangText("msgTakingLootSS"), $COLOR_ORANGE)
-			Local $Date = @MDAY & "." & @MON & "." & @YEAR
+			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
 			Local $Time = @HOUR & "." & @MIN
 			$FileName = $Date & "_at_" & $Time & ".jpg"
+			If _Sleep(300) Then Return
 			_CaptureRegion()
 			_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots & $FileName)
+			If $LastRaidGold>400000 Or $LastRaidElixir>400000 Then
+				_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots &"Amazing\"& $FileName)
+			EndIf
 		EndIf
-		If _Sleep(2000) Then Return
+		If _Sleep(1000) Then Return
 		Click(428, 544) ;Click Return Home Button
 	Else
 		checkMainScreen(True)
@@ -72,7 +90,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 
 		If $counter >= 50 Then
 			SetLog(GetLangText("msgCannotReturn"), $COLOR_RED)
-			checkMainScreen()
+			checkMainScreen(True)
 			Return
 		EndIf
 	WEnd

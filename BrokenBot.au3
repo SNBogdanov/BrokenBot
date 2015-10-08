@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.0"
+$sBotVersion = "3.3.20 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -18,12 +18,12 @@ EndIf
 Global $StartupLanguage = IniRead(@ScriptDir & "\config\default.ini", "config", "language", "English")
 
 If _Singleton($sBotTitle, 1) = 0 Then
-	MsgBox(0, "", GetLangText("boxAlreadyRunning"))
+	MsgBox(0, "", GetLangText("boxAlreadyRunning"),60)
 	Exit
 EndIf
 
 If @AutoItX64 = 1 Then
-	MsgBox(0, "", GetLangText("boxCompile1") & @CRLF & GetLangText("boxCompile2"))
+	MsgBox(0, "", GetLangText("boxCompile1") & @CRLF & GetLangText("boxCompile2"),60)
 	Exit
 EndIf
 
@@ -43,17 +43,22 @@ EndIf
 GUIRegisterMsg($WM_COMMAND, "GUIControl")
 GUIRegisterMsg($WM_SYSCOMMAND, "GUIControl")
 GUIRegisterMsg(0x0003, "_WinMoved")
+OnAutoItExitRegister("_PowerResetState")
 
 ; Initialize everything
 DirCreate($dirLogs)
 DirCreate($dirLoots)
+DirCreate($dirLoots &"Amazing\")
 DirCreate($dirAllTowns)
 DirCreate($dirDebug)
 DirCreate($dirAttack)
 DirCreate($dirConfigs)
 DirCreate($dirStrat)
+DirCreate($dirStat)
 readConfig()
 applyConfig()
+ModReload()
+btnUPreload()
 checkupdate()
 _PluginDefaults()
 _btnRefresh()
@@ -61,6 +66,10 @@ _GUICtrlListBox_SetCurSel($lstStrategies, 0)
 _lstStrategies()
 
 HotKeySet("^!+p", "_ScreenShot")
+
+If Not RegWrite("HKEY_CURRENT_USER\Environment\", "TESSDATA_PREFIX", "REG_EXPAND_SZ", @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\") Or Not RegWrite("HKEY_CURRENT_USER\Environment\", "PATH", "REG_EXPAND_SZ", @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\") Then
+	SetLog("Tesseract's language path could not be wiritten registry. _TesseractReadText() might not work")
+EndIf
 
 $sTimer = TimerInit()
 AdlibRegister("SetTime", 1000)
