@@ -1574,7 +1574,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If $DarkBarrackTroopNext[$i] = 1 Then
-					$itxtDarkBarrack2Next = Ceiling(($itxtDarkBarrack2Next / $totalHogs) * $CurHogs)
+					$itxtDarkBarrack2Next = Ceiling(($itxtDarkBarrack2Next / $totalHogs) * $CurHog)
 					Local $troopHog2 = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
 					If StringRight($troopHog2, 1) = "x" Then $troopHog2 = StringLeft($troopHog2, StringLen($troopHog2) - 1)
 					;SetLog($troopHog2 & " Hogs training already", $COLOR_BLUE)
