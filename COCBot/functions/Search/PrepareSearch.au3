@@ -19,7 +19,7 @@ Func PrepareSearch() ;Click attack button and find match button, will break shie
 		SetLog(GetLangText("msgSearchingMatch")&" failed")
 		;Something is wrong here, restart bluestack
 		If checkObstacles() Then Return False
-		restartBlueStack()
+;		restartBlueStack()
 	EndIf
 	Return False
 EndFunc   ;==>PrepareSearch
