@@ -3,7 +3,7 @@
 	 by Orkhan.Alikhanov to use only for BrokenBot
 #ce
 
-Global $tesseract_Path = @ScriptDir & "\COCBot\functions\Custom Funtions\Tesseract\"
+Global $tesseract_Path = @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\"
 
 Func _TesseractReadText($iLeft = 0, $iTop = 0, $iRight = 0, $iBottom = 0, $ConvertOptions = "", $Lang = "BrokenBot", $Debug = False)
 	If StatusCheck(False) Then Return ""

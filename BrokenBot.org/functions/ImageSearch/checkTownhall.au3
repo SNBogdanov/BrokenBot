@@ -53,3 +53,5 @@ Func checkTownhall()
 		EndIf
 	EndIf
 EndFunc   ;==>checkTownhall
+
+

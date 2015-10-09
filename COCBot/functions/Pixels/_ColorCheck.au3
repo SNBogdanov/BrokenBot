@@ -5,9 +5,12 @@
 ;Checks if the color components exceed $sVari and returns true if they are below $sVari.
 ;--------------------------------------------------------------------------------------------------------------
 
-Func _ColorCheck($nColor1, $nColor2, $sVari = 5)
+;Func _ColorCheck($nColor1, $nColor2, $sVari = 5)
+Func _ColorCheck($nColor1, $nColor2, $sVari = 5,$debug=0)
 	Local $Red1, $Red2, $Blue1, $Blue2, $Green1, $Green2
 
+	If $debug = 1 Then SetLog($nColor1)
+	If $debug = 1 Then SetLog($nColor2)
 	$Red1 = Dec(StringMid(String($nColor1), 1, 2))
 	$Blue1 = Dec(StringMid(String($nColor1), 3, 2))
 	$Green1 = Dec(StringMid(String($nColor1), 5, 2))
@@ -16,8 +19,11 @@ Func _ColorCheck($nColor1, $nColor2, $sVari = 5)
 	$Blue2 = Dec(StringMid(String($nColor2), 3, 2))
 	$Green2 = Dec(StringMid(String($nColor2), 5, 2))
 
+	If $debug = 1 Then SetLog($Blue1&" - "&$Blue2, $COLOR_RED)
 	If Abs($Blue1 - $Blue2) > $sVari Then Return False
+	If $debug = 1 Then SetLog($Green1&" - "&$Green2, $COLOR_RED)
 	If Abs($Green1 - $Green2) > $sVari Then Return False
+	If $debug = 1 Then SetLog($Red1&" - "&$Red2, $COLOR_RED)
 	If Abs($Red1 - $Red2) > $sVari Then Return False
 	Return True
 EndFunc   ;==>_ColorCheck

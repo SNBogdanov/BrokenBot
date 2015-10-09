@@ -65,6 +65,7 @@ Func Prepare_SnipeSearch()
 		Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
 		Return False
 	EndIf
+	If ChkDisconnection() Then Return False
 	If ($CurArchinCamp + $CurBarbinCamp + $CurMinioninCamp + $CurValkyrieinCamp) < 10 Then
 		SetLog("Aborted... Need at least 10 non-targeting troop", $COLOR_RED)
 		Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay

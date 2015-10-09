@@ -1,4 +1,5 @@
 Func Click($x, $y, $times = 1, $speed = 0, $CenteredOn = 0, $BufferDist = -1)
+;SetLog("Click:"&$x&":"&$y)
 	If $CenteredOn = 0 Then
 		If $times <> 1 Then
 			For $i = 0 To ($times - 1)

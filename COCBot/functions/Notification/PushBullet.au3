@@ -31,12 +31,12 @@ Func _RemoteControl()
 															"[o] RestartBot - Restart BrokenBot\n" & _
 															"[o] Restart - Restart BlueStacks and BrokenBot\n" & _
 															"[o] ManualRestart - Use this in case your logs show that a manual restart is required. This will fully close BrokenBot and BlueStacks and then start BrokenBot again. Be warned: bot will start with the first available strategy in alphabetical order.\n" & _
-															"[Note] The command ManualRestart will work with BrokenBot.au3 without any extra effort, but to use it with BrokenBot.exe, you need to compile the file RestartBrokenBot.au3 into RestartBrokenBot.exe"
+															"[Note] The command ManualRestart will work with BrokenBot.au3 without any extra effort, but to use it with BrokenBot.exe, you need to compile the file RestartBrokenBot.au3 into RestartBrokenBot.exe" & _
 																			  "\n\n----Danger Zone----\n\n" & _
 																  "The following commands will make BrokenBot inaccessible\n\n" & _
 															"[o] Quit - Close BlueStacks and BrokenBot\n" & _
 															"[o] Sleep - Put your computer into sleep/suspend mode\n" & _
-															"[o] Shutdown - Shut down your computer" & _)
+															"[o] Shutdown - Shut down your computer")
 					_DeleteMessage($iden[$x])
 				ElseIf StringLeft($title[$x], 9) = "BOT PAUSE" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
 					If $PauseBot = False Then
