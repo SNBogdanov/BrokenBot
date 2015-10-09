@@ -338,7 +338,7 @@ Func btnStop()
 		GUICtrlSetState($btnUPdown, $GUI_ENABLE)
 		GUICtrlSetState($btnUPsave, $GUI_ENABLE)
 		GUICtrlSetState($btnUPreload, $GUI_ENABLE)
-		GUICtrlSetState($chkUPHalt, $GUI_ENABLE)
+;		GUICtrlSetState($chkUPHalt, $GUI_ENABLE)
 		UPRefreshControls()
 
 
@@ -1171,7 +1171,7 @@ Func UPRefreshControls()
 		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
 		GUICtrlSetState($btnUPsave, $GUI_DISABLE)
 		GUICtrlSetState($btnUPreload, $GUI_DISABLE)
-		GUICtrlSetState($chkUPHalt, $GUI_DISABLE)
+;		GUICtrlSetState($chkUPHalt, $GUI_DISABLE)
 		Return
 	EndIf
 	For $myGroupItem = $grpUPqueue To $grpUPqueueEnd
