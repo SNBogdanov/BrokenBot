@@ -45,7 +45,14 @@ Func Laboratory()
 	If _Sleep(1000) Then Return
 	SetLog(GetLangText("msgLabSearching") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_BLUE)
 	Click(507, 597) ; Click Button Research
-	If _Sleep(3000) Then Return
+	If _Sleep(2000) Then Return
+	_CaptureRegion()
+	If _ColorCheck(_GetPixelColor(633, 273), Hex(0x60AC10, 6), 20)  Then
+		SetLog(GetLangText("msgLabWaiting") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabAfter"), $COLOR_RED)
+		If _Sleep(1000) Then Return
+		ClickP($TopLeftClient, 2)
+		Return
+	EndIf
 	GetUpLaboratoryPos() ; Click Troops
 	SetLog(GetLangText("msgLabTroopSearch") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabTroopFound"), $COLOR_GREEN)
 	If _Sleep(1000) Then Return
