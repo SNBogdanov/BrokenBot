@@ -3,10 +3,13 @@
 ##################################################
 
 AllTowns/
+bm_config/
+bl_logs/
 Attacks/
 Debug/
 logs/
 Loots/
+stat/
 config/*.ini
 strategies/*.ini
 .developer
