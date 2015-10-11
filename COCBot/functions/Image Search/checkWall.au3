@@ -41,7 +41,8 @@ Func checkWall()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
-	While $ToleranceHere < 91
+	$icmbWalls=_GUICtrlComboBox_GetCurSel($cmbWalls)
+	While $ToleranceHere < 51
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -67,8 +68,9 @@ Func FindWall()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
+	$icmbWalls=_GUICtrlComboBox_GetCurSel($cmbWalls)
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 91
+	While $ToleranceHere < 51
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -86,11 +88,12 @@ EndFunc   ;==>FindWall
 Func checkWallE()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
+	$icmbWallsE=_GUICtrlComboBox_GetCurSel($cmbWallsE)
 	$ToleranceHere = 20
-	While $ToleranceHere < 91
+	While $ToleranceHere < 51
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
-				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				$WallPos = _ImageSearch($Wall[$icmbWallsE+4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
 				If $WallPos = 1 Then
 					$checkwalllogic = True
 					SetLog(GetLangText("msgWallFound") & $icmbWallsE + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
@@ -110,11 +113,12 @@ Func FindWallE()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
+	$icmbWallsE=_GUICtrlComboBox_GetCurSel($cmbWallsE)
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 91
+	While $ToleranceHere < 51
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
-				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				$WallPos = _ImageSearch($Wall[$icmbWallsE+4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
 				If $WallPos = 1 Then
 				Click($WallX, $WallY)
 				SetLog(GetLangText("msgWallFound") & $icmbWallsE + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
