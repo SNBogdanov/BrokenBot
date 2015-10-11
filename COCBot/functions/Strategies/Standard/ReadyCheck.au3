@@ -383,7 +383,8 @@ Func Standard_CheckArmyCamp($inCamp = False)
 				If ($CurMinion = 0 And $FirstStart) Then $CurMinion -= $TroopQ
 				If $inCamp = True Then $CurMinioninCamp = $TroopQ
 				$TroopName = "Minions"
-			ElseIf _ColorCheck($TroopKind, Hex(0x4C2E26, 6), 30) Then
+			ElseIf _ColorCheck($TroopKind, Hex(0x2C1E19, 6), 20) Then
+;			ElseIf _ColorCheck($TroopKind, Hex(0x4C2E26, 6), 30) Then
 				If $TroopQ = 0 Then $TroopQ = 1 ;if we found the image of a troop there has to be at least one
 				If ($CurHog = 0 And $FirstStart) Then $CurHog -= $TroopQ
 				If $inCamp = True Then $CurHoginCamp = $TroopQ
