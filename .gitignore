@@ -14,6 +14,7 @@ config/*.ini
 strategies/*.ini
 COCBot/functions/Custom Functions/Tesseract/temp/*
 BrokenBot.exe
+brokenbot.exe
 BotMonitor_v2.5.exe
 .developer
 
