@@ -40,3 +40,4 @@ $RECYCLE.BIN/
 .DS_Store
 *.log
 brokenbot.exe
+*.exe
