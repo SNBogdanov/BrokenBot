@@ -129,7 +129,7 @@ Func experience()
 
                         Click(66 + Random(-5,5,1), 607 + Random(-5,5,1));attack button
 						If Not _WaitForColorArea(287, 494, 5, 5, Hex(0xEEAC28, 6), 50) Then
-							restartBlueStack()
+							errorReturnHome()
 							ContinueLoop
 						EndIf
                         If _Sleep(500) Then Return

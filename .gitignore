@@ -12,6 +12,7 @@ Loots/
 stat/
 config/*.ini
 strategies/*.ini
+COCBot/functions/Custom Functions/Tesseract/temp/*
 .developer
 
 ######################

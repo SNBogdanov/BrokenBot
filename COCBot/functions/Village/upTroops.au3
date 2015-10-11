@@ -43,7 +43,6 @@ Func Laboratory()
 	SetLog("Checking Upgrade Troops...")
 	Click($LabPos[0], $LabPos[1]);Click Laboratory
 	If _Sleep(1000) Then Return
-	SetLog(GetLangText("msgLabSearching") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_BLUE)
 	Click(507, 597) ; Click Button Research
 	If _Sleep(2000) Then Return
 	_CaptureRegion()
@@ -53,6 +52,7 @@ Func Laboratory()
 		ClickP($TopLeftClient, 2)
 		Return
 	EndIf
+	SetLog(GetLangText("msgLabSearching") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_BLUE)
 	GetUpLaboratoryPos() ; Click Troops
 	SetLog(GetLangText("msgLabTroopSearch") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabTroopFound"), $COLOR_GREEN)
 	If _Sleep(1000) Then Return
