@@ -3,11 +3,12 @@
 ##################################################
 
 AllTowns/
-bm_config/
-bl_logs/
+bm_config/*.ini
+bl_logs/*.log
+bl_logs\*.log
 Attacks/
 Debug/
-logs/
+logs/*.log
 Loots/
 stat/
 config/*.ini
@@ -37,3 +38,4 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+*.log

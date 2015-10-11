@@ -41,7 +41,7 @@ Func checkWall()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
-	While $ToleranceHere < 91
+	While $ToleranceHere < 31
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -68,7 +68,7 @@ Func FindWall()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 91
+	While $ToleranceHere < 31
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -87,13 +87,13 @@ Func checkWallE()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
-	While $ToleranceHere < 91
+	While $ToleranceHere < 31
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
-				$WallPos = _ImageSearch($Wall[$icmbWallsE + 4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
 				If $WallPos = 1 Then
 					$checkwalllogic = True
-					SetLog(GetLangText("msgWallFound") & $icmbWalls + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+					SetLog(GetLangText("msgWallFound") & $icmbWallsE + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
 					Return True
 				EndIf
 			Next
@@ -101,7 +101,7 @@ Func checkWallE()
 	$checkwalllogic = False
 	SetLog(GetLangText("msgWallNotFound") & $icmbWallsE + 8 & GetLangText("msgWallSkipUpgrade"), $COLOR_RED)
 	If $PushBulletEnabled = 1 Then
-		_Push(GetLangText("msgWallNotFound"),GetLangText("msgWallNotFound") & $icmbWalls + 4 & GetLangText("msgWallSkipUpgrade"))
+		_Push(GetLangText("msgWallNotFound"),GetLangText("msgWallNotFound") & $icmbWallsE + 8 & GetLangText("msgWallSkipUpgrade"))
 	EndIf
 	Return False
 EndFunc   ;==>checkWall
@@ -111,18 +111,18 @@ Func FindWallE()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 91
+	While $ToleranceHere < 31
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
-				$WallPos = _ImageSearch($Wall[$icmbWallsE + 4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
+				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
 				If $WallPos = 1 Then
 				Click($WallX, $WallY)
-				SetLog(GetLangText("msgWallFound") & $icmbWalls + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
+				SetLog(GetLangText("msgWallFound") & $icmbWallsE + 8 & " " & GetLangText("msgWallAt") & " PosX: " & $WallX & ", PosY: " & $WallY & "...", $COLOR_GREEN)
 				Return True
 				EndIf
 			Next
 	WEnd
-	SetLog(GetLangText("msgWallNotFound") & $icmbWalls + 8 & GetLangText("msgWallAdjustTol"), $COLOR_RED)
+	SetLog(GetLangText("msgWallNotFound") & $icmbWallsE + 8 & GetLangText("msgWallAdjustTol"), $COLOR_RED)
 	Return False
 EndFunc   ;==>FindWall 
 
