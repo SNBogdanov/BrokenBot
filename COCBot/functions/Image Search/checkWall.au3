@@ -41,7 +41,7 @@ Func checkWall()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
-	While $ToleranceHere < 31
+	While $ToleranceHere < 91
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -68,7 +68,7 @@ Func FindWall()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 31
+	While $ToleranceHere < 91
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -87,7 +87,7 @@ Func checkWallE()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
-	While $ToleranceHere < 31
+	While $ToleranceHere < 91
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -111,7 +111,7 @@ Func FindWallE()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 31
+	While $ToleranceHere < 91
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWallsE][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
