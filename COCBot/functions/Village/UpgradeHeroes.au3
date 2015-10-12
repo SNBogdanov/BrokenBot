@@ -11,7 +11,7 @@ Func UpgradeHeroes()
 
 			$FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
 			Setlog(GetLangText("msgNumFreeBuild") & $FreeBuilder, $COLOR_GREEN)
-			GUICtrlSetData($lblfreebuilder, $FreeBuilder)
+;			GUICtrlSetData($lblfreebuilder, $FreeBuilder)
 			If $FreeBuilder < $itxtKeepFreeBuilder+1 Then
 			   SetLog(GetLangText("msgFreeBuilder"), $COLOR_RED)
 			   Return
@@ -60,7 +60,7 @@ Func UpgradeHeroes()
 
 		 $FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
 		 Setlog(GetLangText("msgNumFreeBuild") & $FreeBuilder, $COLOR_GREEN)
-		 GUICtrlSetData($lblfreebuilder, $FreeBuilder)
+;		 GUICtrlSetData($lblfreebuilder, $FreeBuilder)
 		 If _Sleep(1000) Then Return
 		 If $FreeBuilder < $itxtKeepFreeBuilder+1 Then
 		   SetLog(GetLangText("msgFreeBuilder"), $COLOR_RED)
@@ -113,7 +113,7 @@ Func UpgradeHeroes()
 
 		 $FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
 		 Setlog(GetLangText("msgNumFreeBuild") & $FreeBuilder, $COLOR_GREEN)
-		 GUICtrlSetData($lblfreebuilder, $FreeBuilder)
+;		 GUICtrlSetData($lblfreebuilder, $FreeBuilder)
 		 If _Sleep(1000) Then Return
 		 If $FreeBuilder < $itxtKeepFreeBuilder+1 Then
 		   SetLog(GetLangText("msgFreeBuilder"), $COLOR_RED)

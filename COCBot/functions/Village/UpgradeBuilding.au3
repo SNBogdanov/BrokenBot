@@ -17,7 +17,7 @@ Func UpgradeBuilding()
 		$ElixirCount = Number(ReadText(666, 76, 138, $textMainScreen, 0))
 		$FreeBuilder = ReadText(320, 23, 41, $textMainScreen)
 		Setlog("Num. of Free Builders: " & $FreeBuilder, $COLOR_GREEN)
-		GUICtrlSetData($lblfreebuilder, $FreeBuilder)
+;		GUICtrlSetData($lblfreebuilder, $FreeBuilder)
 		If $FreeBuilder =0  Then
 			SetLog(GetLangText("msgNoBuilders"), $COLOR_RED)
 			ExitLoop
