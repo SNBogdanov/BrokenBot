@@ -79,7 +79,7 @@ Func checkupdate()
 				If StringInStr($strReadLine, "$sBotVersion") Then
 					$split = StringSplit($strReadLine, "&quot;", 1)
 					SetLog(GetLangText("msgVersionOnline") & $split[2])
-					If ($VersionCompare < $split[2]) Then
+					If ($VersionCompare < StringReplace($split[2], " MOD by SNBogdanov", "")) Then
 						SetLog(GetLangText("msgUpdateNeeded"))
 						InetGet("https://raw.githubusercontent.com/SNBogdanov/BrokenBot/Mod/changelog.md", @TempDir & "\brokenbotchangelog.md", 3)
 						$strReleaseNotes = ""
@@ -135,8 +135,8 @@ Func checkupdate()
 								EndIf
 							EndIf
 						EndIf
-					ElseIf $UsingBeta Then
-						SetLog(GetLangText("msgRunningBeta"))
+;					ElseIf $UsingBeta Then
+;						SetLog(GetLangText("msgRunningBeta"))
 					ElseIf $VersionCompare > $split[2] Then
 						SetLog(GetLangText("msgAheadMaster"))
 					Else
