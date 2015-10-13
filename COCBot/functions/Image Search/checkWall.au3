@@ -44,9 +44,9 @@ Func checkWall()
 	$icmbWalls=_GUICtrlComboBox_GetCurSel($cmbWalls)
 	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
 		Case 0
-			$Walltollerance = 51
-		Case 1
 			$Walltollerance = 71
+		Case 1
+			$Walltollerance = 51
 		Case 2
 			$Walltollerance = 91
 	EndSwitch
@@ -80,9 +80,9 @@ Func FindWall()
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
 	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
 		Case 0
-			$Walltollerance = 51
-		Case 1
 			$Walltollerance = 71
+		Case 1
+			$Walltollerance = 51
 		Case 2
 			$Walltollerance = 91
 	EndSwitch
@@ -108,9 +108,9 @@ Func checkWallE()
 	$ToleranceHere = 20
 	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
 		Case 0
-			$Walltollerance = 51
-		Case 1
 			$Walltollerance = 71
+		Case 1
+			$Walltollerance = 51
 		Case 2
 			$Walltollerance = 91
 	EndSwitch
@@ -141,9 +141,9 @@ Func FindWallE()
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
 	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
 		Case 0
-			$Walltollerance = 51
-		Case 1
 			$Walltollerance = 71
+		Case 1
+			$Walltollerance = 51
 		Case 2
 			$Walltollerance = 91
 	EndSwitch
