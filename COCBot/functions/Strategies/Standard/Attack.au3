@@ -1640,7 +1640,7 @@ Func Standard_AttackBuilding($AttackMethod = 0)
 		Local $spreadPerc = 25 ;Pecentage of troops (barbs, archs, minions) to use in the clearing wave
 		Local $trickleWavePerc = 25 ;Will drop this percentage of one troop before looping to next troop
 		Local $firstGiantWavePerc = 50 ;If number of giants is >=8 then split up the deployment
-		Local $giantWaitTime = 1500 ;msec Time to wait after deploying giants
+		Local $giantWaitTime = 3500 ;msec Time to wait after deploying giants
 		Local $waitToClearTime = 2000 ;msec Time to wait after deploying clearing wave
 
 		; Figure out how many to spread vs trickle

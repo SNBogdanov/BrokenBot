@@ -64,10 +64,10 @@ Func checkupdate()
 	If IsChecked($chkUpdate) Then
 		Local $sFilePath = @TempDir & "\update.dat"
 
-		Local $UsingBeta = StringInStr($sBotVersion, "BETA")
-		Local $VersionCompare = StringReplace($sBotVersion, " BETA", "")
+		Local $UsingBeta = StringInStr($sBotVersion, "MOD by SNBogdanov")
+		Local $VersionCompare = StringReplace($sBotVersion, " MOD by SNBogdanov", "")
 ;~ 		Local $hMasterVersion = InetGet("http://www.brokenbot.org/page.php?p=vcheck", $sFilePath, 3)
-		Local $hMasterVersion = InetGet("https://github.com/codebroken/BrokenBot/blob/master/BrokenBot.au3", $sFilePath, 3)
+		Local $hMasterVersion = InetGet("https://github.com/SNBogdanov/BrokenBot/blob/Mod/BrokenBot.au3", $sFilePath, 3)
 
 		If $hMasterVersion = 0 Then
 			SetLog(GetLangText("msgFailedVersion"))
@@ -81,36 +81,36 @@ Func checkupdate()
 					SetLog(GetLangText("msgVersionOnline") & $split[2])
 					If ($VersionCompare < $split[2]) Or ($UsingBeta And $VersionCompare = $split[2]) Then
 						SetLog(GetLangText("msgUpdateNeeded"))
-						InetGet("https://raw.githubusercontent.com/codebroken/BrokenBot/master/changelog.md", @TempDir & "\brokenbotchangelog.md", 3)
+						InetGet("https://raw.githubusercontent.com/SNBogdanov/BrokenBot/Mod/changelog.md", @TempDir & "\brokenbotchangelog.md", 3)
 						$strReleaseNotes = ""
-						$fileopen = FileOpen(@TempDir & "\brokenbotchangelog.md")
-						If @error Then SetLog(GetLangText("msgFailedVersion"))
-						FileReadLine($fileopen)
-						FileReadLine($fileopen)
-						While True
-							$line = FileReadLine($fileopen)
-							If @error Then ExitLoop
-							If StringLeft($line, 3) = "###" Then
-								If StringReplace($line, "### v", "") <= $VersionCompare Then
-									ExitLoop
-								EndIf
-							EndIf
-							If StringStripWS($line, 3) <> "" Then SetLog($line)
-							$strReleaseNotes = $strReleaseNotes & StringReplace($line, "### ", "") & @CRLF
-						WEnd
-						FileClose($fileopen)
-						FileDelete(@TempDir & "\brokenbotchangelog.md")
+;						$fileopen = FileOpen(@TempDir & "\brokenbotchangelog.md")
+;						If @error Then SetLog(GetLangText("msgFailedVersion"))
+;						FileReadLine($fileopen)
+;						FileReadLine($fileopen)
+;						While True
+;							$line = FileReadLine($fileopen)
+;							If @error Then ExitLoop
+;							If StringLeft($line, 3) = "###" Then
+;								If StringReplace($line, "### v", "") <= $VersionCompare Then
+;									ExitLoop
+;								EndIf
+;							EndIf
+;							If StringStripWS($line, 3) <> "" Then SetLog($line)
+;							$strReleaseNotes = $strReleaseNotes & StringReplace($line, "### ", "") & @CRLF
+;						WEnd
+;						FileClose($fileopen)
+;						FileDelete(@TempDir & "\brokenbotchangelog.md")
 						If MsgBox($MB_OKCANCEL, GetLangText("boxUpdate"), GetLangText("boxUpdate2") & @CRLF & @CRLF & GetLangText("boxUpdate3") & @CRLF & @CRLF & GetLangText("boxUpdate5") & @CRLF & @CRLF & GetLangText("boxUpdate6") & @CRLF & @CRLF & $strReleaseNotes, 0, $frmBot) = $IDOK Then
 							SetLog(GetLangText("msgDownloading"))
-							InetGet("https://github.com/codebroken/BrokenBot/archive/master.zip", @TempDir & "\BrokenBot-master.zip", 3)
-							If Not FileExists(@TempDir & "\BrokenBot-master.zip") Then
+							InetGet("https://github.com/SNBogdanov/BrokenBot/archive/Mod.zip", @TempDir & "\BrokenBot-Mod.zip", 3)
+							If Not FileExists(@TempDir & "\BrokenBot-Mod.zip") Then
 								MsgBox(0, "", GetLangText("boxUpdateError"))
 							Else
 								SetLog(GetLangText("msgUnzipping"))
 								If Not FileExists(@TempDir & "\TempUpdateFolder") Then
 									DirCreate(@TempDir & "\TempUpdateFolder")
 								EndIf
-								If _ExtractZip(@TempDir & "\BrokenBot-master.zip", @TempDir & "\TempUpdateFolder") <> 1 Then
+								If _ExtractZip(@TempDir & "\BrokenBot-Mod.zip", @TempDir & "\TempUpdateFolder") <> 1 Then
 									MsgBox(0, "", GetLangText("boxUpdateExtract"))
 								Else
 									SetLog(GetLangText("msgInstallandRestart"))
@@ -118,10 +118,15 @@ Func checkupdate()
 									_GDIPlus_Shutdown()
 									_Crypt_Shutdown()
 									$fileopen = FileOpen(@TempDir & "\brokenbotupdate.bat", 2)
-									FileWriteLine($fileopen, 'xcopy "' & @TempDir & '\TempUpdateFolder\BrokenBot-master\*.*" "' & @ScriptDir & '\" /S /E /Y')
+									FileWriteLine($fileopen, 'xcopy "' & @TempDir & '\TempUpdateFolder\Brokenbot-Mod\*.*" "' & @ScriptDir & '\" /S /E /Y')
 									FileWriteLine($fileopen, 'del "' & @TempDir & '\TempUpdateFolder\*.*" /S /Q')
-									FileWriteLine($fileopen, 'del "' & @TempDir & '\BrokenBot-master.zip" /S /Q')
+									FileWriteLine($fileopen, 'del "' & @TempDir & '\BrokenBot-Mod.zip" /S /Q')
 									FileWriteLine($fileopen, 'rd "' & @TempDir & '\TempUpdateFolder" /S /Q')
+									If $64Bit Then
+										FileWriteLine($fileopen, '"C:\Program Files (X86)\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
+									Else
+										FileWriteLine($fileopen, '"C:\Program Files\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
+									EndIf
 									FileWriteLine($fileopen, 'start "" /D "' & @ScriptDir & '\" BrokenBot.exe')
 									FileClose($fileopen)
 									_GUICtrlRichEdit_Destroy($txtLog)
