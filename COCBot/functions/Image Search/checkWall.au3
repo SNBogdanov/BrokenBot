@@ -35,14 +35,22 @@ $Wall[6][1] = @ScriptDir & "\images\Walls\10_2.bmp"
 $Wall[6][2] = @ScriptDir & "\images\Walls\10.png"
 
 Local $WallPos
-
+Local $Walltollerance
 
 Func checkWall()
 	_CaptureRegion()
 	Local $listArrayPoint = ""
 	$ToleranceHere = 20
 	$icmbWalls=_GUICtrlComboBox_GetCurSel($cmbWalls)
-	While $ToleranceHere < 71
+	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
+		Case 0
+			$Walltollerance = 51
+		Case 1
+			$Walltollerance = 71
+		Case 2
+			$Walltollerance = 91
+	EndSwitch
+	While $ToleranceHere < $Walltollerance
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -70,7 +78,15 @@ Func FindWall()
 	$ToleranceHere = 20
 	$icmbWalls=_GUICtrlComboBox_GetCurSel($cmbWalls)
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 71
+	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
+		Case 0
+			$Walltollerance = 51
+		Case 1
+			$Walltollerance = 71
+		Case 2
+			$Walltollerance = 91
+	EndSwitch
+	While $ToleranceHere < $Walltollerance
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWalls][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -90,7 +106,15 @@ Func checkWallE()
 	Local $listArrayPoint = ""
 	$icmbWallsE=_GUICtrlComboBox_GetCurSel($cmbWallsE)
 	$ToleranceHere = 20
-	While $ToleranceHere < 71
+	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
+		Case 0
+			$Walltollerance = 51
+		Case 1
+			$Walltollerance = 71
+		Case 2
+			$Walltollerance = 91
+	EndSwitch
+	While $ToleranceHere < $Walltollerance
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWallsE+4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location
@@ -115,7 +139,15 @@ Func FindWallE()
 	$ToleranceHere = 20
 	$icmbWallsE=_GUICtrlComboBox_GetCurSel($cmbWallsE)
 	If ($ichkForceBS) = 1 And Not WinActive("[CLASS:BlueStacksApp; INSTANCE:1]") And $Hide = False Then WinActivate("[CLASS:BlueStacksApp; INSTANCE:1]");If something blocked BS
-	While $ToleranceHere < 71
+	Switch _GUICtrlComboBox_GetCurSel($cmbTolerance)
+		Case 0
+			$Walltollerance = 51
+		Case 1
+			$Walltollerance = 71
+		Case 2
+			$Walltollerance = 91
+	EndSwitch
+	While $ToleranceHere < $Walltollerance
 		$ToleranceHere = $ToleranceHere + 10
 			For $ImageIndex = 0 To 2
 				$WallPos = _ImageSearch($Wall[$icmbWallsE+4][$ImageIndex], 1, $WallX, $WallY, $ToleranceHere) ; Getting Wall Location

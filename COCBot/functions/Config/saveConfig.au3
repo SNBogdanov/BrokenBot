@@ -109,7 +109,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	EndIf
 	IniWrite($config, "upgrade", "walllvlG", _GUICtrlComboBox_GetCurSel($cmbWalls))
 	IniWrite($config, "upgrade", "walllvlE", _GUICtrlComboBox_GetCurSel($cmbWallsE))
-;	IniWrite($config, "upgrade", "walltolerance", _GUICtrlComboBox_GetCurSel($cmbTolerance))
+	IniWrite($config, "upgrade", "walltolerance", _GUICtrlComboBox_GetCurSel($cmbTolerance))
 	If IsChecked($UseGold) Then
 		IniWrite($config, "upgrade", "wallusegold", 1)
 	Else

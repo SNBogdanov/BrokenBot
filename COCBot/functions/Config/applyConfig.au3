@@ -68,7 +68,7 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 	EndIf
 	_GUICtrlComboBox_SetCurSel($cmbWalls, $icmbWalls)
 	_GUICtrlComboBox_SetCurSel($cmbWallsE, $icmbWallsE)
-;	_GUICtrlComboBox_SetCurSel($cmbTolerance, $icmbTolerance)
+	_GUICtrlComboBox_SetCurSel($cmbTolerance, $icmbTolerance)
 
 	If $iWallUseGold = 1 Then
 		GUICtrlSetState($UseGold, $GUI_CHECKED)

@@ -54,7 +54,7 @@ Func readConfig() ;Reads config and sets it to the variables
 	$iWallUseElixer = IniRead($config,"upgrade","walluseelix","0")
 	$itxtWallMinGold = IniRead($config, "upgrade", "minwallgold", "0")
 	$itxtWallMinElixir = IniRead($config, "upgrade", "minwallelixir", "0")
-;	$icmbTolerance = IniRead($config, "upgrade", "walltolerance", "0")
+	$icmbTolerance = IniRead($config, "upgrade", "walltolerance", "0")
 
 	;UpgradeHeroes
 	$ichkUpgradeKing = IniRead($config, "Upgrade", "UpKing", "0")	;==>upgradeking
