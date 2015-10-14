@@ -3,10 +3,10 @@ Func WriteStats($Skips, $EarnedGold, $EarnedElixir, $EarnedDark,$RaidGold,$RaidE
 	$sStatPath = $dirStat & "Loot Results.csv"
 	If Not FileExists($sStatPath) Then
 		$hStatFileHandle = FileOpen($sStatPath, $FO_APPEND)
-		FileWriteLine($hStatFileHandle, "Time;Skips;EarnedGold;EarnedElixir;EarnedDark;RaidGold;RaidElixir;RaidDark;GoldCount;ElixirCount;DarkCount;GoldGained;ElixirGained;DarkGained")
+		FileWriteLine($hStatFileHandle, "Time"&$Delimiter&"Skips"&$Delimiter&"EarnedGold"&$Delimiter&"EarnedElixir"&$Delimiter&"EarnedDark"&$Delimiter&"RaidGold"&$Delimiter&"RaidElixir"&$Delimiter&"RaidDark"&$Delimiter&"GoldCount"&$Delimiter&"ElixirCount"&$Delimiter&"DarkCount"&$Delimiter&"GoldGained"&$Delimiter&"ElixirGained"&$Delimiter&"DarkGained")
 	Else
 		$hStatFileHandle = FileOpen($sStatPath, $FO_APPEND)
 	EndIf
-	FileWriteLine($hStatFileHandle, _Now() & ";" & $Skips & ";" & $EarnedGold & ";" & $EarnedElixir & ";" & $EarnedDark & ";" & $RaidGold & ";" & $RaidElixir & ";" & $RaidDark & ";" & $GoldCount & ";" & $ElixirCount & ";" & $DarkCount & ";" & $GoldGained & ";" & $ElixirGained & ";" & $DarkGained)
+	FileWriteLine($hStatFileHandle, _Now() & $Delimiter & $Skips & $Delimiter & $EarnedGold & $Delimiter & $EarnedElixir & $Delimiter & $EarnedDark & $Delimiter & $RaidGold & $Delimiter & $RaidElixir & $Delimiter & $RaidDark & $Delimiter & $GoldCount & $Delimiter & $ElixirCount & $Delimiter & $DarkCount & $Delimiter & $GoldGained & $Delimiter & $ElixirGained & $Delimiter & $DarkGained)
 	FileClose($hStatFileHandle)
 EndFunc   ;==>WriteStats

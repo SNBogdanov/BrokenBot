@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.22 MOD by SNBogdanov"
+$sBotVersion = "3.3.23 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -64,6 +64,7 @@ _PluginDefaults()
 _btnRefresh()
 _GUICtrlListBox_SetCurSel($lstStrategies, 0)
 _lstStrategies()
+Global $Delimiter=RegRead("HKCU\Control Panel\International", "sList")
 
 HotKeySet("^!+p", "_ScreenShot")
 

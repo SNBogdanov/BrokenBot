@@ -61,6 +61,8 @@ EndFunc   ;==>_ExtractZip
 ;
 Func checkupdate()
 	$hUpdateTimer = TimerInit()
+	Local $ACP=RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "ACP")
+	Local $Compile=RegRead("HKCR\AutoIt3Script\Shell\Compile\Command", "")
 	If IsChecked($chkUpdate) Then
 		Local $sFilePath = @TempDir & "\update.dat"
 
@@ -117,20 +119,22 @@ Func checkupdate()
 									DllClose($KernelDLL)
 									_GDIPlus_Shutdown()
 									_Crypt_Shutdown()
-									$fileopen = FileOpen(@TempDir & "\brokenbotupdate.bat", 2)
+									$fileopen = FileOpen(@TempDir & "\brokenbotupdate.bat", 2+512)
+									FileWriteLine($fileopen,"CHCP "&$ACP)
 									FileWriteLine($fileopen, 'xcopy "' & @TempDir & '\TempUpdateFolder\Brokenbot-Mod\*.*" "' & @ScriptDir & '\" /S /E /Y')
 									FileWriteLine($fileopen, 'del "' & @TempDir & '\TempUpdateFolder\*.*" /S /Q')
 									FileWriteLine($fileopen, 'del "' & @TempDir & '\BrokenBot-Mod.zip" /S /Q')
 									FileWriteLine($fileopen, 'rd "' & @TempDir & '\TempUpdateFolder" /S /Q')
-									If $64Bit Then
-										FileWriteLine($fileopen, '"C:\Program Files (X86)\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
-									Else
-										FileWriteLine($fileopen, '"C:\Program Files\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
-									EndIf
+;									If $64Bit Then
+;										FileWriteLine($fileopen, '"C:\Program Files (X86)\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
+;									Else
+;										FileWriteLine($fileopen, '"C:\Program Files\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "' & @ScriptDir & '\BrokenBot.au3"')
+;									EndIf
+									FileWriteLine($fileopen, StringReplace(StringReplace($Compile,"%1","%l"),"%l",@ScriptDir & '\BrokenBot.au3'))
 									FileWriteLine($fileopen, 'start "" /D "' & @ScriptDir & '\" BrokenBot.exe')
 									FileClose($fileopen)
 									_GUICtrlRichEdit_Destroy($txtLog)
-									Run(@ComSpec & ' /c "' & @TempDir & '\brokenbotupdate.bat"', @SystemDir, @SW_SHOW)
+;									Run(@ComSpec & ' /c "' & @TempDir & '\brokenbotupdate.bat"', @SystemDir, @SW_SHOW)
 									Exit
 								EndIf
 							EndIf
