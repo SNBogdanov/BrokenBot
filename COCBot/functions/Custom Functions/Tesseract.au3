@@ -17,7 +17,7 @@ Func _TesseractCheck()
 		SetLog("Check for file "&$Command)
 		Return False
 	EndIf
-	RunWait(@ComSpec & " /c " & $Command & " > " & $FileName, "", @SW_HIDE)
+	RunWait(@ComSpec & " /c """ & $Command & """ 2> " & $FileName, "", @SW_HIDE)
  	$Str = FileRead($FileName)
 	If @error Then
 		FileDelete($FileName)
@@ -25,6 +25,7 @@ Func _TesseractCheck()
 	EndIf
 	If StringInStr($Str,"Error opening") Then
 		SetLog("Check settings for tesseract and directory "&$tesseract_Path)
+		FileDelete($FileName)
 		Return False
 	EndIf
 

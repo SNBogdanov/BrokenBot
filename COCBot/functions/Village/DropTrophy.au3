@@ -92,12 +92,17 @@ Func DropTrophy()
 						Else
 							RedLineDeploy($x, $y)
 						EndIf
+						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then
+					                If _Sleep(200) Then Return ;  wait 0.2 seconds
+					                Click(68 + (72 * $DropTroop) + Random(-5,5,1), 595 + Random(-5,5,1)) ; before activate king power
+						EndIf
 						$DropFailed = False
 						If _Sleep(100) Then Return False
 						_CaptureRegion()
 						If _ColorCheck(_GetPixelColor(733, 499), Hex(0xEBAD28, 6), 20) Then
 							$DropFailed = True
 						EndIf
+						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then ExitLoop
 						$i += 1
 					Until Not $DropFailed Or $i > 4
 					If $DropTroop = 0 Then ; Don't just assume the troop you dropped was an archer
