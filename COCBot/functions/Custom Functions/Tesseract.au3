@@ -4,7 +4,33 @@
 #ce
 
 Global $tesseract_Path = @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\"
+Func _TesseractCheck()
+	Local $Command=$tesseract_Path&"tesseract.exe"
+	Local $Convert=$tesseract_Path&"convert.exe"
+	Local $Str
+	$FileName = $tesseract_Path&"temp\check.log"
+	If Not FileExists($Convert) Then
+		SetLog("Check for file "&$Convert)
+		Return False
+	EndIf
+	If Not FileExists($Command) Then
+		SetLog("Check for file "&$Command)
+		Return False
+	EndIf
+	RunWait(@ComSpec & " /c " & $Command & " > " & $FileName, "", @SW_HIDE)
+ 	$Str = FileRead($FileName)
+	If @error Then
+		FileDelete($FileName)
+		Return False
+	EndIf
+	If StringInStr($Str,"Error opening") Then
+		SetLog("Check settings for tesseract and directory "&$tesseract_Path)
+		Return False
+	EndIf
 
+	FileDelete($FileName)
+	Return True
+EndFunc
 Func _TesseractReadText($iLeft = 0, $iTop = 0, $iRight = 0, $iBottom = 0, $ConvertOptions = "", $Lang = "BrokenBot", $Debug = False)
 	If StatusCheck(False) Then Return ""
 

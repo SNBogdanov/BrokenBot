@@ -33,6 +33,10 @@ Func runBot() ;Bot that runs everything in order
 			EndIf
 		EndIf
 	EndIf
+	If Not _TesseractCheck() Then
+		btnStop()
+		Return
+	EndIf
 	If $SearchCost = 0 Then
 		CheckCostPerSearch()
 		If StatusCheck() Then Return
