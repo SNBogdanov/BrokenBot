@@ -8,7 +8,7 @@ Func _TesseractCheck()
 	Local $Command=$tesseract_Path&"tesseract.exe"
 	Local $Convert=$tesseract_Path&"convert.exe"
 	Local $Str
-	$FileName = $tesseract_Path&"temp\check.log"
+	$FileName = @TempDir&"\check.log"
 	If Not FileExists($Convert) Then
 		SetLog("Check for file "&$Convert)
 		Return False
