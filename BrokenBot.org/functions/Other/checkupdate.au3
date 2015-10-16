@@ -134,7 +134,7 @@ Func checkupdate()
 									FileWriteLine($fileopen, 'start "" /D "' & @ScriptDir & '\" BrokenBot.exe')
 									FileClose($fileopen)
 									_GUICtrlRichEdit_Destroy($txtLog)
-;									Run(@ComSpec & ' /c "' & @TempDir & '\brokenbotupdate.bat"', @SystemDir, @SW_SHOW)
+									Run(@ComSpec & ' /c "' & @TempDir & '\brokenbotupdate.bat"', @SystemDir, @SW_SHOW)
 									Exit
 								EndIf
 							EndIf
