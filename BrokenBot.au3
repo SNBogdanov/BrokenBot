@@ -68,9 +68,13 @@ Global $Delimiter=RegRead("HKCU\Control Panel\International", "sList")
 
 HotKeySet("^!+p", "_ScreenShot")
 
-If Not RegWrite("HKEY_CURRENT_USER\Environment\", "TESSDATA_PREFIX", "REG_EXPAND_SZ", @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\") Or Not RegWrite("HKEY_CURRENT_USER\Environment\", "PATH", "REG_EXPAND_SZ", @ScriptDir & "\COCBot\functions\Custom Functions\Tesseract\") Then
+If Not RegWrite("HKEY_CURRENT_USER\Environment\", "TESSDATA_PREFIX", "REG_EXPAND_SZ", $tesseract_Path) Then
 	SetLog("Tesseract's language path could not be wiritten registry. _TesseractReadText() might not work")
 EndIf
+EnvSet("TESSDATA_PREFIX",$tesseract_Path)
+Local $sEnvVar = EnvGet("PATH")
+EnvSet("PATH", $sEnvVar & ";" & $tesseract_Path)
+EnvUpdate()
 
 $sTimer = TimerInit()
 AdlibRegister("SetTime", 1000)
