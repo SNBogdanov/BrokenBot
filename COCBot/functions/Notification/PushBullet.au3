@@ -66,6 +66,10 @@ Func _RemoteControl()
 				ElseIf StringLeft($title[$x], 9) = "BOT RESET" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
         				StatusCheck()
 					SetLog("Your request has been received. Resetting statistics.")
+					_DeleteMessage($iden[$x])
+					If IsChecked($lblpushbulletenabled) And IsChecked($lblpushbulletdelete) Then
+						_DeletePush()
+					EndIf
 					_Push("Request to Reset Statistics", "Report of status before resetting statistics:\n\n" & _PushStatisticsString())
 					$GoldStart=0
 					$GoldUpgraded=0
@@ -92,10 +96,6 @@ Func _RemoteControl()
 					GUICtrlSetData($lblresultsearchdisconnected,0)
 					UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
 					$PushBulletvillagereportTimer = TimerInit()
-					_DeleteMessage($iden[$x])
-					If IsChecked($lblpushbulletenabled) And IsChecked($lblpushbulletdelete) Then
-						_DeletePush()
-					EndIf
 				ElseIf StringLeft($title[$x], 8) = "BOT LOGS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
 					SetLog(GetLangText("msgPBLog"))
 					_PushFile($sLogFileName, "logs", "text/plain; charset=utf-8", "Current Logs", $sLogFileName)

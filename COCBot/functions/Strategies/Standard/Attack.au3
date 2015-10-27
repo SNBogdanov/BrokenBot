@@ -1,6 +1,7 @@
 ; Improved attack algorithm, using Barbarians, Archers, Goblins, Giants and Wallbreakers as they are available
 ; Create by Fast French, edited by safar46
 Global $EdgeOrder[4]
+Global $giantWaitTime = 3500 ;msec Time to wait after deploying giants
 
 Func Wave_Sleep($type)
 	Switch $type
@@ -10,6 +11,7 @@ Func Wave_Sleep($type)
 			$delay = (_GUICtrlComboBox_GetCurSel($cmbWaveDelay) + 1) * 200
 	EndSwitch
 	$delay = _Random_Gaussian($delay, $delay / 6)
+;	SetLog("Delay = "&$delay)
 	If $delay < 1 Then $delay = 1
 	While TimerDiff($hWaveTimer) < $delay
 		If _Sleep(1, False) Then Return True
@@ -919,6 +921,12 @@ Func Standard_Attack($AttackMethod = 1)
 											$TroopBins[$collector][$ColTroop] -= $WaveSize
 											If $TroopBins[$collector][$ColTroop] > 0 Then $AllGone = False
 										EndIf
+										Switch $ColTroop
+											Case $Giant
+												SetLog(GetLangText("msgWaitForGiants"),$COLOR_BLUE)
+												If _Sleep($giantWaitTime) Then Return
+										EndSwitch
+
 									EndIf
 								EndIf
 
@@ -1640,7 +1648,6 @@ Func Standard_AttackBuilding($AttackMethod = 0)
 		Local $spreadPerc = 25 ;Pecentage of troops (barbs, archs, minions) to use in the clearing wave
 		Local $trickleWavePerc = 25 ;Will drop this percentage of one troop before looping to next troop
 		Local $firstGiantWavePerc = 50 ;If number of giants is >=8 then split up the deployment
-		Local $giantWaitTime = 3500 ;msec Time to wait after deploying giants
 		Local $waitToClearTime = 2000 ;msec Time to wait after deploying clearing wave
 
 		; Figure out how many to spread vs trickle

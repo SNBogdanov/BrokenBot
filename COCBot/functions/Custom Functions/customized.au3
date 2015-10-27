@@ -18,6 +18,7 @@ Func TryToOpenArmyOverview()
 
 	If Not IsArray($RedCrossButton) Then
 
+		If ChkDisconnection() Then Return False
 		If $DebugMode = 1 Then SetLog("Opening ArmyOverview")
 		ClickP($TopLeftClient) ;Click Away
 		If _Sleep(250) Then Return False

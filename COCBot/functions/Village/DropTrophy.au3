@@ -24,6 +24,9 @@ Func DropTrophy()
 
 				; Make sure clouds have cleared
 				If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then Return -1
+				GUICtrlSetData($lblresultsearchcost, _NumberFormat(Number(StringReplace(GUICtrlRead($lblresultsearchcost), " ", "")) + $SearchCost))
+				UpdateStat(-$SearchCost, 0, 0, 0)
+				GUICtrlSetData($lblresultvillagesattacked, GUICtrlRead($lblresultvillagesattacked) + 1)
 
 				; Wait just a bit extra
 				If _Sleep(100) Then Return $Result

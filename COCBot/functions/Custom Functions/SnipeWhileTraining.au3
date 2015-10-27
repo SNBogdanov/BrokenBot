@@ -45,6 +45,8 @@ SetLog("Approximate time to full army: " & Floor(Floor($ssTrainingTime / 60) / 6
 			ReturnHome($TakeLootSnapShot)
 			If StatusCheck(False) Then Return True
 			Return True
+		ElseIf $AttackType = -2 Then
+			Return True
 		EndIf
 	EndIf
 EndFunc   ;==>SnipeWhileTraining
@@ -221,6 +223,10 @@ Func GetSnipe()
 	;just copied from GetResources.au3
 
 	$fdiffReadGold = TimerDiff($hTimerClickNext) ; amount of time to locate TH
+	If ChkDisconnection() Then
+		SetLog(GetLangText("msgNoNextButton"), $COLOR_RED)
+		Return False
+	EndIf
 
 
 	If checkTownhall() = "-" Then
@@ -295,7 +301,7 @@ Func Snipe_Search($ssMaxSearchingTime = 0)
 
 	While 1
 		; Make sure end battle button is visible
-		If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 10) Then
+		If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then
 			If ChkDisconnection() Then Return -2
 			Return -1
 		EndIf

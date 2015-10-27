@@ -25,7 +25,7 @@ Func Standard_Search()
 
 
 			; Make sure end battle button is visible
-			If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 10) Then
+			If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then
 				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf

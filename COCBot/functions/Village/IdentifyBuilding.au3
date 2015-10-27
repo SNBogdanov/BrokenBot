@@ -48,8 +48,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 			$MenuBar = StringReplace(StringStripWS(ReadText(175, 138, 500, $textWindowTitles),3),"N","n")
 			$Level = Number(StringRegExpReplace($MenuBar,"[^0-9]",""))
 			$MenuBar = StringReplace(StringRegExpReplace($MenuBar,"[0-9]","")," (Level )","")
-			$MenuBar = StringReplace($MenuBar,"La boratory","Laboratory")
 			$MenuBar = StringReplace($MenuBar,"lnferno","Inferno")
+			$MenuBar = StringReplace($MenuBar," ","")
 		EndIf
 	EndIf
 	If $Level <1 Then
@@ -64,63 +64,70 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 			Return False
 		EndIf
 		$UpgradeCost=$UPCannon[$Level]
-	ElseIf $MenuBar =  "Archer Tower" Then
+	ElseIf  $MenuBar =  "ArcherTower" Then
+		$MenuBar =  "Archer Tower"
 		If $Level>= UBound($UPArcherTower) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPArcherTower[$Level]
-	ElseIf $MenuBar =  "Mortar" Then
+	ElseIf  $MenuBar =  "Mortar" Then
 		If $Level>= UBound($UPMortar) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPMortar[$Level]
-	ElseIf $MenuBar =  "Air Defense" Then
+	ElseIf  $MenuBar =  "AirDefense" Then
+		$MenuBar =  "Air Defense"
 		If $Level >= UBound($UPAirDefense) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPAirDefense[$Level]
-	ElseIf $MenuBar =  "Wizard Tower" Then
+	ElseIf  $MenuBar =  "WizardTower" Then
+		$MenuBar =  "Wizard Tower"
 		If $Level>= UBound($UPWizardTower) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPWizardTower[$Level]
-	ElseIf $MenuBar =  "Air Sweeper" Then
+	ElseIf  $MenuBar =  "AirSweeper" Then
+		$MenuBar =  "Air Sweeper"
 		If $Level>= UBound($UPAirSweeper) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPAirSweeper[$Level]
-	ElseIf $MenuBar =  "Hidden Tesla" Then
+	ElseIf  $MenuBar =  "HiddenTesla" Then
+		$MenuBar =  "Hidden Tesla"
 		If $Level>= UBound($UPHiddenTesla) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPHiddenTesla[$Level]
-	ElseIf $MenuBar =  "X-Bow" Then
+	ElseIf  $MenuBar =  "X-Bow" Then
 		If $Level>= UBound($UPXBow) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPXBow[$Level]
-	ElseIf $MenuBar =  "Inferno Tower" Then
+	ElseIf  $MenuBar =  "InfernoTower" Then
+		$MenuBar =  "Inferno Tower"
 		If $Level>= UBound($UPInfernoTower) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPInfernoTower[$Level]
-	ElseIf $MenuBar =  "Gold Mine" Then
+	ElseIf  $MenuBar =  "GoldMine" Then
+		$MenuBar =  "Gold Mine"
 		If $Level>= UBound($UPGoldMine) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -128,14 +135,16 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPGoldMine[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Elixir Collector" Then
+	ElseIf  $MenuBar =  "ElixirCollector" Then
+		$MenuBar =  "Elixir Collector"
 		If $Level>= UBound($UPElixirCollector) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPElixirCollector[$Level]
-	ElseIf $MenuBar =  "Dark Elixir Drill" Then
+	ElseIf  $MenuBar =  "DarkElixirDrill" Then
+		$MenuBar =  "Dark Elixir Drill"
 		If $Level>= UBound($UPDarkElixirDrill) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -143,7 +152,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPDarkElixirDrill[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Gold Storage" Then
+	ElseIf  $MenuBar =  "GoldStorage" Then
+		$MenuBar =  "Gold Storage"
 		If $Level>= UBound($UPGoldStorage) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -151,14 +161,16 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPGoldStorage[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Elixir Storage" Then
+	ElseIf  $MenuBar =  "ElixirStorage" Then
+		$MenuBar =  "Elixir Storage"
 		If $Level>= UBound($UPElixirStorage) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPElixirStorage[$Level]
-	ElseIf $MenuBar =  "Dark Elixir Storage" Then
+	ElseIf  $MenuBar =  "DarkElixirStorage" Then
+		$MenuBar =  "Dark Elixir Storage"
 		If $Level>= UBound($UPDarkElixirStorage) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -166,7 +178,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPDarkElixirStorage[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Army Camp" Then
+	ElseIf  $MenuBar =  "ArmyCamp" Then
+		$MenuBar =  "Army Camp"
 		If $Level>= UBound($UPArmyCamp) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -174,7 +187,7 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPArmyCamp[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Barracks" Then
+	ElseIf  $MenuBar =  "Barracks" Then
 		If $Level>= UBound($UPBarracks) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -182,7 +195,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPBarracks[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Dark Barracks" Then
+	ElseIf  $MenuBar =  "DarkBarracks" Then
+		$MenuBar =  "Dark Barracks"
 		If $Level>= UBound($UPDarkBarracks) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -190,7 +204,7 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPDarkBarracks[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Laboratory" Then
+	ElseIf  $MenuBar =  "Laboratory" Then
 		If $Level>= UBound($UPLaboratory) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -198,7 +212,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPLaboratory[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Spell Factory" Then
+	ElseIf  $MenuBar =  "SpellFactory" Then
+		$MenuBar =  "Spell Factory"
 		If $Level>= UBound($UPSpellFactory) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -206,7 +221,8 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPSpellFactory[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Dark Spell Factory" Then
+	ElseIf  $MenuBar =  "DarkSpellFactory" Then
+		$MenuBar =  "Dark Spell Factory"
 		If $Level>= UBound($UPDarkSpellFactory) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
@@ -214,56 +230,62 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 		EndIf
 		$UpgradeCost=$UPDarkSpellFactory[$Level]
 		$UpgradeResource=1
-	ElseIf $MenuBar =  "Town Hall" Then
+	ElseIf  $MenuBar =  "TownHall" Then
+		$MenuBar =  "Town Hall"
 		If $Level>= UBound($UPTownHall) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPTownHall[$Level]
-	ElseIf $MenuBar =  "Clan Castle" Then
+	ElseIf  $MenuBar =  "ClanCastle" Then
+		$MenuBar =  "Clan Castle"
 		If $Level>= UBound($UPClanCastle) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPClanCastle[$Level]
-	ElseIf $MenuBar =  "Bomb" Then
+	ElseIf  $MenuBar =  "Bomb" Then
 		If $Level>= UBound($UPBomb) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPBomb[$Level]
-	ElseIf $MenuBar =  "Giant Bomb" Then
+	ElseIf  $MenuBar =  "GiantBomb" Then
+		$MenuBar =  "Giant Bomb"
 		If $Level>= UBound($UPGiantBomb) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPGiantBomb[$Level]
-	ElseIf $MenuBar =  "Air Bomb" Then
+	ElseIf  $MenuBar =  "AirBomb" Then
+		$MenuBar =  "Air Bomb"
 		If $Level>= UBound($UPAirBomb) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPAirBomb[$Level]
-	ElseIf $MenuBar =  "Seeking Air Mine" Then
+	ElseIf  $MenuBar =  "SeekingAirMine" Then
+		$MenuBar =  "Seeking Air Mine"
 		If $Level>= UBound($UPSeekingAirMine) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPSeekingAirMine[$Level]
-	ElseIf $MenuBar =  "Skeleton Trap" Then
+	ElseIf  $MenuBar =  "SkeletonTrap" Then
+		$MenuBar =  "Skeleton Trap"
 		If $Level>= UBound($UPSkeletonTrap) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		EndIf
 		$UpgradeCost=$UPSkeletonTrap[$Level]
-	ElseIf $MenuBar =  "Wall" Then
+	ElseIf  $MenuBar =  "Wall" Then
 		If $Level>= UBound($UPWall) Then 
 			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)

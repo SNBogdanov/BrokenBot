@@ -131,6 +131,12 @@ If _ColorCheck(_GetPixelColor(501, 570), Hex(0xE70A12, 6), 20) Then ; Red number
 	If _Sleep(1000) Then Return
 	ClickP($TopLeftClient, 2)
 Else
+	If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+		SetLog(GetLangText("msgKingUpgrading"), $COLOR_ORANGE)
+		If _Sleep(1000) Then Return
+		ClickP($TopLeftClient, 2)
+		Return
+	EndIf
 	Click(504, 592) ;Click Upgrade Button
 	If _Sleep(2000) Then Return
 	Click(578, 512) ;Click Confirm Button
@@ -156,6 +162,12 @@ If _ColorCheck(_GetPixelColor(501, 570), Hex(0xE70A12, 6), 20) Then ; Red number
 	If _Sleep(1000) Then Return
 	ClickP($TopLeftClient, 2)
 Else
+	If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+		SetLog(GetLangText("msgQueenUpgrading"), $COLOR_ORANGE)
+		If _Sleep(1000) Then Return
+		ClickP($TopLeftClient, 2)
+		Return
+	EndIf
 	Click(504, 592) ;Click Upgrade Button
 	If _Sleep(2000) Then Return
 	Click(578, 512) ;Click Confirm Button

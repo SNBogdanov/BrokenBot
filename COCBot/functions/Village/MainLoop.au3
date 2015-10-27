@@ -241,7 +241,6 @@ Func runBot() ;Bot that runs everything in order
 					If PrepareSearch() Then
 						If $GoldBeforeSearch=0 Then $GoldBeforeSearch=$GoldCount
 						$AttackType = Call($strPlugInInUse & "_Search")
-						If BotStopped(False) Then Return
 						If $AttackType = -1 Then
 							$SearchFailed = True
 							ContinueLoop
@@ -251,6 +250,7 @@ Func runBot() ;Bot that runs everything in order
 							$SearchFailed = True
 							ExitLoop
 						EndIf
+						If BotStopped(False) Then Return
 
 						Call($strPlugInInUse & "_PrepareAttack", False, $AttackType)
 						If BotStopped(False) Then Return
@@ -264,6 +264,10 @@ Func runBot() ;Bot that runs everything in order
 						If _GUICtrlComboBox_GetCurSel($cmbTroopComp) = 8 And $AttackType <> 3 Then $AfterAttack=True
 					Else
 						If _ColorCheck(_GetPixelColor(820, 15), Hex(0xF88288, 6), 20) Then Click(820, 15) ;Click Red X
+						If ChkDisconnection() Then 
+							$SearchFailed = True
+							ExitLoop
+						EndIf
 						If StatusCheck() Then Return
 						ContinueLoop
 					EndIf

@@ -18,6 +18,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 	If _Sleep(1500) Then Return	;wait until number stop changing.
 ;	_CaptureRegion()
 	If _WaitForColorArea(19, 519, 100, 30, Hex(0xEE5056, 6), 50, 2) Then
+		SetLog("Click End Battle/Surrender")
 		Click(77, 529) ;Click Surrender
 		If _Sleep(500) Then Return	
 ;		_CaptureRegion()
