@@ -6,6 +6,8 @@ Func UpgradeBuilding()
 	Local $SomethingUpgraded = False
 	Local $GoldRequired
 	Local $ElixirRequired
+	$iinpUPMinimumGold=GUICtrlRead($inpUPMinimumGold)
+	$iinpUPMinimumElixir=GUICtrlRead($inpUPMinimumElixir)
 
 	SetLog("Checking Upgrade Buildings...")
 	For $Building In $UpgradeQueue

@@ -1,44 +1,60 @@
 #include <Array.au3>
 #include <String.au3>
 
+Global $OldCommand = ""
+Global $source_device_iden=""
 Func _RemoteControl()
+	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
-	$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=3", False)
-	$oHTTP.SetCredentials($access_token, "", 0)
-	$oHTTP.SetRequestHeader("Content-Type", "application/json")
-	$oHTTP.SetTimeouts(5000,5000,5000,5000)
-	$oHTTP.Send()
-	If @error Then Return
-	$Result = $oHTTP.ResponseText
 
-	If StringInStr(StringLower($Result), '"body":"bot') Then
+	Do 
+		If $Cursor = "" Then
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10", False)
+		Else
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10&cursor="&$cursor, False)
+		EndIf
+		$oHTTP.SetCredentials($access_token, "", 0)
+		$oHTTP.SetRequestHeader("Content-Type", "application/json")
+		$oHTTP.SetTimeouts(5000,5000,5000,5000)
+		$oHTTP.Send()
+		If @error Then Return
+		$Result = $oHTTP.ResponseText
+		$Cursor=""
+		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
 		Local $title = _StringBetween($Result, '"body":"', '"', "", False)
 		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
+		Local $target_device_iden = ""
+		If UBound(_StringBetween($Result, '"target_device_iden":"', '"', "", False)) <> 0 Then $target_device_iden=_StringBetween($Result, '"target_device_iden":"', '"', "", False)[0]
 		For $x = 0 To UBound($title) - 1
 			If $title <> "" Or $iden <> "" Then
 				$title[$x] = StringUpper(StringStripWS($title[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES))
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
-				If StringLeft($title[$x], 8) = "BOT HELP" Then
+				If $source_device_iden <> "" Then
+					if $target_device_iden <> ""  Then
+						If $target_device_iden <> $source_device_iden Then ContinueLoop
+					EndIf
+				EndIf
+				If (StringLeft($title[$x], 8) = "BOT HELP" And $target_device_iden = "") Or (StringLeft($title[$x], 4) = "HELP" And $target_device_iden = $source_device_iden) Then
 					SetLog(GetLangText("msgPBHelpSent"))
 					_Push(GetLangText("pushHRa"), GetLangText("pushHRb") & _
-																			  "\n\n----Additional Commands----\n\n" & _
-																  "Warning: BrokenBot will follow these commands without considering what it is currently doing, even if it is in the middle of an ongoing attack\n\n" & _
-															"[o] Stop - Stop BrokenBot, close BlueStacks and leave BrokenBot open\n" & _
-															"[o] Start - Start BrokenBot. Bot must be left open to start it with this command.\n" & _
-															"[o] Reset - Reset statistics" & _
-															"[o] RestartBS - Restart BlueStacks\n" & _
-															"[o] RestartBot - Restart BrokenBot\n" & _
-															"[o] Restart - Restart BlueStacks and BrokenBot\n" & _
-															"[o] ManualRestart - Use this in case your logs show that a manual restart is required. This will fully close BrokenBot and BlueStacks and then start BrokenBot again. Be warned: bot will start with the first available strategy in alphabetical order.\n" & _
-															"[Note] The command ManualRestart will work with BrokenBot.au3 without any extra effort, but to use it with BrokenBot.exe, you need to compile the file RestartBrokenBot.au3 into RestartBrokenBot.exe" & _
-																			  "\n\n----Danger Zone----\n\n" & _
-																  "The following commands will make BrokenBot inaccessible\n\n" & _
-															"[o] Quit - Close BlueStacks and BrokenBot\n" & _
-															"[o] Sleep - Put your computer into sleep/suspend mode\n" & _
-															"[o] Shutdown - Shut down your computer")
+						"\n\n----Additional Commands----\n\n" & _
+						"Warning: BrokenBot will follow these commands without considering what it is currently doing, even if it is in the middle of an ongoing attack\n\n" & _
+						"[o] Stop - Stop BrokenBot, close BlueStacks and leave BrokenBot open\n" & _
+						"[o] Start - Start BrokenBot. Bot must be left open to start it with this command.\n" & _
+						"[o] Reset - Reset statistics\n" & _
+						"[o] RestartBS - Restart BlueStacks\n" & _
+						"[o] RestartBot - Restart BrokenBot\n" & _
+						"[o] Restart - Restart BlueStacks and BrokenBot\n" & _
+						"[o] ManualRestart - Use this in case your logs show that a manual restart is required. This will fully close BrokenBot and BlueStacks and then start BrokenBot again. Be warned: bot will start with the first available strategy in alphabetical order.\n" & _
+						"[Note] The command ManualRestart will work with BrokenBot.au3 without any extra effort, but to use it with BrokenBot.exe, you need to compile the file RestartBrokenBot.au3 into RestartBrokenBot.exe" & _
+						"\n\n----Danger Zone----\n\n" & _
+						"The following commands will make BrokenBot inaccessible\n\n" & _
+						"[o] Quit - Close BlueStacks and BrokenBot\n" & _
+						"[o] Sleep - Put your computer into sleep/suspend mode\n" & _
+						"[o] Shutdown - Shut down your computer")
 					_DeleteMessage($iden[$x])
-				ElseIf StringLeft($title[$x], 9) = "BOT PAUSE" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 9) = "BOT PAUSE" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "PAUSE" And $target_device_iden = $source_device_iden) Then
 					If $PauseBot = False Then
 						SetLog(GetLangText("msgPBBotPauseFuture"))
 						_Push(GetLangText("pushPRa"), GetLangText("pushPRb"))
@@ -48,7 +64,7 @@ Func _RemoteControl()
 						_Push(GetLangText("pushPRa"), GetLangText("pushPRc"))
 					EndIf
 					_DeleteMessage($iden[$x])
-				ElseIf StringLeft($title[$x], 10) = "BOT RESUME" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 10), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 10) = "BOT RESUME" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 10), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 6) = "RESUME" And $target_device_iden = $source_device_iden) Then
 					If $PauseBot = True Then
 						SetLog(GetLangText("msgPBResumed"))
 						_Push(GetLangText("pushRRa"), GetLangText("pushRRb"))
@@ -59,11 +75,13 @@ Func _RemoteControl()
 						_Push(GetLangText("pushRRa"), GetLangText("pushRRc"))
 					EndIf
 					_DeleteMessage($iden[$x])
-				ElseIf StringLeft($title[$x], 9) = "BOT STATS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 9) = "BOT STATS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "STATS" And $target_device_iden = $source_device_iden) Then
 					SetLog(GetLangText("msgPBStats"))
 					_Push(GetLangText("pushStatRa"), _PushStatisticsString())
 					_DeleteMessage($iden[$x])
-				ElseIf StringLeft($title[$x], 9) = "BOT RESET" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 9) = "BOT RESET" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "RESET" And $target_device_iden = $source_device_iden) Then
+					If $OldCommand = $iden[$x] Then ContinueLoop
+                                        $OldCommand = $iden[$x]
         				StatusCheck()
 					SetLog("Your request has been received. Resetting statistics.")
 					_DeleteMessage($iden[$x])
@@ -94,42 +112,42 @@ Func _RemoteControl()
 					GUICtrlSetData($lblresultvillagesskipped,0)
 					GUICtrlSetData($lblresultvillagesattacked,0)
 					GUICtrlSetData($lblresultsearchdisconnected,0)
-					UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
 					$PushBulletvillagereportTimer = TimerInit()
-				ElseIf StringLeft($title[$x], 8) = "BOT LOGS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+					UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
+				ElseIf (StringLeft($title[$x], 8) = "BOT LOGS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 4) = "LOGS" And $target_device_iden = $source_device_iden) Then
 					SetLog(GetLangText("msgPBLog"))
 					_PushFile($sLogFileName, "logs", "text/plain; charset=utf-8", "Current Logs", $sLogFileName)
 					_DeleteMessage($iden[$x])
-			    ElseIf StringLeft($title[$x], 13) = "BOT RESTARTBS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 13), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 13) = "BOT RESTARTBS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 13), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 9) = "RESTARTBS" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Restarting BlueStacks now.")
 					_DeleteMessage($iden[$x])
 					restartBlueStack()
-				ElseIf StringLeft($title[$x], 14) = "BOT RESTARTBOT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 14), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 14) = "BOT RESTARTBOT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 14), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 10) = "RESTARTBOT" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Restarting BrokenBot now.")
 					_Push("Request to Restart", "Restarting BrokenBot")
 					_DeleteMessage($iden[$x])
 					btnStop()
 					btnStart()
-				 ElseIf StringLeft($title[$x], 11) = "BOT RESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 11), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 11) = "BOT RESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 11), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 7) = "RESTART" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Restarting BlueStacks and BrokenBot now.")
 					_Push("Request to Restart", "Restarting BlueStack and BrokenBot")
 					_DeleteMessage($iden[$x])
 					restartBlueStack()
 					btnStop()
 					btnStart()
-				 ElseIf StringLeft($title[$x], 9) = "BOT SLEEP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 9) = "BOT SLEEP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "SLEEP" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Putting your PC to Sleep.")
 					_Push("Request to Sleep", "Putting your computer to Sleep. No command can be accepted after this.")
 					_DeleteMessage($iden[$x])
 					Shutdown(32)
 					btnStop()
-				 ElseIf StringLeft($title[$x], 12) = "BOT SHUTDOWN" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 12), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 12) = "BOT SHUTDOWN" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 12), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 9) = "SHOOTDOWN" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Your computer will be switched off.")
 					_Push("Request to Shut down", "Switching off your computer. No command can be accepted after this.")
 					_DeleteMessage($iden[$x])
 					Shutdown(5)
 					btnStop()
-				 ElseIf StringLeft($title[$x], 8) = "BOT QUIT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 8) = "BOT QUIT" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 4) = "QUIT" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. BrokenBot will close BlueStacks and quit.")
 					_Push("Request to Quit", "Closing BlueStacks and BrokenBot. No command can be accepted after this.")
 					_DeleteMessage($iden[$x])
@@ -141,7 +159,7 @@ Func _RemoteControl()
 					btnUPsave()
 					ModSave()
 					Exit
-				 ElseIf StringLeft($title[$x], 17) = "BOT MANUALRESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 17), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 17) = "BOT MANUALRESTART" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 17), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 13) = "MANUALRESTART" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Attempting to close and start BrokenBot afresh.", $COLOR_ORANGE)
 					_DeleteMessage($iden[$x])
 					$restartBrokenBot = "not_set"
@@ -163,13 +181,13 @@ Func _RemoteControl()
 					Else
 					   _Push("Request to Restart failed", "Please compile the file RestartBrokenBot.au3 if you want to use this command with the compiled version of BrokenBot.")
 					EndIf
-				 ElseIf StringLeft($title[$x], 8) = "BOT STOP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 8) = "BOT STOP" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 4) = "STOP" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. BrokenBot will be stopped.")
 					_Push("Request to Stop", "Stopping BrokenBot, closing BlueStacks and leaving BrokenBot open.")
 					_DeleteMessage($iden[$x])
 					ProcessClose("HD-Frontend.exe")
 					btnStop()
-				 ElseIf StringLeft($title[$x], 9) = "BOT START" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3)) Then
+				ElseIf (StringLeft($title[$x], 9) = "BOT START" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "START" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. BrokenBot will be started.")
 					_Push("Request to Start", "Starting BrokenBot")
 					_DeleteMessage($iden[$x])
@@ -179,7 +197,7 @@ Func _RemoteControl()
 				$iden[$x] = ""
 			EndIf
 		Next
-	EndIf
+	Until $cursor = ""
 EndFunc   ;==>_RemoteControl
 
 Func _PushBullet($pTitle = "", $pMessage = "")
@@ -193,22 +211,77 @@ Func _PushBullet($pTitle = "", $pMessage = "")
 	Local $device_name = _StringBetween($Result, 'nickname":"', '"')
 EndFunc   ;==>_PushBullet
 
+Func _PushBulletDevice()
+	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
+	$access_token = $PushBullettoken
+	$oHTTP.Open("Get", "https://api.pushbullet.com/v2/devices?active=true", False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	$oHTTP.Send()
+	If @error Then Return
+	$Result = $oHTTP.ResponseText
+	Local $pTitle=""
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
+		$pTitle = "BrokenBot (" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
+	Else
+		$pTitle = "BrokenBot"
+	EndIf
+	Local $devices = _StringBetween(StringRight($Result,StringLen($Result)-StringInStr($Result,'"devices":[')), '[', ']', "", False)
+	$Found=False
+	For $x = 0 To UBound($devices) - 1
+		Local $devices1 = _StringBetween($devices[$x], '{', '}', "", False)
+		For $x1 = 0 To UBound($devices1) - 1
+			$NickName=_StringBetween($devices1[$x1],'"nickname":"','"', "", False)
+			If UBound($NickName) = 0 Then ContinueLoop
+			If $NickName[0] = $pTitle Then
+				ExitLoop
+			EndIf
+		Next
+		If $x1 <> UBound($devices1) Then
+			$Found=true
+;			SetLog($devices1[$x1])
+			If UBound(_StringBetween($devices1[$x1],'"iden":"','"', "", False)) <> 0 Then 
+				$source_device_iden=_StringBetween($devices1[$x1],'"iden":"','"', "", False)[0]
+			EndIf
+		EndIf
+	Next
+	If $Found = False Then
+		
+		$oHTTP.Open("Post", "https://api.pushbullet.com/v2/devices", False)
+		$oHTTP.SetCredentials($access_token, "", 0)
+		$oHTTP.SetRequestHeader("Content-Type", "application/json")
+		Local $pPush = '{"nickname":"' & $pTitle & '","model":"BrokenBot","manufacturer":"BrokenBot"}'
+		$oHTTP.Send($pPush)
+		$Result = $oHTTP.ResponseText
+		If UBound(_StringBetween($Result,'"iden":"','"', "", False)) <> 0 Then 
+			$source_device_iden=_StringBetween($Result,'"iden":"','"', "", False)[0]
+		EndIf
+	EndIf
+EndFunc   ;==>_PushBullet
+
+
 Func _Push($pTitle, $pMessage)
 	Local $Date = _NowDate()
 	Local $Time = _NowTime()
-	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $pTitle = "[" & StringStripWS(GUICtrlRead($inppushuser), 3) & "] " & $pTitle
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") " & $pTitle
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Post", "https://api.pushbullet.com/v2/pushes", False)
 	$oHTTP.SetCredentials($access_token, "", 0)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$pMessage = $Date & " at " & $Time & "\n" & $pMessage
-	Local $pPush = '{"type": "note", "title": "' & $pTitle & '", "body": "' & $pMessage & '","dismissable": true}'
+	Local $pPush = '{"type": "note", "title": "' & $pTitle & '", "body": "' & $pMessage & '","dismissable": true'
+	If $source_device_iden = "" Then
+		$pPush = $pPush & '}'
+	Else
+		$pPush = $pPush &',"source_device_iden":"'&$source_device_iden&'"}'
+	EndIf
 	$oHTTP.Send($pPush)
+	$Result = $oHTTP.ResponseText
 EndFunc   ;==>_Push
 
 Func _PushFile($File, $Folder, $FileType, $title, $body)
-	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $title = "[" & StringStripWS(GUICtrlRead($inppushuser), 3) & "] " & $title
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $title = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") " & $title
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Post", "https://api.pushbullet.com/v2/upload-request", False)
@@ -284,14 +357,42 @@ Func _PushFile($File, $Folder, $FileType, $title, $body)
 	EndIf
 EndFunc   ;==>_PushFile
 
-Func _DeletePush()
+Func _DeletePush1()
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/pushes", False)
 	$oHTTP.SetCredentials($access_token, "", 0)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
+EndFunc   ;==>_DeletePush1
+Func _DeletePush()
+	Local $pTitle=""
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
+		$pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
+	Else
+		_DeletePush1()
+	EndIf
+
+	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
+	$access_token = $PushBullettoken
+	$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=1000", False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	$oHTTP.SetTimeouts(5000,5000,5000,5000)
+	$oHTTP.Send()
+	If @error Then Return
+	$Result = $oHTTP.ResponseText
+	Local $sources = _StringBetween($Result, '"source_device_iden":"', '"', "", False)
+	Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
+	For $x = 0 To UBound($sources) - 1
+		If $sources[$x] = $source_device_iden Then
+			$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
+			_DeleteMessage($iden[$x])
+		EndIf
+	Next
 EndFunc   ;==>_DeletePush
+
+
 
 Func _DeleteMessage($iden)
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
@@ -325,11 +426,11 @@ Func _PushStatisticsString()
 			GetLangText("pushStatRh") & GUICtrlRead($lblresultdenow) & _
 			GetLangText("pushStatRi") & GUICtrlRead($lblresulttrophynow) & _
 			GetLangText("pushStatRl") & GUICtrlRead($lblresultgoldgain) & _
-			"\nGold/hr:  " & GUICtrlRead($lblresultavggoldgain) & _
+			GetLangText("pushStatRgh") & GUICtrlRead($lblresultavggoldgain) & _
 			GetLangText("pushStatRm") & GUICtrlRead($lblresultelixirgain) & _
-			"\nElixir/hr:  " & GUICtrlRead($lblresultavgelixirgain) & _
+			GetLangText("pushStatReh") & GUICtrlRead($lblresultavgelixirgain) & _
 			GetLangText("pushStatRn") & GUICtrlRead($lblresultdegain) & _
-			"\nDark Elixir/hr:  " & GUICtrlRead($lblresultavgdegain) & _
+			GetLangText("pushStatRdeh") & GUICtrlRead($lblresultavgdegain) & _
 			GetLangText("pushStatRo") & GUICtrlRead($lblresulttrophygain) & _
 			GetLangText("pushStatRp") & GUICtrlRead($lblresultvillagesattacked) & _
 			GetLangText("pushStatRq") & GUICtrlRead($lblresultvillagesskipped) & _
