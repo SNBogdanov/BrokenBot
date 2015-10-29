@@ -403,7 +403,7 @@ Func _DeletePush()
 				_DeleteMessage($iden[$x])
 			EndIf
 		Next
-		For $x = 0 To UBound($target_device_iden) - 1
+		For $x = 0 To UBound($targets) - 1
 			If $targets[$x] = $source_device_iden Then
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 				_DeleteMessage($iden[$x])
