@@ -10,9 +10,9 @@ Func _RemoteControl()
 
 	Do 
 		If $Cursor = "" Then
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10", False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100", False)
 		Else
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10&cursor="&$cursor, False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100&cursor="&$cursor, False)
 		EndIf
 		$oHTTP.SetCredentials($access_token, "", 0)
 		$oHTTP.SetRequestHeader("Content-Type", "application/json")
@@ -21,12 +21,20 @@ Func _RemoteControl()
 		If @error Then Return
 		$Result = $oHTTP.ResponseText
 		$Cursor=""
+		$Pushes=""
 		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
-		Local $title = _StringBetween($Result, '"body":"', '"', "", False)
-		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
-		Local $target_device_iden = ""
-		If UBound(_StringBetween($Result, '"target_device_iden":"', '"', "", False)) <> 0 Then $target_device_iden=_StringBetween($Result, '"target_device_iden":"', '"', "", False)[0]
-		For $x = 0 To UBound($title) - 1
+		If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
+;		SetLog($Pushes)
+		Local $Push=_StringBetween($Pushes, '{', '}', "", False)
+		For $y = 0 To UBound($Push) - 1
+;			SetLog($Push[$y])
+			Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
+			Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
+			$target_device_iden=""
+			If UBound(_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)) Then $target_device_iden=_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)[0]
+			For $x = 0 To UBound($title) - 1
+;			SetLog($target_device_iden)
+;			SetLog($Source_device_iden)
 			If $title <> "" Or $iden <> "" Then
 				$title[$x] = StringUpper(StringStripWS($title[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES))
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
@@ -197,6 +205,7 @@ Func _RemoteControl()
 				$iden[$x] = ""
 			EndIf
 		Next
+		Next
 	Until $cursor = ""
 EndFunc   ;==>_RemoteControl
 
@@ -220,7 +229,6 @@ Func _PushBulletDevice()
 	$oHTTP.Send()
 	If @error Then Return
 	$Result = $oHTTP.ResponseText
-;SetLog($Result)
 	Local $pTitle=""
 	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
 		$pTitle = "BrokenBot (" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
@@ -358,7 +366,7 @@ Func _PushFile($File, $Folder, $FileType, $title, $body)
 	EndIf
 EndFunc   ;==>_PushFile
 
-Func _DeletePush1()
+Func _DeletePush()
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/pushes", False)
@@ -366,23 +374,32 @@ Func _DeletePush1()
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
 EndFunc   ;==>_DeletePush1
-Func _DeletePush()
-;	Local $pTitle=""
+Func _DeletePush2()
+	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
+	$access_token = $PushBullettoken
+	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/pushes?source_device_iden="&$source_device_iden, False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	$oHTTP.Send()
+EndFunc   ;==>_DeletePush1
+Func _DeletePush1()
+	Local $pTitle=""
 ;	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
 ;		$pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
+;		_DeletePush2()
 ;	Else
-		_DeletePush1()
+;		_DeletePush1()
 ;	EndIf
-	return
+;	return
 	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 
 	Do 
 		If $Cursor = "" Then
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10", False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=500", False)
 		Else
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10&cursor="&$cursor, False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=500&cursor="&$cursor, False)
 		EndIf
 		$oHTTP.SetCredentials($access_token, "", 0)
 		$oHTTP.SetRequestHeader("Content-Type", "application/json")
@@ -402,12 +419,14 @@ Func _DeletePush()
 			If $sources[$x] = $source_device_iden Then
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 				_DeleteMessage($iden[$x])
+				_Sleep(200)
 			EndIf
 		Next
 		For $x = 0 To UBound($targets) - 1
 			If $targets[$x] = $source_device_iden Then
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 				_DeleteMessage($iden[$x])
+				_Sleep(200)
 			EndIf
 		Next
 	Until $cursor = ""
