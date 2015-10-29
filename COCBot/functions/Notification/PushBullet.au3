@@ -220,6 +220,7 @@ Func _PushBulletDevice()
 	$oHTTP.Send()
 	If @error Then Return
 	$Result = $oHTTP.ResponseText
+;SetLog($Result)
 	Local $pTitle=""
 	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
 		$pTitle = "BrokenBot (" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
@@ -366,13 +367,13 @@ Func _DeletePush1()
 	$oHTTP.Send()
 EndFunc   ;==>_DeletePush1
 Func _DeletePush()
-	Local $pTitle=""
-	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
-		$pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
-	Else
+;	Local $pTitle=""
+;	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
+;		$pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
+;	Else
 		_DeletePush1()
-	EndIf
-
+;	EndIf
+	return
 	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
