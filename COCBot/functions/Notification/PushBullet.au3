@@ -366,7 +366,7 @@ Func _PushFile($File, $Folder, $FileType, $title, $body)
 	EndIf
 EndFunc   ;==>_PushFile
 
-Func _DeletePush()
+Func _DeletePush1()
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/pushes", False)
@@ -382,24 +382,17 @@ Func _DeletePush2()
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
 EndFunc   ;==>_DeletePush1
-Func _DeletePush1()
+Func _DeletePush()
 	Local $pTitle=""
-;	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
-;		$pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
-;		_DeletePush2()
-;	Else
-;		_DeletePush1()
-;	EndIf
-;	return
 	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 
 	Do 
 		If $Cursor = "" Then
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=500", False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100", False)
 		Else
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=500&cursor="&$cursor, False)
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100&cursor="&$cursor, False)
 		EndIf
 		$oHTTP.SetCredentials($access_token, "", 0)
 		$oHTTP.SetRequestHeader("Content-Type", "application/json")
@@ -408,26 +401,31 @@ Func _DeletePush1()
 		If @error Then Return
 		$Result = $oHTTP.ResponseText
 		$Cursor=""
+		$Pushes=""
 		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
-
-		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
-		Local $targets =_StringBetween($Result, '"target_device_iden":"', '"', "", False)
-		Local $sources = _StringBetween($Result, '"source_device_iden":"', '"', "", False)
-
-		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
-		For $x = 0 To UBound($sources) - 1
-			If $sources[$x] = $source_device_iden Then
-				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
-				_DeleteMessage($iden[$x])
-				_Sleep(200)
-			EndIf
-		Next
-		For $x = 0 To UBound($targets) - 1
-			If $targets[$x] = $source_device_iden Then
-				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
-				_DeleteMessage($iden[$x])
-				_Sleep(200)
-			EndIf
+		If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
+;		SetLog($Pushes)
+		Local $Push=_StringBetween($Pushes, '{', '}', "", False)
+		For $y = 0 To UBound($Push) - 1
+;			SetLog($Push[$y])
+			Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
+			Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
+			Local $target=""
+			If UBound(_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)) Then $target=_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)[0]
+			Local $source=""
+			If UBound(_StringBetween($Push[$y], '"source_device_iden":"', '"', "", False)) Then $source=_StringBetween($Push[$y], '"source_device_iden":"', '"', "", False)[0]
+			For $x = 0 To UBound($title) - 1
+				If $source = $source_device_iden Then
+					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
+					_DeleteMessage($iden[$x])
+					_Sleep(200)
+				EndIf
+				If $target = $source_device_iden Then
+					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
+					_DeleteMessage($iden[$x])
+					_Sleep(200)
+				EndIf
+			Next
 		Next
 	Until $cursor = ""
 EndFunc   ;==>_DeletePush

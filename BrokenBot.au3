@@ -113,6 +113,7 @@ Else
 	GUICtrlSetData($inpBBPassword, "")
 EndIf
 If $PushBulletEnabled = 1 Then _PushBulletDevice()
+;_DeletePush1()
 ;Only enable button start after all Initiation done.
 GUICtrlSetData($btnStart, GetLangText("btnStart"))
 GUICtrlSetState($btnStart, $GUI_ENABLE)
