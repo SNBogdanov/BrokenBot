@@ -272,7 +272,11 @@ EndFunc   ;==>_PushBullet
 Func _Push($pTitle, $pMessage)
 	Local $Date = _NowDate()
 	Local $Time = _NowTime()
-	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then $pTitle = "(" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") " & $pTitle
+	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
+		$pTitle = "BrokenBot (" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") : " & $pTitle
+	Else
+		$pTitle = "BrokenBot : "& $pTitle
+	EndIf
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	$oHTTP.Open("Post", "https://api.pushbullet.com/v2/pushes", False)
