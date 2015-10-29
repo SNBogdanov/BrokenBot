@@ -373,23 +373,43 @@ Func _DeletePush()
 		_DeletePush1()
 	EndIf
 
+	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
-	$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=1000", False)
-	$oHTTP.SetCredentials($access_token, "", 0)
-	$oHTTP.SetRequestHeader("Content-Type", "application/json")
-	$oHTTP.SetTimeouts(5000,5000,5000,5000)
-	$oHTTP.Send()
-	If @error Then Return
-	$Result = $oHTTP.ResponseText
-	Local $sources = _StringBetween($Result, '"source_device_iden":"', '"', "", False)
-	Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
-	For $x = 0 To UBound($sources) - 1
-		If $sources[$x] = $source_device_iden Then
-			$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
-			_DeleteMessage($iden[$x])
+
+	Do 
+		If $Cursor = "" Then
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10", False)
+		Else
+			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=10&cursor="&$cursor, False)
 		EndIf
-	Next
+		$oHTTP.SetCredentials($access_token, "", 0)
+		$oHTTP.SetRequestHeader("Content-Type", "application/json")
+		$oHTTP.SetTimeouts(5000,5000,5000,5000)
+		$oHTTP.Send()
+		If @error Then Return
+		$Result = $oHTTP.ResponseText
+		$Cursor=""
+		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
+
+		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
+		Local $targets =_StringBetween($Result, '"target_device_iden":"', '"', "", False)
+		Local $sources = _StringBetween($Result, '"source_device_iden":"', '"', "", False)
+
+		Local $iden = _StringBetween($Result, '"iden":"', '"', "", False)
+		For $x = 0 To UBound($sources) - 1
+			If $sources[$x] = $source_device_iden Then
+				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
+				_DeleteMessage($iden[$x])
+			EndIf
+		Next
+		For $x = 0 To UBound($target_device_iden) - 1
+			If $targets[$x] = $source_device_iden Then
+				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
+				_DeleteMessage($iden[$x])
+			EndIf
+		Next
+	Until $cursor = ""
 EndFunc   ;==>_DeletePush
 
 

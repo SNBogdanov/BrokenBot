@@ -737,6 +737,8 @@ EndFunc   ;==>UseAttackJPG
 
 Func lblpushbulletenabled()
 	If IsChecked($lblpushbulletenabled) Then
+		$PushBulletEnabled = 1 
+		_PushBulletDevice()
 		GUICtrlSetState($pushbullettokenvalue, $GUI_ENABLE)
 		GUICtrlSetState($lblpushbulletdebug, $GUI_ENABLE)
 		GUICtrlSetState($lblpushbulletremote, $GUI_ENABLE)
@@ -748,6 +750,7 @@ Func lblpushbulletenabled()
 		GUICtrlSetState($lbllastraid, $GUI_ENABLE)
 		GUICtrlSetState($UseJPG, $GUI_ENABLE)
 	Else
+		$PushBulletEnabled = 0
 		GUICtrlSetState($pushbullettokenvalue, $GUI_DISABLE)
 		GUICtrlSetState($lblpushbulletdebug, $GUI_DISABLE)
 		GUICtrlSetState($lblpushbulletremote, $GUI_DISABLE)
