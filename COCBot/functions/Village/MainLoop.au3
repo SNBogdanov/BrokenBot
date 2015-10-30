@@ -349,17 +349,22 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 		$TimeSinceTroop = TimerDiff($hTroopTimer) / 1000
 		SetLog(GetLangText("msgTimeIdle") & Floor(Floor($TimeIdle / 60) / 60) & GetLangText("msgTimeIdleHours") & Floor(Mod(Floor($TimeIdle / 60), 60)) & GetLangText("msgTimeIdleMin") & Floor(Mod($TimeIdle, 60)) & GetLangText("msgTimeIdleSec"), $COLOR_ORANGE)
 		$hIdle = TimerInit()
-		If IsChecked($chkSnipeTrainingEnable) Then 
+		If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
+;			If Not $closetofull And $AfterAttack Then 
+			If Not $closetofull Then 
+				$AfterAttack=False;
+				Click(127,697,2,250)
+				SetLog("Unbreakable mode, wait 3 minute", $COLOR_PURPLE)
+				If _Sleep(180000) Then Return
+;				SetLog("Unbreakable mode, wait 12 minutes", $COLOR_PURPLE)
+;				If _Sleep(720000) Then Return
+				If StatusCheck() Then Return False
+				ReArm()
+			EndIf
+		ElseIf IsChecked($chkSnipeTrainingEnable) Then 
 			If SnipeWhileTraining() Then Return True
 		ElseIf IsChecked($mixmodenormexp) Then
 			Experience()
-;		ElseIf IsChecked($mixmodenormexp) And Not $closetofull Then
-;			$AfterAttack=False;
-;			Click(127,697)
-;			SetLog("Unbreakable mode, wait 12 minutes", $COLOR_PURPLE)
-;			If _Sleep(720000) Then Return
-;			If StatusCheck() Then Return False
-;			ReArm()
 		EndIf
 		If $closetofull Then
 			$loopdelay = 1000

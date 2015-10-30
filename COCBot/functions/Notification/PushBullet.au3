@@ -23,18 +23,18 @@ Func _RemoteControl()
 		$Cursor=""
 		$Pushes=""
 		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
+		If $oHTTP.GetResponseHeader("X-Ratelimit-Remaining") < 200 Then 
+			$Cursor=""
+			SetLog("Pushbullet limit is close, coluld be problem in pushes")
+		EndIf
 		If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
-;		SetLog($Pushes)
 		Local $Push=_StringBetween($Pushes, '{', '}', "", False)
 		For $y = 0 To UBound($Push) - 1
-;			SetLog($Push[$y])
 			Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
 			Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
 			$target_device_iden=""
 			If UBound(_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)) Then $target_device_iden=_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)[0]
 			For $x = 0 To UBound($title) - 1
-;			SetLog($target_device_iden)
-;			SetLog($Source_device_iden)
 			If $title <> "" Or $iden <> "" Then
 				$title[$x] = StringUpper(StringStripWS($title[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES))
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
@@ -50,6 +50,7 @@ Func _RemoteControl()
 						"Warning: BrokenBot will follow these commands without considering what it is currently doing, even if it is in the middle of an ongoing attack\n\n" & _
 						"[o] Stop - Stop BrokenBot, close BlueStacks and leave BrokenBot open\n" & _
 						"[o] Start - Start BrokenBot. Bot must be left open to start it with this command.\n" & _
+						"[o] Clear - Clear Pushbullet pushes\n" & _
 						"[o] Reset - Reset statistics\n" & _
 						"[o] RestartBS - Restart BlueStacks\n" & _
 						"[o] RestartBot - Restart BrokenBot\n" & _
@@ -62,6 +63,9 @@ Func _RemoteControl()
 						"[o] Sleep - Put your computer into sleep/suspend mode\n" & _
 						"[o] Shutdown - Shut down your computer")
 					_DeleteMessage($iden[$x])
+				ElseIf (StringLeft($title[$x], 9) = "BOT CLEAR" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "CLEAR" And $target_device_iden = $source_device_iden) Then
+					SetLog("Clear Pushbullet pushes")
+					_DeletePush()
 				ElseIf (StringLeft($title[$x], 9) = "BOT PAUSE" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 9), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 5) = "PAUSE" And $target_device_iden = $source_device_iden) Then
 					If $PauseBot = False Then
 						SetLog(GetLangText("msgPBBotPauseFuture"))
@@ -124,7 +128,7 @@ Func _RemoteControl()
 					UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
 				ElseIf (StringLeft($title[$x], 8) = "BOT LOGS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 8), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 4) = "LOGS" And $target_device_iden = $source_device_iden) Then
 					SetLog(GetLangText("msgPBLog"))
-					_PushFile($sLogFileName, "logs", "text/plain; charset=utf-8", "Current Logs", $sLogFileName)
+					_PushFile($sLogFileName, "logs", "text/plain; charset=utf-8", "Current Logs", "");
 					_DeleteMessage($iden[$x])
 				ElseIf (StringLeft($title[$x], 13) = "BOT RESTARTBS" And StringStripWS(StringRight($title[$x], StringLen($title[$x]) - 13), 3) = StringUpper(StringStripWS(GUICtrlRead($inppushuser), 3))  And $target_device_iden = "" ) Or (StringLeft($title[$x], 9) = "RESTARTBS" And $target_device_iden = $source_device_iden) Then
 					SetLog("Your request has been received. Restarting BlueStacks now.")
@@ -204,7 +208,7 @@ Func _RemoteControl()
 				$title[$x] = ""
 				$iden[$x] = ""
 			EndIf
-		Next
+			Next
 		Next
 	Until $cursor = ""
 EndFunc   ;==>_RemoteControl
@@ -229,6 +233,7 @@ Func _PushBulletDevice()
 	$oHTTP.Send()
 	If @error Then Return
 	$Result = $oHTTP.ResponseText
+
 	Local $pTitle=""
 	If StringStripWS(GUICtrlRead($inppushuser), 3) <> "" Then 
 		$pTitle = "BrokenBot (" & StringStripWS(GUICtrlRead($inppushuser), 3) & ") "
@@ -301,7 +306,12 @@ Func _PushFile($File, $Folder, $FileType, $title, $body)
 	$oHTTP.SetCredentials($access_token, "", 0)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 
-	Local $pPush = '{"file_name": "' & $File & '", "file_type": "' & $FileType & '"}'
+	Local $pPush = '{"file_name": "' & $File & '", "file_type": "' & $FileType & '"'
+	If $source_device_iden = "" Then
+		$pPush = $pPush & '}'
+	Else
+		$pPush = $pPush &',"source_device_iden":"'&$source_device_iden&'"}'
+	EndIf
 	$oHTTP.Send($pPush)
 	$Result = $oHTTP.ResponseText
 	$Result1 = $Result
@@ -342,7 +352,12 @@ Func _PushFile($File, $Folder, $FileType, $title, $body)
                 $oHTTP.SetCredentials($access_token, "", 0)
                 $oHTTP.SetRequestHeader("Content-Type", "application/json")
                 ;Local $pPush = '{"type": "file", "file_name": "' & $FileName & '", "file_type": "' & $FileType & '", "file_url": "' & $file_url[0] & '", "title": "' & $title & '", "body": "' & $body & '"}'
-                Local $pPush = '{"type": "file", "file_name": "' & $File & '", "file_type": "' & $FileType & '", "file_url": "' & $fLink & '", "title": "' & $title & '", "body": "' & $body & '"}'
+                Local $pPush = '{"type": "file", "file_name": "' & $File & '", "file_type": "' & $FileType & '", "file_url": "' & $fLink & '", "title": "' & $title & '", "body": "' & $body & '"'
+		If $source_device_iden = "" Then
+			$pPush = $pPush & '}'
+		Else
+			$pPush = $pPush &',"source_device_iden":"'&$source_device_iden&'"}'
+		EndIf
                 $oHTTP.Send($pPush)
                 $Result = $oHTTP.ResponseText
 			Else
@@ -378,20 +393,19 @@ Func _DeletePush1()
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
 EndFunc   ;==>_DeletePush1
-Func _DeletePush2()
-	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
-	$access_token = $PushBullettoken
-	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/pushes?source_device_iden="&$source_device_iden, False)
-	$oHTTP.SetCredentials($access_token, "", 0)
-	$oHTTP.SetRequestHeader("Content-Type", "application/json")
-	$oHTTP.Send()
-EndFunc   ;==>_DeletePush1
 Func _DeletePush()
+	If $ClearAllPushes = 1 Then
+		_DeletePush1()
+	Else
+		_DeletePush2()
+	EndIf
+EndFunc   ;==>_DeletePush1
+Func _DeletePush2()
 	Local $pTitle=""
 	Local $cursor=""
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
-
+	SetLog("Deleting old pushes")
 	Do 
 		If $Cursor = "" Then
 			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100", False)
@@ -408,10 +422,13 @@ Func _DeletePush()
 		$Pushes=""
 		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
 		If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
-;		SetLog($Pushes)
+		If $oHTTP.GetResponseHeader("X-Ratelimit-Remaining") < 1000 Then 
+			$Cursor=""
+			SetLog("Pushbullet limit is close, coluld be problem in pushes")
+		EndIf
 		Local $Push=_StringBetween($Pushes, '{', '}', "", False)
+		SetLog(UBound($Push)&" old pushes found")
 		For $y = 0 To UBound($Push) - 1
-;			SetLog($Push[$y])
 			Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
 			Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
 			Local $target=""
@@ -422,12 +439,11 @@ Func _DeletePush()
 				If $source = $source_device_iden Then
 					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 					_DeleteMessage($iden[$x])
-					_Sleep(200)
-				EndIf
-				If $target = $source_device_iden Then
+					_Sleep(50)
+				ElseIf $target = $source_device_iden Then
 					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 					_DeleteMessage($iden[$x])
-					_Sleep(200)
+					_Sleep(50)
 				EndIf
 			Next
 		Next

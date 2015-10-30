@@ -414,3 +414,5 @@ Global $MaxDark=0
 
 Global $ilblFontName=""
 Global $ilblFontSize=0
+
+Global $ClearAllPushes=0

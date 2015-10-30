@@ -39,7 +39,8 @@ Func GetResources($MidAttack = 0) ;Reads resources
 
 		If Not (DeadMinConditions($RetVal) Or AnyMinConditions($RetVal)) Then
 			$SearchCount += 1
-			SetLog("Skipping Base...", $COLOR_BLUE)
+			SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;			SetLog("Skipping Base...", $COLOR_BLUE)
 			$RetVal[6] = True
 			Return $RetVal
 		EndIf
@@ -137,7 +138,7 @@ Func DeadMinConditions(Const $RetVal)
 						(Number($RetVal[3]) < Number($MinDeadElixir)) Then
 
 
-					SetLog(StringFormat("(%3d) [%s]: %7d [%s]: %7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog("Dead Min And, Demands [G]: " & $MinDeadGold & " [E]:" & $MinDeadElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 
 					Return False ;if min gold or elixir does not meet search condition then do not do adnotional checks just skip
@@ -145,14 +146,14 @@ Func DeadMinConditions(Const $RetVal)
 			ElseIf $myDeadAndOr = 1 Then ; if Or condition. Both Should meet demands
 				If (Number($RetVal[2]) < Number($MinDeadGold)) And _
 						(Number($RetVal[3]) < Number($MinDeadElixir)) Then
-					SetLog(StringFormat("(%3d) [%s]: %7d [%s]: %7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog("Dead Min OR, Demand [G]: " & $MinDeadGold & " [E]:" & $MinDeadElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 					Return False ;if min gold AND elixir does not meet search condition then do not do adnotional checks just skip
 				EndIf
 			ElseIf $myDeadAndOr = 2 Then ; if "+" condition. Both Should meet demands
 				If Number(Number($RetVal[2]) + Number($RetVal[3])) < _
 						Number(Number($MinDeadGold) + Number($MinDeadElixir)) Then
-					SetLog(StringFormat("(%3d) [%s]: %7d [%s]: %7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog('Dead Min "+", Demand [G]: ' & $MinDeadGold & " [E]:" & $MinDeadElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 					Return False ;if min gold + elixir does not meet search condition then do not do adnotional checks just skip
 				EndIf
@@ -166,7 +167,7 @@ Func DeadMinConditions(Const $RetVal)
 			If (Number($RetVal[4]) < Number($MinDeadDark)) Then
 
 
-				SetLog(StringFormat("(%3d) [%s]: %7d [%s]: %7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;				SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 				If $DebugMode = 1 Then SetLog("Dead Min DE, Demands [DE]: " & $MinDeadDark & "   Found [DE]: " & $RetVal[4])
 
 				Return False ;if DE does not meet search condition then do not do adnotional checks just skip
@@ -180,7 +181,7 @@ Func DeadMinConditions(Const $RetVal)
 			If (Number($RetVal[5]) < Number($MinDeadTrophy)) Then
 
 
-				SetLog(StringFormat("(%3d) [%s]: %7d [%s]: %7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
+;				SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 				If $DebugMode = 1 Then SetLog("Dead Min T, Demands [T]: " & $MinDeadTrophy & "   Found [T]: " & $RetVal[5])
 
 				Return False ;if trophy count does not meet search condition then do not do adnotional checks just skip
@@ -212,7 +213,7 @@ Func AnyMinConditions(Const $RetVal)
 						(Number($RetVal[3]) < Number($MinElixir)) Then
 
 
-					SetLog("(" & ($SearchCount + 1) & ") [" & GetLangText("msgGoldinitial") & "]: " & $RetVal[2] & Tab($RetVal[2], 7) & "[" & GetLangText("msgElixirinitial") & "]: " & $RetVal[3] & Tab($RetVal[3], 7) & "[" & GetLangText("msgDarkElixinitial") & "]: " & $RetVal[4], $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog(" Any Min And, Demands [G]: " & $MinGold & " [E]:" & $MinElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 
 					Return False
@@ -220,14 +221,14 @@ Func AnyMinConditions(Const $RetVal)
 			ElseIf $myAndOr = 1 Then ; if Or condition. Both Should meet demands
 				If (Number($RetVal[2]) < Number($MinGold)) And _
 						(Number($RetVal[3]) < Number($MinElixir)) Then
-					SetLog("(" & ($SearchCount + 1) & ") [" & GetLangText("msgGoldinitial") & "]: " & $RetVal[2] & Tab($RetVal[2], 7) & "[" & GetLangText("msgElixirinitial") & "]: " & $RetVal[3] & Tab($RetVal[3], 7) & "[" & GetLangText("msgDarkElixinitial") & "]: " & $RetVal[4], $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog(" Min OR, Demand [G]: " & $MinGold & " [E]:" & $MinElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 					Return False ;if min gold AND elixir does not meet search condition then do not do adnotional checks just skip
 				EndIf
 			ElseIf $myAndOr = 2 Then ; if "+" condition. Both Should meet demands
 				If Number(Number($RetVal[2]) + Number($RetVal[3])) < _
 						Number(Number($MinGold) + Number($MinElixir)) Then
-					SetLog("(" & ($SearchCount + 1) & ") [" & GetLangText("msgGoldinitial") & "]: " & $RetVal[2] & Tab($RetVal[2], 7) & "[" & GetLangText("msgElixirinitial") & "]: " & $RetVal[3] & Tab($RetVal[3], 7) & "[" & GetLangText("msgDarkElixinitial") & "]: " & $RetVal[4], $COLOR_BLUE)
+;					SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 					If $DebugMode = 1 Then SetLog(' Min "+", Demand [G]: ' & $MinGold & " [E]:" & $MinElixir & "   Found [G]: " & $RetVal[2] & " [E]:" & $RetVal[3])
 					Return False ;if min gold + elixir does not meet search condition then do not do adnotional checks just skip
 				EndIf
@@ -241,7 +242,7 @@ Func AnyMinConditions(Const $RetVal)
 			If (Number($RetVal[4]) < Number($MinDark)) Then
 
 
-				SetLog("(" & ($SearchCount + 1) & ") [" & GetLangText("msgGoldinitial") & "]: " & $RetVal[2] & Tab($RetVal[2], 7) & "[" & GetLangText("msgElixirinitial") & "]: " & $RetVal[3] & Tab($RetVal[3], 7) & "[" & GetLangText("msgDarkElixinitial") & "]: " & $RetVal[4], $COLOR_BLUE)
+;				SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 				If $DebugMode = 1 Then SetLog(" Min DE, Demands [DE]: " & $MinDark & "   Found [DE]: " & $RetVal[4])
 
 				Return False ;if DE does not meet search condition then do not do adnotional checks just skip
@@ -255,7 +256,7 @@ Func AnyMinConditions(Const $RetVal)
 			If (Number($RetVal[5]) < Number($MinTrophy)) Then
 
 
-				SetLog("(" & ($SearchCount + 1) & ") [" & GetLangText("msgGoldinitial") & "]: " & $RetVal[2] & Tab($RetVal[2], 7) & "[" & GetLangText("msgElixirinitial") & "]: " & $RetVal[3] & Tab($RetVal[3], 7) & "[" & GetLangText("msgDarkElixinitial") & "]: " & $RetVal[4], $COLOR_BLUE)
+;				SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount+1,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 				If $DebugMode = 1 Then SetLog(" Min T, Demands [T]: " & $MinTrophy & "   Found [T]: " & $RetVal[5])
 
 				Return False ;if trophy count does not meet search condition then do not do adnotional checks just skip
