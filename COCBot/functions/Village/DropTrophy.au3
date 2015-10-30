@@ -105,7 +105,7 @@ Func DropTrophy()
 						If _ColorCheck(_GetPixelColor(733, 499), Hex(0xEBAD28, 6), 20) Then
 							$DropFailed = True
 						EndIf
-						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then ReturnHome(False, False)
+						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then ExitLoop
 						$i += 1
 					Until Not $DropFailed Or $i > 4
 					If $DropTroop = 0 Then ; Don't just assume the troop you dropped was an archer
