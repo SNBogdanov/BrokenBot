@@ -206,7 +206,7 @@ Func readConfig() ;Reads config and sets it to the variables
 	EndIf
 	$ilblFontName=IniRead($config, "config", "LogFontName", "Lucida Console")
 	$ilblFontSize=IniRead($config, "config", "LogFontSize", "7.5")
-	$ClearAllPushes=IniRead($config, "config", "ClearAllPushes", "1")
+	$ClearAllPushes=IniRead($config, "config", "ClearAllPushes", "0")
 
 	;---------------------------------------------------------------------------------------
 	; Base location settings ---------------------------------------------------------------

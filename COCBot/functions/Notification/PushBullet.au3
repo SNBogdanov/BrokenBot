@@ -8,33 +8,28 @@ Func _RemoteControl()
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 
-	Do 
-		If $Cursor = "" Then
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100", False)
-		Else
-			$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=100&cursor="&$cursor, False)
-		EndIf
-		$oHTTP.SetCredentials($access_token, "", 0)
-		$oHTTP.SetRequestHeader("Content-Type", "application/json")
-		$oHTTP.SetTimeouts(5000,5000,5000,5000)
-		$oHTTP.Send()
-		If @error Then Return
-		$Result = $oHTTP.ResponseText
+	$oHTTP.Open("Get", "https://api.pushbullet.com/v2/pushes?active=true&limit=3", False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	$oHTTP.SetTimeouts(5000,5000,5000,5000)
+	$oHTTP.Send()
+	If @error Then Return
+	$Result = $oHTTP.ResponseText
+	$Cursor=""
+	$Pushes=""
+	If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
+	If $oHTTP.GetResponseHeader("X-Ratelimit-Remaining") < 200 Then 
 		$Cursor=""
-		$Pushes=""
-		If UBound(_StringBetween($Result, '"cursor":"', '"', "", False))<> 0 Then $Cursor=_StringBetween($Result, '"cursor":"', '"', "", False)[0]
-		If $oHTTP.GetResponseHeader("X-Ratelimit-Remaining") < 200 Then 
-			$Cursor=""
-			SetLog("Pushbullet limit is close, coluld be problem in pushes")
-		EndIf
-		If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
-		Local $Push=_StringBetween($Pushes, '{', '}', "", False)
-		For $y = 0 To UBound($Push) - 1
-			Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
-			Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
-			$target_device_iden=""
-			If UBound(_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)) Then $target_device_iden=_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)[0]
-			For $x = 0 To UBound($title) - 1
+		SetLog("Pushbullet limit is close, coluld be problem in pushes")
+	EndIf
+	If UBound(_StringBetween($Result, '"pushes":[{', '}],', "", False))<> 0 Then $Pushes="{"&_StringBetween($Result, '"pushes":[{', '}],', "", False)[0]&"}"
+	Local $Push=_StringBetween($Pushes, '{', '}', "", False)
+	For $y = 0 To UBound($Push) - 1
+		Local $title = _StringBetween($Push[$y], '"body":"', '"', "", False)
+		Local $iden = _StringBetween($Push[$y], '"iden":"', '"', "", False)
+		$target_device_iden=""
+		If UBound(_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)) Then $target_device_iden=_StringBetween($Push[$y], '"target_device_iden":"', '"', "", False)[0]
+		For $x = 0 To UBound($title) - 1
 			If $title <> "" Or $iden <> "" Then
 				$title[$x] = StringUpper(StringStripWS($title[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES))
 				$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
@@ -208,9 +203,8 @@ Func _RemoteControl()
 				$title[$x] = ""
 				$iden[$x] = ""
 			EndIf
-			Next
 		Next
-	Until $cursor = ""
+	Next
 EndFunc   ;==>_RemoteControl
 
 Func _PushBullet($pTitle = "", $pMessage = "")
