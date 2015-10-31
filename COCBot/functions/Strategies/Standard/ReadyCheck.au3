@@ -46,6 +46,7 @@ Func Standard_ReadyCheck($TimeSinceNewTroop)
 	If $ElixirCount <$MinElixir Then
 		If Not $fullarmy  Then
 			SetLog("Elixir level "&$ElixirCount&" is less then minimum "&$MinElixir&", skip training", $COLOR_RED)
+			$stuckCount=0
 			Click(1, 1, 2, 250) ;Click Away with 205ms delay
 			Return False
 		EndIf
