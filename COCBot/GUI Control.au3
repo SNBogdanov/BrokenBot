@@ -2,6 +2,7 @@ Opt("GUIOnEventMode", 1)
 Opt("MouseClickDelay", 10)
 Opt("MouseClickDownDelay", 10)
 Opt("TrayMenuMode", 3)
+Opt("GUICloseOnESC", 0) ; Prevent closing on ESC
 
 _GDIPlus_Startup()
 _Crypt_Startup()
@@ -511,7 +512,7 @@ Func btnFindWall()
 	$Running = True
 	GUICtrlSetState($chkWalls, $GUI_DISABLE)
 	GUICtrlSetState($UseGold, $GUI_DISABLE)
-	GUICtrlSetState($UseElixir, $GUI_DISABLE)	
+	GUICtrlSetState($UseElixir, $GUI_DISABLE)
 	While 1
 ;		SaveConfig()
 ;		readConfig()
@@ -557,8 +558,8 @@ EndFunc   ;==>btnLocateCamp
 
 Func btnHide()
 	If $Hide = False Then
-		Local $window = WinGetPos($Title)		
-		If IsArray($window) Then	
+		Local $window = WinGetPos($Title)
+		If IsArray($window) Then
 			GUICtrlSetData($btnHide, "Show BS")
 			$botPos[0] = $window[0]
 			$botPos[1] = $window[1]
@@ -737,7 +738,7 @@ EndFunc   ;==>UseAttackJPG
 
 Func lblpushbulletenabled()
 	If IsChecked($lblpushbulletenabled) Then
-		$PushBulletEnabled = 1 
+		$PushBulletEnabled = 1
 		_PushBulletDevice()
 		GUICtrlSetState($pushbullettokenvalue, $GUI_ENABLE)
 		GUICtrlSetState($lblpushbulletdebug, $GUI_ENABLE)
@@ -1240,4 +1241,11 @@ Func SetFont()
 	Else
 		MsgBox($MB_SYSTEMMODAL, "Error", "Error Choosing Font")
 	EndIf
+EndFunc
+
+Func MinimizeTray()
+   If IsChecked($chkMinimizeTray) And Not $isMinimizeTray Then
+	  GUISetState(@SW_HIDE, $frmBot)
+	  $isMinimizeTray = True
+   EndIf
 EndFunc
