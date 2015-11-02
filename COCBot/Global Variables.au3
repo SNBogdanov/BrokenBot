@@ -63,7 +63,7 @@ Global $TakeLootSnapShot = True
 Global $TakeAllTownSnapShot = False
 Global $FasterExit
 
-Global $SubmissionMade = False
+Global $SubmissionMade = True
 Global $SubmissionTimer = TimerInit()
 Global $SearchTimer = TimerInit()
 Global $SubmissionGold
@@ -77,7 +77,7 @@ Global $SubmissionSTrophy = ""
 Global $SubmissionSTH = ""
 Global $SubmissionSDead = ""
 Global $SearchSubmitdelay = (1000 * 60 * 5)
-Global $AttackSubmitdelay = (1000 * 60 * 15)
+Global $AttackSubmitdelay = (1000 * 60 * 60)
 Global $LastAttackTH=0
 Global $LastAttackDead=0
 Global $TrophyCountOld=0

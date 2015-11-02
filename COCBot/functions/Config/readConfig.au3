@@ -4,6 +4,7 @@ Func readConfig() ;Reads config and sets it to the variables
 	;---------------------------------------------------------------------------------------
 	; Main settings ------------------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
+	$MinElixirToTrain = IniRead($config, "general", "MinElixirToTrain", "150000")
 	$itxtMinTrophy = IniRead($config, "general", "MinTrophy", "0")
 	$itxtMaxTrophy = IniRead($config, "general", "MaxTrophy", "3000")
 	GUICtrlSetData($txtSnipeBelow, IniRead($config, "general", "MinSnipe", "0"))

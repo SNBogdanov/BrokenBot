@@ -70,15 +70,15 @@ Func VillageReport()
 ;SetLog("6:"&$DarkCount)
 ;SetLog("7:"&$DarkCountOld)
 ;SetLog("8:"&$DarkTrainCost)
-    			WriteStats($SearchCount,($GoldCount - $GoldBeforeSearch),($ElixirCount - $ElixirCountOld-$ElixirTrainCost),($DarkCount - $DarkCountOld-$DarkTrainCost),$LastRaidGold,$LastRaidElixir,$LastRaidDarkElixir)
-    			SetLog(GetLangText("msgLastRaidGain") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($GoldCount - $GoldBeforeSearch) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($ElixirCount - $ElixirCountOld-$ElixirTrainCost) & _
-    					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($DarkCount - $DarkCountOld-$DarkTrainCost) & " [" & GetLangText("msgTrophyInitial") & "]: " & ($TrophyCount - $TrophyCountOld))
+    			WriteStats($SearchCount,$LastRaidGold-$SearchCount*$SearchCost,$LastRaidElixir-$ElixirTrainCost,$LastRaidDarkElixir-$DarkTrainCost,$LastRaidGold,$LastRaidElixir,$LastRaidDarkElixir)
+    			SetLog(GetLangText("msgLastRaidGain") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold-$SearchCount*$SearchCost) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir-$ElixirTrainCost) & _
+    					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($LastRaidDarkElixir-$DarkTrainCost) & " [" & GetLangText("msgTrophyInitial") & "]: " & ($TrophyCount - $TrophyCountOld))
     			SetLog(GetLangText("msgLastRaidLoot") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir) & _
     					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($LastRaidDarkElixir) & " [" & GetLangText("msgTrophyInitial") & "]: " & $LastRaidTrophy)
     			If $PushBulletEnabled = 1 Then ;do pushbullet reports
-    				Local $PushReportText = GetLangText("pushLRb") & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($GoldCount - $GoldBeforeSearch) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($ElixirCount - $ElixirCountOld-$ElixirTrainCost) & _
-    						" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($DarkCount - $DarkCountOld-$DarkTrainCost) & " [" & GetLangText("msgTrophyInitial") & "]: " & ($TrophyCount - $TrophyCountOld) & _
-    						"\nLoot: \n[" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir) & _
+    				Local $PushReportText = GetLangText("pushLRb") & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold-$SearchCount*$SearchCost) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir-$ElixirTrainCost) & _
+    						" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($LastRaidDarkElixir-$DarkTrainCost) & " [" & GetLangText("msgTrophyInitial") & "]: " & ($TrophyCount - $TrophyCountOld) & _
+    						"\nLoot+Bonus: \n[" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir) & _
     						" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($LastRaidDarkElixir) & " [" & GetLangText("msgTrophyInitial") & "]: " & $LastRaidTrophy & _
     						"\n" & GetLangText("pushLootA") & "\n" & $MatchFoundText & _
     						"\n" & GetLangText("pushBS") & $SearchCount & _

@@ -388,9 +388,12 @@ Func _DeletePush1()
 	$oHTTP.Send()
 EndFunc   ;==>_DeletePush1
 Func _DeletePush()
-	If $ClearAllPushes = 1 Then
+;	SetLog("Delete pushes at device "&$source_device_iden)
+	If $ClearAllPushes = 1 Or $source_device_iden="" Then
 		_DeletePush1()
 	Else
+;		_DeleteDevice($source_device_iden)
+;		_PushBulletDevice()
 		_DeletePush2()
 	EndIf
 EndFunc   ;==>_DeletePush1
@@ -454,6 +457,17 @@ Func _DeleteMessage($iden)
 	$oHTTP.SetRequestHeader("Content-Type", "application/json")
 	$oHTTP.Send()
 EndFunc   ;==>_DeleteMessage
+
+Func _DeleteDevice($iden)
+	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
+	$access_token = $PushBullettoken
+	$oHTTP.Open("Delete", "https://api.pushbullet.com/v2/devices/" & $iden, False)
+	$oHTTP.SetCredentials($access_token, "", 0)
+	$oHTTP.SetRequestHeader("Content-Type", "application/json")
+	$oHTTP.Send()
+	$Result = $oHTTP.ResponseText
+	SetLog($Result)
+EndFunc   ;==>_DeleteDevice
 
 Func _PushStartMessage()
     $pMessage = "Bot Start"

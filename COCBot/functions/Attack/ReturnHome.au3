@@ -53,11 +53,38 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 			$LastRaidTrophy = ReadText(380, 403, 60, $textReturnHome, 0)
 		EndIf
 
+		If $LastRaidTrophy >= 0 Then
+			If _ColorCheck(_GetPixelColor(678, 418), Hex(0x030000, 6), 30) Then
+;				If _Sleep(250) Then Return
+				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 92, 3, 0), "+", ""))
+;				If _Sleep(250) Then Return
+				$BonusLeagueE=Number(StringReplace(ReadText(590, 371, 92, 3, 0), "+", ""))
+;				If _Sleep(250) Then Return
+				$BonusLeagueD=Number(StringReplace(ReadText(624, 402, 92, 3, 0), "+", ""))
+				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE) & " [DE]: " & _NumberFormat($BonusLeagueD), $COLOR_GREEN)
+			Else
+;				If _Sleep(250) Then Return
+				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 92, 3, 0), "+", ""))
+;				If _Sleep(250) Then Return
+				$BonusLeagueE=Number(StringReplace(ReadText(590, 371, 92, 3, 0), "+", ""))
+;				If _Sleep(250) Then Return
+				$BonusLeagueD=0
+				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE), $COLOR_GREEN)
+			EndIf
+		Else
+			$BonusLeagueG = 0
+			$BonusLeagueE = 0
+			$BonusLeagueD = 0
+		EndIf
+
+		$LastRaidGold+=$BonusLeagueG
+		$LastRaidElixir+=$BonusLeagueE
+		$LastRaidDarkElixir+=$BonusLeagueD
+
 		$GoldTotalLoot += $LastRaidGold
 		$ElixirTotalLoot += $LastRaidElixir
 		$DarkTotalLoot += $LastRaidDarkElixir
 		$TrophyTotalLoot += $LastRaidTrophy
-
 		If $TakeSS = 1 Or ( $PushBulletEnabled = 1 And IsChecked($UseJPG) )Then
 			SetLog(GetLangText("msgTakingLootSS"), $COLOR_ORANGE)
 			Local $Date =  @YEAR & "." & @MON & "." & @MDAY

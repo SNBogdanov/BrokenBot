@@ -9,6 +9,7 @@ Func UpdateStat($Gold,$Elixir,$Dark,$Trophy)
 	If $GoldNow > 0 Then
 		If $GoldStart = 0 Then
 			$sTimer = TimerInit()
+			$SubmissionTimer = TimerInit()
             		GUICtrlSetData($lblresultgoldtstart, _NumberFormat(Round($GoldNow)))
 			$GoldStart=$GoldNow
 		EndIf

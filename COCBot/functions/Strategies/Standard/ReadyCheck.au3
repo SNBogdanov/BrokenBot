@@ -1,7 +1,7 @@
 ;ReadyCheck is in charge of build full army and spell.
 ;When Army is full, ReadyCheck will Return True
 ;Hero status check will be done later in the loop, right before start search
-Local $MinElixir=150000
+Global $MinElixirToTrain=150000
 Func Standard_ReadyCheck($TimeSinceNewTroop)
 	If $TimeSinceNewTroop > Standard_GetTrainTime() + 60 Then
 		If $stuckCount < 3 Then
@@ -43,9 +43,9 @@ Func Standard_ReadyCheck($TimeSinceNewTroop)
 	If StatusCheck(False) Then Return False ; Do not wait for main screen we need ArmyOverview open
 
 
-	If $ElixirCount <$MinElixir Then
+	If $ElixirCount <$MinElixirToTrain Then
 		If Not $fullarmy  Then
-			SetLog("Elixir level "&$ElixirCount&" is less then minimum "&$MinElixir&", skip training", $COLOR_RED)
+			SetLog("Elixir level "&$ElixirCount&" is less then minimum "&$MinElixirToTrain&", skip training", $COLOR_RED)
 			$stuckCount=0
 			Click(1, 1, 2, 250) ;Click Away with 205ms delay
 			Return False

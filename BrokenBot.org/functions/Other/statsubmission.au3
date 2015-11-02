@@ -10,14 +10,16 @@ Func StatSubmission($Attack = False)
 	If $Attack Then
 		If $ValidAuth Then
 			If (Not $SubmissionMade) Or (TimerDiff($SubmissionTimer) > $AttackSubmitdelay) Then
-				$Result = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotEncrypt", "str", String(Round($SubmissionGold/$SubmissionAttacks)), "str", String(Round($SubmissionElixir/$SubmissionAttacks)), "str", String(Round($SubmissionDE/$SubmissionAttacks)), "str", StringStripWS($THLevel, 3), "str", String($TrophyCountOld), "str", $LastAttackTH, "str", $LastAttackDead, "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "")), "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")))
+;				$Result = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotEncrypt", "str", String(Round($SubmissionGold/$SubmissionAttacks)), "str", String(Round($SubmissionElixir/$SubmissionAttacks)), "str", String(Round($SubmissionDE/$SubmissionAttacks)), "str", StringStripWS($THLevel, 3), "str", String($TrophyCount), "str", $LastAttackTH, "str", $LastAttackDead, "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "")), "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")))
+				$Result = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotEncrypt", "str", String(Round($SubmissionGold)), "str", String(Round($SubmissionElixir)), "str", String(Round($SubmissionDE)), "str", StringStripWS($THLevel, 3), "str", String($TrophyCount), "str", $LastAttackTH, "str", $LastAttackDead, "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "")), "str", _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")))
 				If IsArray($Result) Then
 					If $Result[0] = -1 Then
 						SetLog(GetLangText("msgDLLError"), $COLOR_RED)
 					ElseIf $Result[0] = -2 Then
 						SetLog(GetLangText("msgLicense"), $COLOR_RED)
 					Else
-						Setlog(GetLangText("msgSubmitStats"))
+						Setlog("msgSubmitStats",0,$SubmissionGold,$SubmissionElixir,$SubmissionDE,$TrophyCount)
+;						Setlog(GetLangText("msgSubmitStats"))
 						Local $oHTTP = ObjCreate("winhttp.winhttprequest.5.1")
 						$oHTTP.Open("POST", "http://forum.brokenbot.org/bot_stat_submit.php?a=submit&u=" & _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "")) & "&p=" & _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")) & "&s=" & URLEncode($Result[0]), False)
 						$oHTTP.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5")
@@ -32,13 +34,13 @@ Func StatSubmission($Attack = False)
 							 Else
 								If Number(StringStripWS($SubmitResult, 3)) > 0 Then $AttackSubmitdelay = Number(StringStripWS($SubmitResult, 3)) * 1000
 								Setlog(GetLangText("msgSubmitSuccess"))
-								$SubmissionGold = 0
-								$SubmissionElixir = 0
-								$SubmissionDE = 0
-								$SubmissionMade = True
-								$SubmissionAttacks = 0
-								$SubmissionTimer = TimerInit()
 							EndIf
+							$SubmissionGold = 0
+							$SubmissionElixir = 0
+							$SubmissionDE = 0
+							$SubmissionMade = True
+							$SubmissionAttacks = 0
+							$SubmissionTimer = TimerInit()
 						EndIf
 					EndIf
 				Else
@@ -50,8 +52,9 @@ Func StatSubmission($Attack = False)
 			$AvgElixir = Round($ElixirTotalLoot/(TimerDiff($sTimer)/(1000*60*60)))
 			$AvgDark = Round($DarkTotalLoot/(TimerDiff($sTimer)/(1000*60*60)))
 			$AvgTrophy = Round($TrophyTotalLoot/(TimerDiff($sTimer)/(1000*60*60)))
-			SetLog(GetLangText("msgHourlyAvg") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($AvgGold) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($AvgElixir) & _
-					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($AvgDark) & " [" & GetLangText("msgTrophyInitial") & "]: " & $AvgTrophy)
+;			SetLog(GetLangText("msgHourlyAvg") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($AvgGold) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($AvgElixir) & _
+;					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($AvgDark) & " [" & GetLangText("msgTrophyInitial") & "]: " & $AvgTrophy)
+			SetLog("msgHourlyAvg",0,_NumberFormat($AvgGold),_NumberFormat($AvgElixir),_NumberFormat($AvgDark),$AvgTrophy)
 		EndIf
 	EndIf
 	If TimerDiff($SearchTimer) > $SearchSubmitdelay And $SubmissionSearches > 0 Then
