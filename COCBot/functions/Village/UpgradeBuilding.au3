@@ -69,9 +69,14 @@ Func UpgradeBuilding()
 
 		Else
 
-			SetLog($Building[5] & " is not enabled, skipping", $COLOR_RED)
-			$i += 1
-			ContinueLoop
+			If IsChecked($chkUPHalt) Then 
+				SetLog("Upgrade Halted.", $COLOR_PURPLE)
+				ExitLoop
+			Else
+				SetLog($Building[5] & " is not enabled, skipping", $COLOR_RED)
+				$i += 1
+				ContinueLoop
+			EndIf
 		EndIf
 
 

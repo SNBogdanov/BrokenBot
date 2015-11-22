@@ -63,10 +63,9 @@ Global $TakeLootSnapShot = True
 Global $TakeAllTownSnapShot = False
 Global $FasterExit
 
-Global $SubmissionMade = True
+Global $SubmissionMade = False
 Global $SubmissionTimer = TimerInit()
 Global $SearchTimer = TimerInit()
-Global $SubmissionGold
 Global $SubmissionGold = 0, $SubmissionElixir = 0, $SubmissionDE = 0
 Global $SubmissionAttacks = 0
 Global $SubmissionSearches = 0
@@ -77,7 +76,7 @@ Global $SubmissionSTrophy = ""
 Global $SubmissionSTH = ""
 Global $SubmissionSDead = ""
 Global $SearchSubmitdelay = (1000 * 60 * 5)
-Global $AttackSubmitdelay = (1000 * 60 * 60)
+Global $AttackSubmitdelay = (1000 * 60 * 15)
 Global $LastAttackTH=0
 Global $LastAttackDead=0
 Global $TrophyCountOld=0
@@ -302,7 +301,7 @@ Global $collectorPos[17][2] ;Positions of each collectors
 
 Global $break = @ScriptDir & "\images\break.bmp"
 Global $device = @ScriptDir & "\images\device.bmp"
-Global $maintenance = @ScriptDir & "\images\Maintenance.bmp"
+Global $maintenance = @ScriptDir & "\images\Maintenance.png"
 Global $connectionlost = @ScriptDir & "\images\Connection.bmp"
 
 Global $GoldCount = 0, $ElixirCount = 0, $DarkCount = 0, $GemCount = 0, $FreeBuilder = 0, $TropHyCount=0

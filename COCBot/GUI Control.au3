@@ -117,6 +117,8 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						btnUPdown()
 					Case $btnUPlocate
 						LocateMyBuilding()
+					Case $btnShowUpgrade
+						ShowUpgrade()
 
 					Case $UseJPG
 						UseJPG()
@@ -338,6 +340,7 @@ Func btnStop()
 		GUICtrlSetState($btnUPdown, $GUI_ENABLE)
 		GUICtrlSetState($btnUPsave, $GUI_ENABLE)
 		GUICtrlSetState($btnUPreload, $GUI_ENABLE)
+		GUICtrlSetState($btnShowUpgrade, $GUI_ENABLE)
 ;		GUICtrlSetState($chkUPHalt, $GUI_ENABLE)
 		UPRefreshControls()
 
@@ -749,6 +752,8 @@ Func lblpushbulletenabled()
 		GUICtrlSetState($lbldisconnect, $GUI_ENABLE)
 		GUICtrlSetState($lbllastraid, $GUI_ENABLE)
 		GUICtrlSetState($UseJPG, $GUI_ENABLE)
+		GUICtrlSetState($UseAttackJPG, $GUI_ENABLE)
+		GUICtrlSetState($lblchatlog, $GUI_ENABLE)
 	Else
 		$PushBulletEnabled = 0
 		GUICtrlSetState($pushbullettokenvalue, $GUI_DISABLE)
@@ -760,7 +765,9 @@ Func lblpushbulletenabled()
 		GUICtrlSetState($lblfreebuilder, $GUI_DISABLE)
 		GUICtrlSetState($lbldisconnect, $GUI_DISABLE)
 		GUICtrlSetState($lbllastraid, $GUI_DISABLE)
+		GUICtrlSetState($lblchatlog, $GUI_DISABLE)
 		GUICtrlSetState($UseJPG, $GUI_DISABLE)
+		GUICtrlSetState($UseAttackJPG, $GUI_DISABLE)
 	EndIf
 EndFunc   ;==>lblpushbulletenabled
 
@@ -1115,6 +1122,11 @@ Func btnUPdown()
 	btnUPreload()
 EndFunc   ;==>btnUPdown
 
+Func ShowUpgrade()
+	$BuildPos1[0] = GUICtrlRead($inpUPx)
+	$BuildPos1[1] = GUICtrlRead($inpUPy)
+	Click($BuildPos1[0],$BuildPos1[1]); Click away twice with 250ms delay
+EndFunc
 
 Func LocateMyBuilding()
 	$Name=""
@@ -1174,6 +1186,7 @@ Func UPRefreshControls()
 		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
 		GUICtrlSetState($btnUPsave, $GUI_DISABLE)
 		GUICtrlSetState($btnUPreload, $GUI_DISABLE)
+		GUICtrlSetState($btnShowUpgrade, $GUI_DISABLE)
 ;		GUICtrlSetState($chkUPHalt, $GUI_DISABLE)
 		Return
 	EndIf
@@ -1184,6 +1197,7 @@ Func UPRefreshControls()
 	GUICtrlSetState($btnUPup, $GUI_ENABLE)
 	GUICtrlSetState($btnUPdown, $GUI_ENABLE)
 	GUICtrlSetState($btnUPremove, $GUI_ENABLE)
+	GUICtrlSetState($btnShowUpgrade, $GUI_ENABLE)
 
 	If $myListCount = 0 Or $mySelItem = -1 Then ; if no item or none selected
 		UPCleanDesigner()
@@ -1193,6 +1207,7 @@ Func UPRefreshControls()
 		GUICtrlSetState($btnUPup, $GUI_DISABLE)
 		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
 		GUICtrlSetState($btnUPremove, $GUI_DISABLE)
+		GUICtrlSetState($btnShowUpgrade, $GUI_DISABLE)
 		Return
 	Else
 		If $myListCount = 1 Then ; just have one item

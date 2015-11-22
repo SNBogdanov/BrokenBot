@@ -9,7 +9,7 @@ Func runBot() ;Bot that runs everything in order
 	readConfig()
 	applyConfig()
 	If StatusCheck(True, True, 3) Then Return
-	If $MaxGold = 0 Then 
+	If $MaxGold = 0 Then
 		$Text=StringReplace(ReadText(690, 8, 140, 1, 1),"G","6")
 		$Text=StringReplace($Text,"O","0")
 		$MaxGold = Number(StringRegExpReplace($Text,"[^0-9]",""))
@@ -27,7 +27,7 @@ Func runBot() ;Bot that runs everything in order
 		SetLog("Maximum dark elixir in storage:"&_NumberFormat($MaxDark),$COLOR_GREEN)
 		If $MaxGold = 0 Then
 			$res=MsgBox($MB_YESNOCANCEL,"Warning","Please check BS configuration, can not continue"&@CR&"If you want to continue for your own risk press Yes, Or press No to stop")
-			If $res=$IDCANCEL Or $res=$IDNO Then 
+			If $res=$IDCANCEL Or $res=$IDNO Then
 				btnStop()
 				Return
 			EndIf
@@ -208,7 +208,7 @@ Func runBot() ;Bot that runs everything in order
 		EndIf
 		If StatusCheck() Then Return
 		$TrophyCount = Number(ReadText(59, 75, 60, $textMainScreen))
-		
+
 		Switch $CurrentMode
 			Case $modeNormal
 				If DropTrophy() Then ContinueLoop
@@ -264,7 +264,7 @@ Func runBot() ;Bot that runs everything in order
 						If _GUICtrlComboBox_GetCurSel($cmbTroopComp) = 8 And $AttackType <> 3 Then $AfterAttack=True
 					Else
 						If _ColorCheck(_GetPixelColor(820, 15), Hex(0xF88288, 6), 20) Then Click(820, 15) ;Click Red X
-						If ChkDisconnection() Then 
+						If ChkDisconnection() Then
 							$SearchFailed = True
 							ExitLoop
 						EndIf
@@ -350,18 +350,17 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 		SetLog(GetLangText("msgTimeIdle") & Floor(Floor($TimeIdle / 60) / 60) & GetLangText("msgTimeIdleHours") & Floor(Mod(Floor($TimeIdle / 60), 60)) & GetLangText("msgTimeIdleMin") & Floor(Mod($TimeIdle, 60)) & GetLangText("msgTimeIdleSec"), $COLOR_ORANGE)
 		$hIdle = TimerInit()
 		If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
-;			If Not $closetofull And $AfterAttack Then 
-			If Not $closetofull Then 
+			If Not $closetofull Then
 				$AfterAttack=False;
-				Click(127,697,2,250)
+				Click(125,695,3,250)
 				SetLog("Unbreakable mode, wait 3 minute", $COLOR_PURPLE)
 				If _Sleep(180000) Then Return
-;				SetLog("Unbreakable mode, wait 12 minutes", $COLOR_PURPLE)
-;				If _Sleep(720000) Then Return
 				If StatusCheck() Then Return False
-				ReArm()
+			    $Checkrearm = True
+			    Return True
+;				ReArm()
 			EndIf
-		ElseIf IsChecked($chkSnipeTrainingEnable) Then 
+		ElseIf IsChecked($chkSnipeTrainingEnable) Then
 			If SnipeWhileTraining() Then Return True
 		ElseIf IsChecked($mixmodenormexp) Then
 			Experience()

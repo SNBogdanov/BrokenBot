@@ -4,6 +4,7 @@ EndFunc   ;==>_ImageSearch
 
 Func _ImageSearchArea($findImage, $resultPosition, $x1, $y1, $right, $bottom, ByRef $x, ByRef $y, $Tolerance)
 	Global $HBMP = $hHBitmap
+	$HBMP = 0
 	If Not IsChecked($chkBackground) Then
 		$HBMP = 0
 		$x1 += $BSPos[0]

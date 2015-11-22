@@ -216,7 +216,9 @@ $btnUPsave = GUICtrlCreateButton("Save", 102, 200, 91, 25)
 GUICtrlSetOnEvent(-1, "$btnUPsave")
 $btnUPreload = GUICtrlCreateButton("Reload", 102, 224, 91, 25)
 GUICtrlSetOnEvent(-1, "$btnUPreload")
-$chkUPHalt = GUICtrlCreateCheckbox("Halt upgrating if one fails", 220, 216, 200, 17)
+$chkUPHalt = GUICtrlCreateCheckbox("Halt upgrating if one fails", 220, 200, 200, 17)
+$btnShowUpgrade = GUICtrlCreateButton("Show", 220, 224, 91, 25)
+GUICtrlSetOnEvent(-1, "$btnShowUpgrade")
 
 
 

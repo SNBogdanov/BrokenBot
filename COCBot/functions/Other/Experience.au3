@@ -150,19 +150,14 @@ Func experience()
 
 						If _Sleep(500) Then Return
 
-                        Click(674 + Random(-5,5,1), 208 + Random(-5,5,1));choose 2nd goblin base
-						If Not _WaitForColorArea(630, 233, 90, 15, Hex(0xF0BC44, 6), 30, 5) Then
+						Click(557 + Random(-5,5,1), 183 + Random(-5,5,1));choose 1st goblin base
+						If Not _WaitForColorArea(513, 208, 90, 15, Hex(0xF0BC44, 6), 30, 5) Then
 							errorReturnHome()
 							ContinueLoop
 						EndIf
+						Click(548 + Random(-5,5,1), 222 + Random(-5,5,1));attack goblin button
 
-						Click(665 + Random(-5,5,1), 247 + Random(-5,5,1));attack goblin button
 						SetLog(GetLangText("msgAttackingGoblin"), $COLOR_BLUE)
-
-						If Not _WaitForColorArea(485, 290, 5, 5, Hex(0xFFCC18, 6), 30, 5) Then ; Wait for base to appear
-							errorReturnHome()
-							ContinueLoop
-						EndIf
 
 						If Not _WaitForColorArea(5, 665, 5, 5, Hex(0x030605, 6), 30, 5) Then ; Wait for clouds to clear
 							errorReturnHome()
@@ -181,7 +176,36 @@ Func experience()
 								ContinueLoop
 							EndIf
 						EndIf
-                        If $kingPos <> -1 Then dropKing(402 + Random(-5,5,1), 325 + Random(-5,5,1), $kingPos) ; drop your king
+			If $kingPos <> -1 Then dropKing(563 + Random(-5,5,1), 330 + Random(-5,5,1), $kingPos) ; drop your king
+
+	                        Local $firstStar = _WaitForPixel(428, 358, 432, 362, Hex(0xC0C8C0, 6), 20, 8) ;Waits for the first star, wait max 15 seconds
+	                        If IsArray($firstStar) = False Then
+	                                Local $firstStar2 = _WaitForPixel(711, 536, 715, 540, Hex(0xC0C8C0, 6), 5, 2) ;Waits for the first star, wait max 2 seconds
+	                                If IsArray($firstStar2) = False Then
+                                        SetLog("Failed to destroy TH...", $COLOR_RED)
+                                        If $DebugMode = 2 Then _GDIPlus_ImageSaveToFile($hBitmap, $dirDebug & "ExpFailedAtk-" & @HOUR & @MIN & @SEC & ".png")
+					errorReturnHome()
+					ContinueLoop
+                                EndIf
+                        EndIf
+
+                        Click(70+ Random(-5,5,1), 530+ Random(-5,5,1)) ;End Battle button
+
+                        Local $okayButton = _WaitForPixel(513, 398, 517, 402, Hex(0x354217, 6), 5, 2) ;finds Okay button, wait max 2 seconds
+                        If IsArray($okayButton) = False Then
+                                SetLog("Failed to find Okay button...", $COLOR_RED)
+				errorReturnHome()
+				ContinueLoop
+                        EndIf
+
+                        Click(515+ Random(-5,5,1), 400+ Random(-5,5,1)) ;Confirm button
+
+                        Local $returnButton = _WaitForPixel(426, 542, 430, 548, Hex(0xFFFFFF, 6), 5, 2) ;finds Return Home button, wait max 2 seconds
+                        If IsArray($returnButton) = False Then
+                                SetLog("Failed to find Return Home button...", $COLOR_RED)
+				errorReturnHome()
+				ContinueLoop
+                        EndIf
 
                         _WaitForColorArea(367, 520, 130, 30, Hex(0xCAE868, 6), 30, 300)
 
@@ -231,7 +255,7 @@ Func dropKing($x = 10, $y = 10, $num = 2)
                 Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ;Select King
                 If _Sleep(500) Then Return
                 Click($x, $y)
-                If _Sleep(5000) Then Return ;  wait 5 seconds
+                If _Sleep(500) Then Return ;  wait 5 seconds
                 Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ; before activate king power
         EndIf
 EndFunc   ;==>dropKing

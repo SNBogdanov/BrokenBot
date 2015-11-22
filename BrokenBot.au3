@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.26.4 MOD by SNBogdanov"
+$sBotVersion = "3.3.26.6 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -34,8 +34,8 @@ EndIf
 
 #include "COCBot\Global Variables.au3"
 #include "COCBot\GUI Design.au3"
-#include "COCBot\Functions.au3"
 #include "BrokenBot.org\functions\functions.au3"
+#include "COCBot\Functions.au3"
 #include "COCBot\GUI Control.au3"
 #include-once
 

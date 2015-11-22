@@ -38,7 +38,7 @@ Func StatSubmission($Attack = False)
 							$SubmissionGold = 0
 							$SubmissionElixir = 0
 							$SubmissionDE = 0
-							$SubmissionMade = True
+							$SubmissionMade = False
 							$SubmissionAttacks = 0
 							$SubmissionTimer = TimerInit()
 						EndIf

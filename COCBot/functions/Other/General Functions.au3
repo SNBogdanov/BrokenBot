@@ -84,6 +84,7 @@ Func Initiate()
 		GUICtrlSetState($btnUPdown, $GUI_DISABLE)
 		GUICtrlSetState($btnUPsave, $GUI_DISABLE)
 		GUICtrlSetState($btnUPreload, $GUI_DISABLE)
+		GUICtrlSetState($btnShowUpgrade, $GUI_DISABLE)
 ;		GUICtrlSetState($chkUPHalt, $GUI_DISABLE)
 
 ;		$sTimer = TimerInit()

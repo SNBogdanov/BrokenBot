@@ -1,4 +1,3 @@
-;Modded by obudu (2015)
 Global $GoldBeforeSearch=0
 Func VillageReport()
         Local $TrophyCountOld,$GoldCountOld,$ElixirCountOld,$DarkCountOld
@@ -14,9 +13,6 @@ Func VillageReport()
         Else
             $buildernotified = False
         EndIf
-;        If Not $FirstAttack Then
-;            GUICtrlSetData($lblresulttrophygain, $TrophyCount - $TrophyCountOld)
-;        EndIf
         $TrophyCountOld = $TrophyCount
         $GoldCountOld = $GoldCount
         $ElixirCountOld = $ElixirCount
@@ -37,22 +33,11 @@ Func VillageReport()
 	If $ElixirCount <2 Then $ElixirCount=$ElixirCountOld
 	If $DarkCount <2 Then $DarkCount=$DarkCountOld
 	UpdateStat($GoldCount,$ElixirCount,$DarkCount,$TrophyCount)
-;        SetLog(GetLangText("msgResources") & " [" & GetLangText("msgGoldinitial") & "]: " & $GoldCount & " [" & GetLangText("msgElixirinitial") & "]: " & $ElixirCount & " [" & GetLangText("msgDarkElixinitial") & "]: " & $DarkCount & " [" & GetLangText("msgTrophyInitial") & "]: " & $TrophyCount & " [" & GetLangText("msgGemInitial") & "]: " & $GemCount, $COLOR_GREEN)
         If Not $FirstAttack  Then
-;	    $GoldGained = $GoldCount - $GoldStart + $GoldUpgraded
-;	    $ElixirGained = $ElixirCount - $ElixirStart + $ElixirUpgraded
-;	    $DarkGained = $DarkCount - $DarkStart+ $DarkUpgraded
-;	    $TrophyGained = $TrophyCount - $TropyStart
-            ;$GoldGained += $SubmissionGold
-            ;$ElixirGained += $SubmissionElixir
-            ;$DarkGained += $SubmissionDE
-            ;$TrophyGained += $LastRaidTrophy
             If $PushBulletEnabled = 1 And $PushBulletvillagereport = 1 Then
                 If TimerDiff($PushBulletvillagereportTimer) >= $PushBulletvillagereportInterval Then ;Report is due
-                    _Push(GetLangText("pushVR"), "[" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($GoldCount) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($ElixirCount) & " [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($DarkCount) & _
-                    " [" & GetLangText("msgTrophyInitial") & "]: " & $TrophyCount & " [" & GetLangText("msgGemInitial") & "]: " & $GemCount & "\n[Attack]: " & GUICtrlRead($lblresultvillagesattacked) & _
-                    " [Skip]: " & GUICtrlRead($lblresultvillagesskipped) & " [Walls]: " & GUICtrlRead($lblwallupgradecount) & _
-                    " [Run Time]: " & StringFormat("%02i:%02i:%02i", $hour, $min, $sec) & "\n" & GetLangText("pushDS") & GUICtrlRead($lblresultsearchdisconnected))
+		    _Push(GetLangText("pushVR"), _PushStatisticsString())
+
                     SetLog(GetLangText("msgPushVillageRep"), $COLOR_GREEN)
                     $PushBulletvillagereportTimer = TimerInit()
                 EndIf
@@ -62,14 +47,6 @@ Func VillageReport()
     			$SubmissionGold += $LastRaidGold
     			$SubmissionElixir += $LastRaidElixir
     			$SubmissionDE += $LastRaidDarkElixir
-;SetLog("1:"&$GoldCount)
-;SetLog("2:"&$GoldCountOld)
-;SetLog("3:"&$ElixirCount)
-;SetLog("4:"&$ElixirCountOld)
-;SetLog("5:"&$ElixirTrainCost)
-;SetLog("6:"&$DarkCount)
-;SetLog("7:"&$DarkCountOld)
-;SetLog("8:"&$DarkTrainCost)
     			WriteStats($SearchCount,$LastRaidGold-$SearchCount*$SearchCost,$LastRaidElixir-$ElixirTrainCost,$LastRaidDarkElixir-$DarkTrainCost,$LastRaidGold,$LastRaidElixir,$LastRaidDarkElixir)
     			SetLog(GetLangText("msgLastRaidGain") & " [" & GetLangText("msgGoldinitial") & "]: " & _NumberFormat($LastRaidGold-$SearchCount*$SearchCost) & " [" & GetLangText("msgElixirinitial") & "]: " & _NumberFormat($LastRaidElixir-$ElixirTrainCost) & _
     					" [" & GetLangText("msgDarkElixinitial") & "]: " & _NumberFormat($LastRaidDarkElixir-$DarkTrainCost) & " [" & GetLangText("msgTrophyInitial") & "]: " & ($TrophyCount - $TrophyCountOld))

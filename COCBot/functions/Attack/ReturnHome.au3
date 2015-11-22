@@ -20,13 +20,13 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 	If _WaitForColorArea(19, 519, 100, 30, Hex(0xEE5056, 6), 50, 2) Then
 		SetLog("Click End Battle/Surrender")
 		Click(77, 529) ;Click Surrender
-		If _Sleep(500) Then Return	
+		If _Sleep(500) Then Return
 ;		_CaptureRegion()
 ;		If _WaitForColorArea(280, 372, 130, 50, Hex(0xCF4010, 6), 30, 2) Then
 		If _WaitForColorArea(298, 413, 2, 2, Hex(0xCE4412, 6), 20, 2) Then
 ;		If _ColorCheck(_GetPixelColor(298, 413), Hex(0xCE4412, 6), 20) Then ; Check for confirm button
 			Click(522, 384) ; Click confirm
-			If _Sleep(500) Then Return	
+			If _Sleep(500) Then Return
 ;			_CaptureRegion()
 ;			If _ColorCheck(_GetPixelColor(425, 531), Hex(0xCDE870, 6), 20) Then ; Check for Return Home button
 			If _WaitForColorArea(425, 531, Hex(0xCDE870, 6), 20,2) Then ; Check for Return Home button
@@ -36,7 +36,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 
 		EndIf
 	EndIf
-
+	$Raid = 0
 	If (_WaitForColor(304, 569, Hex(0x020202, 6), 30, 5) And $AbortSearch = False) Then
 		_CaptureRegion()
 		$Raid = 1
@@ -56,9 +56,22 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 		If $LastRaidTrophy >= 0 Then
 			If _ColorCheck(_GetPixelColor(678, 418), Hex(0x030000, 6), 30) Then
 ;				If _Sleep(250) Then Return
-				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 92, 3, 0), "+", ""))
+;SetLog(Number(StringReplace(ReadText(587, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(588, 340, 94, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(587, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(588, 340, 94, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", "")))
+				$BonusLeagueG=Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", ""))
+;				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
+;				_CaptureRegion(590, 340, 92,16)
+;			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
+;			Local $Time = @HOUR & "." & @MIN
+;			$FileName = $Date & "_at_" & $Time & "_1.jpg"
+;			_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots & $FileName)
 ;				If _Sleep(250) Then Return
-				$BonusLeagueE=Number(StringReplace(ReadText(590, 371, 92, 3, 0), "+", ""))
+				$BonusLeagueE=Number(StringReplace(ReadText(589, 371, 93, 3, 0), "+", ""))
+;				If $BonusLeagueE > 1000000 Then $BonusLeagueE -= 1000000
 ;				If _Sleep(250) Then Return
 				$BonusLeagueD=Number(StringReplace(ReadText(624, 402, 92, 3, 0), "+", ""))
 				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE) & " [DE]: " & _NumberFormat($BonusLeagueD), $COLOR_GREEN)
@@ -85,7 +98,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 		$ElixirTotalLoot += $LastRaidElixir
 		$DarkTotalLoot += $LastRaidDarkElixir
 		$TrophyTotalLoot += $LastRaidTrophy
-		If $TakeSS = 1 Or ( $PushBulletEnabled = 1 And IsChecked($UseJPG) )Then
+		If $TakeSS = 1 Or ( $PushBulletEnabled = 1 And IsChecked($UseJPG) ) Then
 			SetLog(GetLangText("msgTakingLootSS"), $COLOR_ORANGE)
 			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
 			Local $Time = @HOUR & "." & @MIN
@@ -93,7 +106,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 			If _Sleep(300) Then Return
 			_CaptureRegion()
 			_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots & $FileName)
-			If $LastRaidGold>400000 Or $LastRaidElixir>400000 Then
+			If $LastRaidGold>500000 Or $LastRaidElixir>500000 Then
 				_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots &"Amazing\"& $FileName)
 			EndIf
 		EndIf

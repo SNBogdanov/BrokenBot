@@ -31,7 +31,7 @@ Func Standard_Search()
 			EndIf
 
 			; Make sure clouds have cleared
-			If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then 
+			If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 25) Then 
 				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf

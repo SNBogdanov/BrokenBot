@@ -400,6 +400,7 @@ EndFunc   ;==>_DeletePush1
 Func _DeletePush2()
 	Local $pTitle=""
 	Local $cursor=""
+	Local $Count=0
 	$oHTTP = ObjCreate("WinHTTP.WinHTTPRequest.5.1")
 	$access_token = $PushBullettoken
 	SetLog("Deleting old pushes")
@@ -436,15 +437,18 @@ Func _DeletePush2()
 				If $source = $source_device_iden Then
 					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 					_DeleteMessage($iden[$x])
+					$Count+=1;
 					_Sleep(50)
 				ElseIf $target = $source_device_iden Then
 					$iden[$x] = StringStripWS($iden[$x], $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 					_DeleteMessage($iden[$x])
+					$Count+=1;
 					_Sleep(50)
 				EndIf
 			Next
 		Next
 	Until $cursor = ""
+	SetLog($Count&" old pushes deleted")
 EndFunc   ;==>_DeletePush
 
 

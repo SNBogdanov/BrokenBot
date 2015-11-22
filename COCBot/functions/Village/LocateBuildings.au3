@@ -218,12 +218,6 @@ Func LocateBuilding()
 	_Sleep(500)
 	LocateUpgrade3()
 	_Sleep(500)
-	LocateUpgrade4()
-	_Sleep(500)
-	LocateUpgrade5()
-	_Sleep(500)
-	LocateUpgrade6()
-	_Sleep(500)
 
 EndFunc   ;==>LocateBuilding
 Func LocateUpgrade1()
@@ -282,64 +276,6 @@ Func LocateUpgrade3()
 		ExitLoop
 	WEnd
 EndFunc   ;==>LocateUpgrade3
-
-Func LocateUpgrade4()
-	checkMainScreen()
-	If Not ZoomOut() Then
-		SetLog(GetLangText("msgFailedZoomOut"), $COLOR_BLUE)
-		Return False
-	EndIf
-	While 1
-		$MsgBox = MsgBox(1 + 262144, GetLangText("boxUpgrade") & " 4", GetLangText("boxUpgradeb"), 0, $frmBot)
-		If $MsgBox = 1 Then
-			$BuildPos4[0] = FindPos()[0]
-			$BuildPos4[1] = FindPos()[1]
-			SetLog(GetLangText("msgLocBuilding") & " 4 =  " & "(" & $BuildPos4[0] & "," & $BuildPos4[1] & ")", $COLOR_GREEN)
-			GUICtrlSetData($txtUpgradeX4, $BuildPos4[0])
-			GUICtrlSetData($txtUpgradeY4, $BuildPos4[1])
-		EndIf
-		ExitLoop
-	WEnd
-EndFunc   ;==>LocateUpgrade4
-
-Func LocateUpgrade5()
-	checkMainScreen()
-	If Not ZoomOut() Then
-		SetLog(GetLangText("msgFailedZoomOut"), $COLOR_BLUE)
-		Return False
-	EndIf
-	While 1
-		$MsgBox = MsgBox(1 + 262144, GetLangText("boxUpgrade") & " 5", GetLangText("boxUpgradeb"), 0, $frmBot)
-		If $MsgBox = 1 Then
-			$BuildPos5[0] = FindPos()[0]
-			$BuildPos5[1] = FindPos()[1]
-			SetLog(GetLangText("msgLocBuilding") & " 5 =  " & "(" & $BuildPos5[0] & "," & $BuildPos5[1] & ")", $COLOR_GREEN)
-			GUICtrlSetData($txtUpgradeX5, $BuildPos5[0])
-			GUICtrlSetData($txtUpgradeY5, $BuildPos5[1])
-		EndIf
-		ExitLoop
-	WEnd
-EndFunc   ;==>LocateUpgrade5
-
-
-Func LocateUpgrade6()
-	checkMainScreen()
-	If Not ZoomOut() Then
-		SetLog(GetLangText("msgFailedZoomOut"), $COLOR_BLUE)
-		Return False
-	EndIf
-	While 1
-		$MsgBox = MsgBox(1 + 262144, GetLangText("boxUpgrade") & " 6", GetLangText("boxUpgradeb"), 0, $frmBot)
-		If $MsgBox = 1 Then
-			$BuildPos6[0] = FindPos()[0]
-			$BuildPos6[1] = FindPos()[1]
-			SetLog(GetLangText("msgLocBuilding") & " 6 =  " & "(" & $BuildPos6[0] & "," & $BuildPos6[1] & ")", $COLOR_GREEN)
-			GUICtrlSetData($txtUpgradeX6, $BuildPos6[0])
-			GUICtrlSetData($txtUpgradeY6, $BuildPos6[1])
-		EndIf
-		ExitLoop
-	WEnd
-EndFunc   ;==>LocateUpgrade6
 
 Func LocateSpellFactory()
 	checkMainScreen()
