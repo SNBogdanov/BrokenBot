@@ -217,7 +217,8 @@ Func runBot() ;Bot that runs everything in order
 				If Idle($strPlugInInUse) Then ContinueLoop
 				If StatusCheck(False) Then Return
 
-				Call($strPlugInInUse & "_PrepNextBattle")
+				If Not $SearchFailed Then Call($strPlugInInUse & "_PrepNextBattle")
+;				Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
 
 				$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
 				$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
@@ -353,8 +354,8 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 			If Not $closetofull Then
 				$AfterAttack=False;
 				Click(125,695,3,250)
-				SetLog("Unbreakable mode, wait 3 minute", $COLOR_PURPLE)
-				If _Sleep(180000) Then Return
+				SetLog("Unbreakable mode, wait 5 minute", $COLOR_PURPLE)
+				If _Sleep(5*60000) Then Return
 				If StatusCheck() Then Return False
 			    $Checkrearm = True
 			    Return True

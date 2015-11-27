@@ -140,24 +140,24 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						If $nNotifyCode = 1 Then _lstStrategies()
 					Case $cmbLanguage
 						If $nNotifyCode = 1 Then cmbLanguage()
-					Case $btnBBValidate
-						_btnBBValidate()
-					Case $inpBBUser
-						If GUICtrlRead($inpBBUser) <> $prevBBUser Then
-							GUICtrlSetData($btnBBValidate, "VALIDATE")
-							GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
+;					Case $btnBBValidate
+;						_btnBBValidate()
+;					Case $inpBBUser
+;						If GUICtrlRead($inpBBUser) <> $prevBBUser Then
+;							GUICtrlSetData($btnBBValidate, "VALIDATE")
+;							GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
 ;~ 							GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\unknown.bmp")
 ;~ 							GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidCheck"))
-						EndIf
-					Case $inpBBPassword
-						If GUICtrlRead($inpBBPassword) <> $prevBBPass Then
-							GUICtrlSetData($btnBBValidate, "VALIDATE")
-							GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
+;						EndIf
+;					Case $inpBBPassword
+;						If GUICtrlRead($inpBBPassword) <> $prevBBPass Then
+;							GUICtrlSetData($btnBBValidate, "VALIDATE")
+;							GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
 ;~ 							GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\unknown.bmp")
 ;~ 							GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidCheck"))
-						EndIf
-					Case $lblBBRegister
-						lblBBRegister()
+;						EndIf
+;					Case $lblBBRegister
+;						lblBBRegister()
 					Case 10000
 						If _GUICtrlTab_GetCurSel($tabMain) = 0 Then
 							ControlShow("", "", $txtLog)
@@ -617,7 +617,7 @@ Func chkRequest()
 EndFunc   ;==>chkRequest
 
 Func tabMain()
-	If _GUICtrlTab_GetCurSel($tabMain) <> $prevTab Then GUICtrlSetData($inpBBPassword, "")
+;	If _GUICtrlTab_GetCurSel($tabMain) <> $prevTab Then GUICtrlSetData($inpBBPassword, "")
 	If _GUICtrlTab_GetCurSel($tabMain) = 0 Then
 		ControlShow("", "", $txtLog)
 	Else
@@ -891,33 +891,33 @@ Func cmbLanguage()
 	EndIf
 EndFunc   ;==>cmbLanguage
 
-Func _btnBBValidate()
-	IniWrite(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", _Encrypt(GUICtrlRead($inpBBUser)))
-	IniWrite(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", _Encrypt(GUICtrlRead($inpBBPassword)))
-	Local $oHTTP = ObjCreate("winhttp.winhttprequest.5.1")
-	$oHTTP.Open("GET", "http://forum.brokenbot.org/bot_stat_submit.php?a=auth&u=" & GUICtrlRead($inpBBUser) & "&p=" & GUICtrlRead($inpBBPassword), False)
-	$oHTTP.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5")
-	$oHTTP.Send("")
-	$authResult = $oHTTP.ResponseText()
-	If $authResult = 1 Then
-		GUICtrlSetData($btnBBValidate, "VALID")
-		GUICtrlSetBkColor($btnBBValidate, 0x00FF00)
+;Func _btnBBValidate()
+;	IniWrite(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", _Encrypt(GUICtrlRead($inpBBUser)))
+;	IniWrite(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", _Encrypt(GUICtrlRead($inpBBPassword)))
+;	Local $oHTTP = ObjCreate("winhttp.winhttprequest.5.1")
+;	$oHTTP.Open("GET", "http://forum.brokenbot.org/bot_stat_submit.php?a=auth&u=" & GUICtrlRead($inpBBUser) & "&p=" & GUICtrlRead($inpBBPassword), False)
+;	$oHTTP.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5")
+;	$oHTTP.Send("")
+;	$authResult = $oHTTP.ResponseText()
+;	If $authResult = 1 Then
+;		GUICtrlSetData($btnBBValidate, "VALID")
+;		GUICtrlSetBkColor($btnBBValidate, 0x00FF00)
 ;~ 		GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\good.bmp")
-		GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidGood"))
-		GUICtrlSetData($inpBBPassword, "")
-		$ValidAuth = True
-	Else
-		GUICtrlSetData($btnBBValidate, "INVALID")
-		GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
+;		GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidGood"))
+;		GUICtrlSetData($inpBBPassword, "")
+;		$ValidAuth = True
+;	Else
+;		GUICtrlSetData($btnBBValidate, "INVALID")
+;		GUICtrlSetBkColor($btnBBValidate, 0xFF0000)
 ;~ 		GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\bad.bmp")
-		GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidBad"))
-		$ValidAuth = False
-	EndIf
-EndFunc   ;==>_btnBBValidate
+;		GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidBad"))
+;		$ValidAuth = False
+;	EndIf
+;EndFunc   ;==>_btnBBValidate
 
-Func lblBBRegister()
-	ShellExecute("http://www.brokenbot.org/page.php?p=register")
-EndFunc  ;==>lblBBRegister
+;Func lblBBRegister()
+;	ShellExecute("http://www.brokenbot.org/page.php?p=register")
+;EndFunc  ;==>lblBBRegister
 
 
 

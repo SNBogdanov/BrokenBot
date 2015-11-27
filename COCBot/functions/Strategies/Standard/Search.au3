@@ -15,6 +15,7 @@ Func Standard_Search()
 
 	;safe to reset flag here. If failed and return -1, this flag will be set again.
 	$SearchFailed = False
+	$itxtSrcCon=GUICtrlRead($txtSearchConne)
 
 	While 1
 		$calculateCondition = False
@@ -464,6 +465,16 @@ Func Standard_Search()
 						EndIf
 					EndIf
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
+		                	If IsChecked($chkSearchConne) And ($SearchCount <> 0 And Mod($SearchCount, $itxtSrcCon) = 0) Then
+                   				SetLog($conditionlogstr & " [Return Village After: " & $itxtSrcCon & " search(es)]",$COLOR_GREEN)
+	                   			ReturnHome(False, False, True)
+						Return -2
+               				EndIf 
+					If StringReplace(GUICtrlRead($lblresultgoldnow), " ", "") < 10000 Then
+						SetLog("Gold level is below 10000, can not continue search", $COLOR_RED)
+					;				  _Sleep(20000)
+						Return -2
+					EndIf
 					Click(750, 500) ;Click Next
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
@@ -477,10 +488,16 @@ Func Standard_Search()
 					Return -1
 				Else
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
-					SetLog(GetLangText("msgNoNextRestart"), $COLOR_RED)
 					If ChkDisconnection() Then Return -2
+					SetLog(GetLangText("msgNoNextRestart"), $COLOR_RED)
 					Return -1
 				EndIf
+
+		                If IsChecked($chkSearchConne) And ($SearchCount <> 0 And Mod($SearchCount, $itxtSrcCon) = 0) Then
+                   			SetLog($conditionlogstr & " [Return Village After: " & $itxtSrcCon & " search(es)]",$COLOR_GREEN)
+                   			ReturnHome(False, False, True)
+					Return -2
+               			EndIf 
 				If StringReplace(GUICtrlRead($lblresultgoldnow), " ", "") < 10000 Then
 					SetLog("Gold level is below 10000, can not continue search", $COLOR_RED)
 					;				  _Sleep(20000)

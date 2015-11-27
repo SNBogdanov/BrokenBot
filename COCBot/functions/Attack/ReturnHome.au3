@@ -57,12 +57,13 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 			If _ColorCheck(_GetPixelColor(678, 418), Hex(0x030000, 6), 30) Then
 ;				If _Sleep(250) Then Return
 ;SetLog(Number(StringReplace(ReadText(587, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(588, 340, 94, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(587, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(588, 340, 94, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", "")))
-				$BonusLeagueG=Number(StringReplace(ReadText(589, 340, 93, 3, 0), "+", ""))
+;SetLog(Number(StringReplace(ReadText(588, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(589, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(591, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(592, 340, 95, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(593, 340, 95, 3, 0), "+", "")))
+
+				$BonusLeagueG=Number(StringReplace(ReadText(591, 340, 93, 3, 0), "+", ""))
 ;				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
 ;				_CaptureRegion(590, 340, 92,16)
 ;			Local $Date =  @YEAR & "." & @MON & "." & @MDAY

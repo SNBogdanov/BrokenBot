@@ -172,6 +172,12 @@ Func Standard_LoadGUI()
 	GUICtrlSetData(-1,GetLangText("cmbFocusedBuilding"), GetLangText("cmbFocusedBuildingDefault"))
 	
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	Global $chkSearchConne=GUICtrlCreateCheckbox("Restart Src After :",20,420,110,21)
+	GUICtrlSetOnEvent(-1, "ChkSearchCon")
+   	Global $txtSearchConne=GUICtrlCreateInput("150",130,423,25,20,BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+   	GUICtrlSetLimit(-1,3)
+   	GUIctrlsetstate(-1,$GUI_DISABLE) 
 	
 	; ---------------------------------------------------------------------------
 	$pageTroops = GUICtrlCreateTabItem(GetLangText("pageTroops"))

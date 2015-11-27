@@ -294,7 +294,7 @@ EndFunc   ;==>Standard_GetDETroopTotals
 Func Standard_CheckArmyCamp($inCamp = False)
 	SetLog(GetLangText("msgCheckingCamp"), $COLOR_BLUE)
 	$fullarmy = False
-	if StatusCheck() then return false
+	if StatusCheck(false) then return false
 
 	If _Sleep(100) Then Return false
 
@@ -571,6 +571,9 @@ Func Standard_Train($reset = False)
 	EndIf
 
 	If (($ArmyComp = 0) And (_GUICtrlComboBox_GetCurSel($cmbTroopComp) <> 8)) Or $FixTrain Then
+;		SetLog("$ArmyComp:"&$ArmyComp)
+;		SetLog("$FixTrain:"&$FixTrain)
+;		SetLog("$reset:"&$reset)
 		If $FixTrain Or $FirstStart And Not $reset Then $ArmyComp = $CurCamp
 		$FixTrain = False
 		Standard_GetDETroopTotals()

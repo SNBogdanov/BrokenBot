@@ -407,3 +407,10 @@ Func Standard_cmbCheckEnableTHAttack()
 	EndIf
 
 EndFunc   ;==>Standard_cmbCheckEnableTHAttack
+Func ChkSearchCon()
+     If IsChecked($chkSearchConne) Then
+    GUICtrlSetState($txtSearchConne, $GUI_ENABLE)
+     Else
+    GUICtrlSetState($txtSearchConne, $GUI_DISABLE)
+     EndIf
+EndFunc 

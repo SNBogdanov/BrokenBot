@@ -112,6 +112,14 @@ Func Standard_LoadConfig()
 	Else
 		GUICtrlSetState($chkDeadSnipe, $GUI_UNCHECKED)
 	EndIf
+;Search Condition
+   	If IniRead($configFile, "search", "ChkSearchConne", "0") = 1 Then
+      		GUICtrlSetState($chkSearchConne,$GUI_CHECKED)
+      		GUICtrlSetState($txtSearchConne,$GUI_ENABLE)
+   	Else
+      		GUICtrlSetState($chkSearchConne,$GUI_UNCHECKED)
+   	EndIf
+   	GUICtrlSetData($txtSearchConne, IniRead($configFile, "search", "TxtSearchConne", "150")) 
 
 	If IniRead($configFile, "search", "conditionSnipe", "0") = 1 Then
 		GUICtrlSetState($chkSnipe, $GUI_CHECKED)
@@ -493,6 +501,14 @@ Func Standard_SaveConfig($configFile)
 	EndIf
 	
 	IniWrite($configFile, "attack", "focatck-focus", _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding))
+
+;Search Condition
+   	If IsChecked($chkSearchConne)  Then
+      		IniWrite($configFile,"search","ChkSearchConne",1)
+   	Else
+      		IniWrite($configFile,"search","ChkSearchConne",0)
+   	EndIf
+   	IniWrite($configFile, "search", "TxtSearchConne", GUICtrlRead($txtSearchConne)) 
 	
 	;Troop Settings--------------------------------------------------------------------------
 	IniWrite($configFile, "troop", "raidcapacity", _GUICtrlComboBox_GetCurSel($cmbRaidcap))

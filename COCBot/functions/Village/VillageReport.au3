@@ -75,7 +75,7 @@ Func VillageReport()
     					SetLog(GetLangText("msgPushLastRaid"), $COLOR_GREEN)
     				EndIf
     			EndIf
-    			StatSubmission(True)
+;    			StatSubmission(True)
 			$GoldBeforeSearch=0
     			$Raid = 0
 			$SearchCount = 0

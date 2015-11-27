@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.26.6 MOD by SNBogdanov"
+$sBotVersion = "3.3.26.7 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -103,14 +103,14 @@ ElseIf $ret[0] = -2 Then
 	MsgBox(48, "BrokenBot.org", GetLangText("msgLicense") & @CRLF & @CRLF & "Please visit BrokenBot.org")
 EndIf
 
-If IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "") = "" Or IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "") = "" Then
-	GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\bad.bmp")
-	GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidBad"))
-Else
-	GUICtrlSetData($inpBBPassword, _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")))
-	_btnBBValidate()
-	GUICtrlSetData($inpBBPassword, "")
-EndIf
+;If IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "1", "") = "" Or IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "") = "" Then
+;	GUICtrlSetImage($btnBBValidate, @ScriptDir & "\images\Resource\bad.bmp")
+;	GUICtrlSetTip($btnBBValidate, GetLangText("tipBBValidBad"))
+;Else
+;	GUICtrlSetData($inpBBPassword, _Decrypt(IniRead(@LocalAppDataDir & "\BrokenBot.org.ini", "default", "2", "")))
+;	_btnBBValidate()
+;	GUICtrlSetData($inpBBPassword, "")
+;EndIf
 If $PushBulletEnabled = 1 Then _PushBulletDevice()
 ;Only enable button start after all Initiation done.
 GUICtrlSetData($btnStart, GetLangText("btnStart"))
