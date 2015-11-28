@@ -217,8 +217,10 @@ Func runBot() ;Bot that runs everything in order
 				If Idle($strPlugInInUse) Then ContinueLoop
 				If StatusCheck(False) Then Return
 
-				If Not $SearchFailed Then Call($strPlugInInUse & "_PrepNextBattle")
-;				Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
+				If Not $SearchFailed Then 
+					Call($strPlugInInUse & "_PrepNextBattle")
+					Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
+				EndIf
 
 				$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
 				$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
