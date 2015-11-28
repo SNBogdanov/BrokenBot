@@ -219,19 +219,19 @@ Func runBot() ;Bot that runs everything in order
 
 				If Not $SearchFailed Then 
 					Call($strPlugInInUse & "_PrepNextBattle")
-				Else
-					Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
-				EndIf
-
-				$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
-				$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
-				If $res>1 Then $ElixirCount = $res
-				If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
-					; No DE
-					UpdateStat($GoldCount,$ElixirCount,0,0)
-				Else
-					$DarkCount = Number(ReadText(711, 125, 93, $textMainScreen, 0))
-					UpdateStat($GoldCount,$ElixirCount,$DarkCount,0)
+;SetLog("Before GoldCount")
+					$GoldCount = Number(ReadText(666, 25, 138, $textMainScreen, 0))
+					$res = Number(ReadText(666, 76, 138, $textMainScreen, 0))
+					If $res>1 Then $ElixirCount = $res
+					If _ColorCheck(_GetPixelColor(718, 131), Hex(0xF8FCFF, 6), 40) Then
+						; No DE
+						UpdateStat($GoldCount,$ElixirCount,0,0)
+					Else
+						$DarkCount = Number(ReadText(711, 125, 93, $textMainScreen, 0))
+						UpdateStat($GoldCount,$ElixirCount,$DarkCount,0)
+					EndIf
+;				Else
+;					Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
 				EndIf
 
 				While True
