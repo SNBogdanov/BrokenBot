@@ -294,7 +294,7 @@ EndFunc   ;==>Standard_GetDETroopTotals
 Func Standard_CheckArmyCamp($inCamp = False)
 	SetLog(GetLangText("msgCheckingCamp"), $COLOR_BLUE)
 	$fullarmy = False
-	if StatusCheck(false) then return false
+	if StatusCheck() then return false
 
 	If _Sleep(100) Then Return false
 

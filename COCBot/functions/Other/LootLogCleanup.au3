@@ -6,7 +6,8 @@ Func LootLogCleanup($no_rotator)
 			SetLog(GetLangText("msgDirNotFound") & $dir, $COLOR_RED)
 			ContinueLoop
 		EndIf
-		Local $fArray = _FileListToArrayRec($dir, "*", $FLTAR_FILESFOLDERS, $FLTAR_RECUR, $FLTAR_SORT, $FLTAR_FULLPATH)
+;		Local $fArray = _FileListToArrayRec($dir, "*", $FLTAR_FILESFOLDERS, $FLTAR_RECUR, $FLTAR_SORT, $FLTAR_FULLPATH)
+		Local $fArray = _FileListToArrayRec($dir, "*", $FLTAR_FILESFOLDERS, $FLTAR_NORECUR, $FLTAR_SORT, $FLTAR_FULLPATH)
 		If UBound($fArray) == 0 Then ContinueLoop
 		Local $data_size = $fArray[0]
 		If $data_size > $no_rotator Then
