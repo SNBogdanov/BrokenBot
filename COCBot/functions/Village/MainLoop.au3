@@ -219,6 +219,7 @@ Func runBot() ;Bot that runs everything in order
 
 				If Not $SearchFailed Then 
 					Call($strPlugInInUse & "_PrepNextBattle")
+				Else
 					Click($TopLeftClient[0], $TopLeftClient[1], 2, 250); Click away twice with 250ms delay
 				EndIf
 
