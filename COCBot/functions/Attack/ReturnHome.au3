@@ -63,8 +63,8 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 ;SetLog(Number(StringReplace(ReadText(592, 340, 95, 3, 0), "+", "")))
 ;SetLog(Number(StringReplace(ReadText(593, 340, 95, 3, 0), "+", "")))
 
-				$BonusLeagueG=Number(StringReplace(ReadText(591, 340, 93, 3, 0), "+", ""))
-;				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
+				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 93, 3, 0), "+", ""))
+				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
 ;				_CaptureRegion(590, 340, 92,16)
 ;			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
 ;			Local $Time = @HOUR & "." & @MIN
