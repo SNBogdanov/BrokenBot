@@ -52,44 +52,49 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 			$LastRaidDarkElixir = ReadText(300, 367, 140, $textReturnHome, 0)
 			$LastRaidTrophy = ReadText(380, 403, 60, $textReturnHome, 0)
 		EndIf
-
-		If $LastRaidTrophy >= 0 Then
-			If _ColorCheck(_GetPixelColor(678, 418), Hex(0x030000, 6), 30) Then
+		$BonusLeagueG=0
+		$BonusLeagueE=0
+		$BonusLeagueD=0
+;		If $LastRaidTrophy >= 0 Then
+;			If _ColorCheck(_GetPixelColor(678, 418), Hex(0x030000, 6), 30) Then
 ;				If _Sleep(250) Then Return
-;SetLog(Number(StringReplace(ReadText(587, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(588, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(589, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(591, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(592, 340, 95, 3, 0), "+", "")))
-;SetLog(Number(StringReplace(ReadText(593, 340, 95, 3, 0), "+", "")))
+;SetLog("339")
+;SetLog(Number(StringReplace(ReadText(587, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(588, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(589, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(590, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(591, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(592, 339, 93, 3, 0), "+", "")))
+;SetLog(Number(StringReplace(ReadText(593, 339, 93, 3, 0), "+", "")))
 
-				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 93, 3, 0), "+", ""))
-				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
+
+;				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 93, 3, 0), "+", ""))
+;				If $BonusLeagueG > 1000000 Then $BonusLeagueG -= 1000000
 ;				_CaptureRegion(590, 340, 92,16)
 ;			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
 ;			Local $Time = @HOUR & "." & @MIN
 ;			$FileName = $Date & "_at_" & $Time & "_1.jpg"
 ;			_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots & $FileName)
 ;				If _Sleep(250) Then Return
-				$BonusLeagueE=Number(StringReplace(ReadText(589, 371, 93, 3, 0), "+", ""))
+;				$BonusLeagueE=Number(StringReplace(ReadText(589, 371, 93, 3, 0), "+", ""))
 ;				If $BonusLeagueE > 1000000 Then $BonusLeagueE -= 1000000
 ;				If _Sleep(250) Then Return
-				$BonusLeagueD=Number(StringReplace(ReadText(624, 402, 92, 3, 0), "+", ""))
-				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE) & " [DE]: " & _NumberFormat($BonusLeagueD), $COLOR_GREEN)
-			Else
+;				$BonusLeagueD=Number(StringReplace(ReadText(624, 402, 92, 3, 0), "+", ""))
+;				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE) & " [DE]: " & _NumberFormat($BonusLeagueD), $COLOR_GREEN)
+;			Else
 ;				If _Sleep(250) Then Return
-				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 92, 3, 0), "+", ""))
+;				$BonusLeagueG=Number(StringReplace(ReadText(590, 340, 92, 3, 0), "+", ""))
 ;				If _Sleep(250) Then Return
-				$BonusLeagueE=Number(StringReplace(ReadText(590, 371, 92, 3, 0), "+", ""))
+;				$BonusLeagueE=Number(StringReplace(ReadText(590, 371, 92, 3, 0), "+", ""))
 ;				If _Sleep(250) Then Return
-				$BonusLeagueD=0
-				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE), $COLOR_GREEN)
-			EndIf
-		Else
-			$BonusLeagueG = 0
-			$BonusLeagueE = 0
-			$BonusLeagueD = 0
-		EndIf
+;				$BonusLeagueD=0
+;				SetLog("Bonus [G]: " & _NumberFormat($BonusLeagueG) & " [E]: " & _NumberFormat($BonusLeagueE), $COLOR_GREEN)
+;			EndIf
+;		Else
+;			$BonusLeagueG = 0
+;			$BonusLeagueE = 0
+;			$BonusLeagueD = 0
+;		EndIf
 
 		$LastRaidGold+=$BonusLeagueG
 		$LastRaidElixir+=$BonusLeagueE
