@@ -968,7 +968,11 @@ EndFunc   ;==>UpdateQueueDesign
 
 
 Func UPsave($myIndex)
+	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+;SetLog("UPSave "&$myIndex&" "&$ListCount)
 
+	If $myIndex >= $ListCount Then Return
+	If $myIndex <0 Then Return
 	IniWrite($UPConfig, "Building_" & $myIndex, "Enabled", Number(IsChecked($chkUPenable)))
 	IniWrite($UPConfig, "Building_" & $myIndex, "X", GUICtrlRead($inpUPx))
 	IniWrite($UPConfig, "Building_" & $myIndex, "Y", GUICtrlRead($inpUPy))
@@ -979,6 +983,7 @@ EndFunc   ;==>UPsave
 
 Func UPRead($myIndex)
 	Local $myBuilding[6]
+;SetLog("UPRead "&$myIndex)
 
 	$myBuilding[0] = Number(IniRead($UPConfig, "Building_" & $myIndex, "Enabled", 0))
 	$myBuilding[1] = IniRead($UPConfig, "Building_" & $myIndex, "X", "")
@@ -991,8 +996,10 @@ EndFunc   ;==>UPRead
 
 Func UPApply($myIndex)
 	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
+;SetLog("UPApply "&$myIndex&" "&$ListCount)
 
-	If $myIndex > $ListCount Then Return
+	If $myIndex >= $ListCount Then Return
+	If $myIndex <0 Then Return
 
 	Local $myBuilding = UPRead($myIndex)
 
@@ -1026,6 +1033,7 @@ EndFunc   ;==>btnUPadd
 
 
 Func btnUPsave()
+;SetLog("btnUPsave "&$UPCurSel)
 	UPsave($UPCurSel)
 	IniWrite($UPConfig, "Halt_Upgrade", "Enabled", Number(IsChecked($chkUPHalt)))
 	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
@@ -1077,11 +1085,9 @@ EndFunc   ;==>btnUPremove
 
 Func UPremove($myIndex )
 
-	IniDelete($UPConfig, "Building_" & $myIndex)
-
 	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
-
-	For $i = $myIndex + 1 To $ListCount
+	IniDelete($UPConfig, "Building_" & $myIndex)
+	For $i = $myIndex + 2 To $ListCount
 		IniRenameSection($UPConfig, "Building_" & $i, "Building_" & ($i - 1))
 	Next
 EndFunc   ;==>UPremove

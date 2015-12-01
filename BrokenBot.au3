@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.26.8 MOD by SNBogdanov"
+$sBotVersion = "3.3.26.9 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -111,6 +111,7 @@ EndIf
 ;	_btnBBValidate()
 ;	GUICtrlSetData($inpBBPassword, "")
 ;EndIf
+;CreateLogFile()
 If $PushBulletEnabled = 1 Then _PushBulletDevice()
 ;Only enable button start after all Initiation done.
 GUICtrlSetData($btnStart, GetLangText("btnStart"))
