@@ -245,5 +245,27 @@ Func readConfig() ;Reads config and sets it to the variables
 	; Hidden settings ----------------------------------------------------------------------
 	;---------------------------------------------------------------------------------------
 	; These settings can be read in from config but aren't found in the GUI
+GUICtrlSetState($expMode, $GUI_DISABLE)
+GUICtrlSetState($expMode, $GUI_UNCHECKED)
+GUICtrlSetState($txtSnipeBelow, $GUI_DISABLE)
+GUICtrlSetData($txtSnipeBelow, 0)
+$ichkDonateBarbarians = 0
+$ichkDonateAllBarbarians = 0
+$ichkDonateArchers = 0
+$ichkDonateAllArchers = 0
+$ichkDonateGiants = 0
+$ichkDonateAllGiants = 0
+GUICtrlSetState($chkDonateAllBarbarians, $GUI_DISABLE)
+GUICtrlSetState($chkDonateBarbarians, $GUI_DISABLE)
+GUICtrlSetState($chkDonateAllArchers, $GUI_DISABLE)
+GUICtrlSetState($chkDonateArchers, $GUI_DISABLE)
+GUICtrlSetState($chkDonateAllGiants, $GUI_DISABLE)
+GUICtrlSetState($chkDonateGiants, $GUI_DISABLE)
+GUICtrlSetState($chkWalls, $GUI_UNCHECKED)
+GUICtrlSetState($chkWalls, $GUI_DISABLE)
+GUICtrlSetState($UseGold, $GUI_UNCHECKED)
+GUICtrlSetState($UseGold, $GUI_DISABLE)
+GUICtrlSetState($UseElixir, $GUI_UNCHECKED)	
+GUICtrlSetState($UseElixir, $GUI_DISABLE)	
 	ModReload()
 EndFunc   ;==>readConfig

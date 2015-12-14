@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.26.9 MOD by SNBogdanov"
+$sBotVersion = "3.3.4.00 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -86,7 +86,7 @@ If IsArray($CmdLine) Then
 	EndIf
 EndIf
 
-$hHBitmap = _ScreenCapture_Capture("", 0, 0, 860, 720)
+$hHBitmap = _ScreenCapture_Capture("", 0, 0, 860, 780)
 $ret = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotRedLineCheck", "ptr", $hHBitmap, "int", 1, "int", 1, "int", 0, "int", 0, "int", 0)
 _WinAPI_DeleteObject($hHBitmap)
 
@@ -112,6 +112,7 @@ EndIf
 ;	GUICtrlSetData($inpBBPassword, "")
 ;EndIf
 ;CreateLogFile()
+
 If $PushBulletEnabled = 1 Then _PushBulletDevice()
 ;Only enable button start after all Initiation done.
 GUICtrlSetData($btnStart, GetLangText("btnStart"))

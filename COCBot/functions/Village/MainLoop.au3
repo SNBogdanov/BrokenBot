@@ -8,9 +8,12 @@ Func runBot() ;Bot that runs everything in order
 	SaveConfig()
 	readConfig()
 	applyConfig()
+;checkObstacles(true)
+;btnStop()
+;Return
 	If StatusCheck(True, True, 3) Then Return
-	If $MaxGold = 0 Then
-		$Text=StringReplace(ReadText(690, 8, 140, 1, 1),"G","6")
+	If $MaxElixir = 0 Then
+		$Text=StringReplace(ReadText(690, 9, 140, 1, 1),"G","6")
 		$Text=StringReplace($Text,"O","0")
 		$MaxGold = Number(StringRegExpReplace($Text,"[^0-9]",""))
 		$Text=StringReplace(ReadText(690, 57, 140, 1, 1),"G","6")
@@ -25,7 +28,7 @@ Func runBot() ;Bot that runs everything in order
 		SetLog("Maximum gold in storage:"&_NumberFormat($MaxGold),$COLOR_GREEN)
 		SetLog("Maximum elixir in storage:"&_NumberFormat($MaxElixir),$COLOR_GREEN)
 		SetLog("Maximum dark elixir in storage:"&_NumberFormat($MaxDark),$COLOR_GREEN)
-		If $MaxGold = 0 Then
+		If $MaxElixir = 0 Then
 			$res=MsgBox($MB_YESNOCANCEL,"Warning","Please check BS configuration, can not continue"&@CR&"If you want to continue for your own risk press Yes, Or press No to stop")
 			If $res=$IDCANCEL Or $res=$IDNO Then
 				btnStop()
@@ -284,9 +287,19 @@ Func runBot() ;Bot that runs everything in order
 				If Not $fullarmy Then Donate_Train()
 				If StatusCheck() Then Return False
 
-				If _Sleep(5000) Then Return
+				SetLog("Sleep for 1 minute")
+				If _Sleep(60000) Then Return
 			Case $modeDonate
-				If _Sleep(5000) Then Return
+				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
+					Click(125,60+695,3,250)
+					SetLog("Unbreakable mode, wait 15 minute", $COLOR_PURPLE)
+					If _Sleep(15*60000) Then Return
+					If StatusCheck() Then Return False
+			    		$Checkrearm = True
+				Else
+					SetLog("Sleep for 1 minute")
+					If _Sleep(60000) Then Return
+				EndIf
 				; Why is this even a mode?
 			Case $modeExperience
 				Experience()
@@ -356,7 +369,7 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 		If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
 			If Not $closetofull Then
 				$AfterAttack=False;
-				Click(125,695,3,250)
+				Click(125,60+695,3,250)
 				SetLog("Unbreakable mode, wait 5 minute", $COLOR_PURPLE)
 				If _Sleep(5*60000) Then Return
 				If StatusCheck() Then Return False

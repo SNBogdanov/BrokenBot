@@ -6,19 +6,19 @@ Func RequestCC()
 
 		If Not TryToOpenArmyOverview() Then Return
 		_CaptureRegion()
-		If _ColorCheck(_GetPixelColor(650, 300), Hex(0xD5D5D5, 6), 3) Then
+		If _ColorCheck(_GetPixelColor(650, 30+300), Hex(0xD5D5D5, 6), 3) Then
 			SetLog(GetLangText("msgCCFull"), $COLOR_RED)
 			Click(150, 550) ;Click away
 			Return
 		EndIf
-		If _ColorCheck(_GetPixelColor(691, 356), Hex(0xFFFFFF, 6), 3) Then
+		If _ColorCheck(_GetPixelColor(691, 30+356), Hex(0xFFFFFF, 6), 3) Then
 			SetLog(GetLangText("msgRequestAlready"), $COLOR_RED)
 			Click(150, 550) ;Click away
 			Return
 		EndIf
 
 		If _Sleep(500) Then Return
-		Click(670, 325) ;Click request button
+		Click(670, 30+325) ;Click request button
 		If _Sleep(1000) Then Return
 		_CaptureRegion()
 		If _ColorCheck(_GetPixelColor(340, 245), Hex(0xCC4010, 6), 20) Then

@@ -339,7 +339,7 @@ Func Snipe_Search($ssMaxSearchingTime = 0)
 
 
 		_CaptureRegion()
-		If _ColorCheck(_GetPixelColor(726, 497), Hex(0xF0AE28, 6), 20) Then ; find next button
+		If _ColorCheck(_GetPixelColor(726, 60+497), Hex(0xF0AE28, 6), 20) Then ; find next button
 
 			Local $fDiffNow = TimerDiff($hTimerClickNext) - $fdiffReadGold ;How long in attack prep mode
 			$RandomDelay = _Random_Gaussian($icmbSearchsp * 1500, ($icmbSearchsp * 1500) / 6)
@@ -349,12 +349,12 @@ Func Snipe_Search($ssMaxSearchingTime = 0)
 
 
 
-			Click(750, 500) ;Click Next
+			Click(750, 60+500) ;Click Next
 			$hTimerClickNext = TimerInit()
 			;Take time to do search
 
 			If _Sleep(1000) Then Return -1
-		ElseIf _ColorCheck(_GetPixelColor(23, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
+		ElseIf _ColorCheck(_GetPixelColor(23, 60+523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 			GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 			SetLog(GetLangText("msgNoNextReturn"), $COLOR_RED)
 			ChkDisconnection(True)

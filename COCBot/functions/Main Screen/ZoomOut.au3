@@ -11,6 +11,7 @@ Func ZoomOut()
 			If _Sleep(600) Then Return False
 		EndIf
 		If ControlSend($Title, "", "", "{DOWN}") Then $i += 1
+		If _Sleep(600) Then Return False
 		_CaptureRegion(0, 0, 860, 2)
 	WEnd
 	If _GetPixelColor(1, 1) <> Hex(0x000000, 6) And _GetPixelColor(850, 1) <> Hex(0x000000, 6) Then

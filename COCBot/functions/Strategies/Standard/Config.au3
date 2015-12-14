@@ -6,6 +6,8 @@ Func Standard_LoadConfig()
 	Else
 		GUICtrlSetState($chkDeadActivate, $GUI_UNCHECKED)
 	EndIf
+
+
 	If IniRead($configFile, "search", "AnyActivate", "0") = 1 Then
 		GUICtrlSetState($chkAnyActivate, $GUI_CHECKED)
 	Else
@@ -130,7 +132,19 @@ Func Standard_LoadConfig()
 	_GUICtrlComboBox_SetCurSel($cmbTH, IniRead($configFile, "search", "AnyTHLvl", "0"))
 	_GUICtrlComboBox_SetCurSel($cmbDeadTH, IniRead($configFile, "search", "DeadTHLvl", "0"))
 
+	GUICtrlSetState($chkDeadActivate, $GUI_UNCHECKED)
+	GUICtrlSetState($chkDeadActivate, $GUI_DISABLE)
+	GUICtrlSetState($chkSnipe, $GUI_UNCHECKED)
+	GUICtrlSetState($chkSnipe, $GUI_DISABLE)
+	GUICtrlSetState($chkMeetTHO, $GUI_UNCHECKED)
+	GUICtrlSetState($chkMeetTHO, $GUI_DISABLE)
+	GUICtrlSetState($chkMeetTH, $GUI_UNCHECKED)
+	GUICtrlSetState($chkMeetTH, $GUI_DISABLE)
+	GUICtrlSetState($cmbTH, $GUI_UNCHECKED)
+	GUICtrlSetState($cmbTH, $GUI_DISABLE)
+
 	Standard_chkDeadActivate()
+
 	Standard_chkAnyActivate()
 
 	;Search reduction settings inside search tab

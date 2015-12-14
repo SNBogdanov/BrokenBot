@@ -1,7 +1,7 @@
 Global $myBarrackPos[4][2] = [[250, 550], [310, 550], [370, 550], [430, 550]]
 Global $myDarkBarrackPos[2][2] = [[520, 550], [580, 550]]
 Global $mySpellFactoryPos[2][2] = [[660, 550], [720, 550]]
-Global $OverviewButton[2] = [38, 528]
+Global $OverviewButton[2] = [38, 587]
 
 
 

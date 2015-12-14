@@ -31,38 +31,46 @@ Global $CampFull[4] = [328, 535, 0xD03840, 20] ;
 
 Global $DropTrophiesStartPoint = [34, 310]
 Global $TrainBtn[4] = [541, 602, 0x728BB0, 20] ;
-Global $TrainBarbarian[4] = [216, 325, 0xF09D1C, 30] ;
-Global $TrainArcher[4] = [330, 323, 0xE84070, 30] ;
-Global $TrainGiant[4] = [419, 319, 0xF88409, 30] ;
-Global $TrainGoblin[4] = [549, 328, 0xFB4C24, 30] ;
-Global $TrainWallbreaker[4] = [635, 335, 0x473940, 30] ;
+Global $TrainBarbarian[4] = [216, 325+30, 0xF09D1C, 30] ;
+Global $TrainArcher[4] = [330, 323+30, 0xE84070, 30] ;
+Global $TrainGiant[4] = [419, 319+30, 0xF88409, 30] ;
+Global $TrainGoblin[4] = [549, 328+30, 0xFB4C24, 30] ;
+Global $TrainWallbreaker[4] = [635, 335+30, 0x473940, 30] ;
 
-Global $TrainMinion[4] = [261, 365, 0x43D9E2, 28] ;
+Global $TrainMinion[4] = [261, 365+30, 0x43D9E2, 28] ;
 ;Global $TrainMinion[4]				= [261, 365, 0x5DDCE5, 10] ;
-Global $TrainHog[4] = [369, 366, 0x39CBDA, 10] ;
-Global $TrainValkyrie[4] = [475, 365, 0x3CD8E0, 10] ;
+Global $TrainHog[4] = [369, 366+30, 0x39CBDA, 10] ;
+Global $TrainValkyrie[4] = [475, 365+30, 0x3CD8E0, 10] ;
 
 Global $TrainMinionDll[2] = [-1, -1] ;
 Global $TrainHogDll[2] = [-1, -1] ;
 Global $TrainValkyrieDll[2] = [-1, -1] ;
 
-Global $NextBtn[2] = [750, 500]
+Global $NextBtn[2] = [750, 60+500]
 ; Someone asking troupes : Color 0xD0E978 in x = 121
 
 
 Func SelectDropTroupe($troop)
-	Click(68 + (72 * $troop), 595)
+	Click(-20+68 + (72 * $troop), 60+595)
 	_CaptureRegion()
-	$GlobalColor = CommonColor(54 + (72 * $troop), 585, 30, 35)
+	$GlobalColor = CommonColor(-30+54 + (72 * $troop), 60+585, 30, 35)
 EndFunc   ;==>SelectDropTroupe
 
 ; Read the quantity for a given troop
-Func ReadTroopQuantity($troop)
+Func ReadTroopQuantity($troop, $shift=false)
 	_CaptureRegion()
-	If _ColorCheck(_GetPixelColor(44 + (72 * $troop), 576), Hex(0xFFFFFF, 6), 20) Then
-		$ReturnQty = ReadText(43 + (72 * $troop), 578, 54, $textDeployNumber)
-	Else
-		$ReturnQty = ReadText(43 + (72 * $troop), 583, 54, $textDeployNumber)
+	If $shift then
+		If _ColorCheck(_GetPixelColor(-30+44 + (72 * $troop), 60+576), Hex(0xFFFFFF, 6), 20) Then
+			$ReturnQty = ReadText(-30+43 + (72 * $troop), 60+578, 54, $textDeployNumber)
+		Else
+			$ReturnQty = ReadText(-30+43 + (72 * $troop), 60+583, 54, $textDeployNumber)
+		EndIf
+	else
+		If _ColorCheck(_GetPixelColor(44 + (72 * $troop), 60+576), Hex(0xFFFFFF, 6), 20) Then
+			$ReturnQty = ReadText(43 + (72 * $troop), 60+578, 54, $textDeployNumber)
+		Else
+			$ReturnQty = ReadText(43 + (72 * $troop), 60+583, 54, $textDeployNumber)
+		EndIf
 	EndIf
 	$ReturnQty = StringStripWS($ReturnQty, 8)
 	If StringLeft($ReturnQty, 1) = "x" Then
@@ -70,12 +78,24 @@ Func ReadTroopQuantity($troop)
 	ElseIf StringLeft($ReturnQty, 2) = "11" Then
 		$ReturnQty = StringRight($ReturnQty, StringLen($ReturnQty) - 1)
 	EndIf
+	if $ReturnQty = "" Or $ReturnQty = 0 Then
+		return ReadTroopQuantity($troop, true)
+	EndIf
 	Return $ReturnQty
 EndFunc   ;==>ReadTroopQuantity
 
-Func IdentifyTroopKind($position)
+Func IdentifyTroopKind($position, $shift=false)
 
-	_CaptureRegion(32 + (72 * $position), 595, 104 + (72 * $position), 665)
+	if $Shift Then
+		_CaptureRegion(-30+32 + (72 * $position), 60+595, -30+104 + (72 * $position), 60+665)
+	else 
+		_CaptureRegion(32 + (72 * $position), 60+595, 104 + (72 * $position), 60+665)
+	EndIf
+;			Local $Date =  @YEAR & "." & @MON & "." & @MDAY
+;			Local $Time = @HOUR & "." & @MIN
+;			$FileName = $Date & "_at_" & $Time &"-"&$position& ".jpg"
+;			_GDIPlus_ImageSaveToFile($hBitmap, $dirLoots & $FileName)
+
 	$sendHBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hBitmap)
 	$resDeploy = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotGetDeploy", "ptr", $sendHBitmap, "int", 201, "int", 3, "int", 1, "int", 0, "int", (IsChecked($chkSpeedBoost) ? (1) : (0)))
 	_WinAPI_DeleteObject($sendHBitmap)
@@ -83,7 +103,11 @@ Func IdentifyTroopKind($position)
 		If $resDeploy[0] = -1 Then
 			$found = -1
 			; check for a large troop image
-			_CaptureRegion(32 + (72 * $position), 595, 104 + (72 * $position), 665)
+			If $Shift Then
+				_CaptureRegion(-30+32 + (72 * $position), 60+595, -30+104 + (72 * $position), 60+665)
+			Else
+				_CaptureRegion(32 + (72 * $position), 60+595, 104 + (72 * $position), 60+665)
+			EndIf
 			$sendHBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hBitmap)
 			$resDeploy = DllCall(@ScriptDir & "\BrokenBot.org\BrokenBot32.dll", "str", "BrokenBotGetDeploy", "ptr", $sendHBitmap, "int", 203, "int", 3, "int", 1, "int", 0, "int", (IsChecked($chkSpeedBoost) ? (1) : (0)))
 			_WinAPI_DeleteObject($sendHBitmap)
@@ -112,7 +136,7 @@ Func IdentifyTroopKind($position)
 		$found = -1
 		SetLog(GetLangText("msgDLLError"), $COLOR_RED)
 	EndIf
-
+;SetLog("IdentifyTroopKind("&$position&")"&"="&$found)
 	Switch $found
 		Case 1
 			Return $eBarbarian
@@ -161,9 +185,15 @@ Func IdentifyTroopKind($position)
 		Case 23
 			Return -1
 		Case Else
-			_CaptureRegion()
-			If _ColorCheck(_GetPixelColor(43 + (72 * $position), 604), Hex(0x5B9CD0, 6), 20) Then Return $eCastle ;Check if slot is Clan Castle
-			Return -1
+			If $Shift Then
+				_CaptureRegion()
+				If _ColorCheck(_GetPixelColor(-30+43 + (72 * $position), 60+604), Hex(0x5B9CD0, 6), 20) Then Return $eCastle ;Check if slot is Clan Castle
+				Return -1
+			Else
+				_CaptureRegion()
+				If _ColorCheck(_GetPixelColor(43 + (72 * $position), 60+604), Hex(0x5B9CD0, 6), 20) Then Return $eCastle ;Check if slot is Clan Castle
+				Return IdentifyTroopKind($position,true)
+			EndIf
 	EndSwitch
 
 EndFunc   ;==>IdentifyTroopKind

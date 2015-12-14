@@ -308,7 +308,8 @@ Func Standard_CheckArmyCamp($inCamp = False)
 	Local $previouscampcap = Number($itxtcampCap)
 	For $readattempts = 1 To 5
 
-		$CurCamp = GetTroopCapacity(211, 144, 290, 157)
+		$CurCamp = GetTroopCapacity(211-20, 30+144, 290-20, 30+157)
+;		$CurCamp = GetTroopCapacity(211, 144, 290, 157)
 		$CurCamp = StringStripWS($CurCamp, 8)
 
 		$itxtcampCap = StringMid($CurCamp, StringInStr($CurCamp, "/") + 1)
@@ -359,10 +360,10 @@ Func Standard_CheckArmyCamp($inCamp = False)
 			$CurValkyrie = 0
 		EndIf
 		For $i = 0 To 9
-			Local $TroopKind = _GetPixelColor(177 + 62 * $i, 195)
-			Local $TroopKind2 = _GetPixelColor(187 + 62 * $i, 200)
+			Local $TroopKind = _GetPixelColor(-20+177 + 62 * $i, 30+195)
+			Local $TroopKind2 = _GetPixelColor(-20+187 + 62 * $i, 30+200)
 			Local $TroopName = ""
-			Local $TroopQ = StringStripWS(GetTroopCount(160 + (62 * $i), 170, 200 + (62 * $i), 181), 3)
+			Local $TroopQ = StringStripWS(GetTroopCount(-20+160 + (62 * $i), 30+170, -20+200 + (62 * $i), 30+181), 3)
 			_CaptureRegion() ; we need this to restore capture that  changed by _TesseractReadText
 
 			If StringLeft($TroopQ, 1) = "x" Then $TroopQ = StringRight($TroopQ, StringLen($TroopQ) - 1)
@@ -454,8 +455,10 @@ EndFunc   ;==>Standard_GetTrainPos
 Func Standard_TrainIt($TroopKind, $howMuch = 1, $iSleep = 100)
 	$anythingadded = True
 	_CaptureRegion()
+SetLog($TroopKind)
 	Local $pos = Standard_GetTrainPos($TroopKind)
 	If IsArray($pos) Then
+SetLog(GetPixelColor($pos))
 		If CheckPixel($pos) Then
 			ClickP($pos, $howMuch, 20)
 			If _Sleep($iSleep) Then Return False
@@ -465,7 +468,7 @@ Func Standard_TrainIt($TroopKind, $howMuch = 1, $iSleep = 100)
 EndFunc   ;==>Standard_TrainIt
 
 Func Standard_GetTrainPosDll()
-	$res = CallHelper("170 290 700 500 BrokenBotMatchObject 200 6 0")
+	$res = CallHelper("170 290 730 500 BrokenBotMatchObject 200 6 0")
 
 	If $res <> $DLLFailed And $res <> $DLLTimeout Then
 		If $res = $DLLLicense Then
@@ -701,7 +704,7 @@ Func Standard_Train($reset = False)
 			Click($myBarrackPos[$i][0], $myBarrackPos[$i][1]) ;Click Barrack
 			If _Sleep($TrainingDelay) Then ExitLoop
 			_CaptureRegion()
-			If Not _ColorCheck(_GetPixelColor(235 + $i * 60 , 530), Hex(0xE8E8E0, 6), 20) Then
+			If Not _ColorCheck(_GetPixelColor(235 + $i * 60 , 530+30), Hex(0xE8E8E0, 6), 20) Then
 				SetLog(GetLangText("msgBarrack") & $i + 1 & GetLangText("msgNotAvailable"), $COLOR_RED)
 				handleBarracksError($i)
 				If _Sleep(100) Then ExitLoop
@@ -724,82 +727,82 @@ Func Standard_Train($reset = False)
 				Local $safeguarding = 0
 				Switch _GUICtrlComboBox_GetCurSel($BarrackControl)
 					Case 0
-						While _ColorCheck(_GetPixelColor(216, 325), Hex(0xF09D1C, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(216, 30+325), Hex(0xF09D1C, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(216, 325, 75) ;Barbarian
+							Click(216, 30+325, 75) ;Barbarian
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 1
-						While _ColorCheck(_GetPixelColor(330, 323), Hex(0xE84070, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(330, 30+323), Hex(0xE84070, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(325, 320, 75) ;Archer
+							Click(325, 30+320, 75) ;Archer
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 2
-						While _ColorCheck(_GetPixelColor(419, 319), Hex(0xF88409, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(419, 30+319), Hex(0xF88409, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(419, 319, 20) ;Giant
+							Click(419, 30+319, 20) ;Giant
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 3
-						While _ColorCheck(_GetPixelColor(549, 328), Hex(0xFB4C24, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(549, 30+328), Hex(0xFB4C24, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(535, 320, 75) ;Goblin
+							Click(535, 30+320, 75) ;Goblin
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 4
-						While _ColorCheck(_GetPixelColor(685, 327), Hex(0x9E4716, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(685, 30+327), Hex(0x9E4716, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(641, 341, 20) ;Wall Breaker
+							Click(641, 30+341, 20) ;Wall Breaker
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 5
-						While _ColorCheck(_GetPixelColor(213, 418), Hex(0x861F15, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(213, 30+418), Hex(0x861F15, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(213, 418, 20) ;Balloon
+							Click(213, 30+418, 20) ;Balloon
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 6
-						While _ColorCheck(_GetPixelColor(340, 449), Hex(0xF09C85, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(340, 30+449), Hex(0xF09C85, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(325, 425, 20) ;Wizard
+							Click(325, 30+425, 20) ;Wizard
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 7
-						While _ColorCheck(_GetPixelColor(440, 445), Hex(0xFDD8C0, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(440, 30+445), Hex(0xFDD8C0, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(440, 445, 10) ;Healer
+							Click(440, 30+445, 10) ;Healer
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 8
-						While _ColorCheck(_GetPixelColor(539, 444), Hex(0x302848, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(539, 30+444), Hex(0x302848, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(539, 444, 10) ;Dragon
+							Click(539, 30+444, 10) ;Dragon
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
 					Case 9
-						While _ColorCheck(_GetPixelColor(647, 440), Hex(0x456180, 6), 30) And ($safeguarding < 200)
+						While _ColorCheck(_GetPixelColor(647, 30+440), Hex(0x456180, 6), 30) And ($safeguarding < 200)
 							$safeguarding += 1
 							$anythingadded = True
-							Click(647, 440, 10) ;PEKKA
+							Click(647, 30+440, 10) ;PEKKA
 							If _Sleep(150) Then ExitLoop
 							_CaptureRegion()
 						WEnd
@@ -819,7 +822,7 @@ Func Standard_Train($reset = False)
 
 
 				;Check to see if we are stuck or done with training by trying to locate the "[!] All Camps Full!"
-				$checkFull = _PixelSearch(374, 146, 423, 163, Hex(0xE84D50, 6), 5)
+				$checkFull = _PixelSearch(374, 30+146, 423, 30+163, Hex(0xE84D50, 6), 5)
 				If IsArray($checkFull) Then
 					$barracksCampFull = True
 					$FirstStart = False
@@ -831,27 +834,27 @@ Func Standard_Train($reset = False)
 				If _Sleep(200) Then ExitLoop
 				_CaptureRegion()
 				If GUICtrlRead($txtNumGiants) <> "0" Then
-					$troopFirstGiant = StringStripWS(ReadText(181 + (2 * 107), 298, 35, $textWindows), 3)
+					$troopFirstGiant = StringStripWS(ReadText(181 + (2 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopFirstGiant, 1) = "x" Then $troopFirstGiant = StringLeft($troopFirstGiant, StringLen($troopFirstGiant) - 1)
 				EndIf
 
 				If GUICtrlRead($txtNumWallbreakers) <> "0" Then
-					$troopFirstWall = StringStripWS(ReadText(181 + (4 * 107), 298, 35, $textWindows), 3)
+					$troopFirstWall = StringStripWS(ReadText(181 + (4 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopFirstWall, 1) = "x" Then $troopFirstWall = StringLeft($troopFirstWall, StringLen($troopFirstWall) - 1)
 				EndIf
 
 				If GUICtrlRead($txtGoblins) <> "0" Then
-					$troopFirstGoblin = StringStripWS(ReadText(181 + (3 * 107), 298, 35, $textWindows), 3)
+					$troopFirstGoblin = StringStripWS(ReadText(181 + (3 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopFirstGoblin, 1) = "x" Then $troopFirstGoblin = StringLeft($troopFirstGoblin, StringLen($troopFirstGoblin) - 1)
 				EndIf
 
 				If GUICtrlRead($txtBarbarians) <> "0" Then
-					$troopFirstBarba = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					$troopFirstBarba = StringStripWS(ReadText(181, 298, 30+35, $textWindows), 3)
 					If StringRight($troopFirstBarba, 1) = "x" Then $troopFirstBarba = StringLeft($troopFirstBarba, StringLen($troopFirstBarba) - 1)
 				EndIf
 
 				If GUICtrlRead($txtArchers) <> "0" Then
-					$troopFirstArch = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					$troopFirstArch = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopFirstArch, 1) = "x" Then $troopFirstArch = StringLeft($troopFirstArch, StringLen($troopFirstArch) - 1)
 				EndIf
 
@@ -921,7 +924,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtArchers) <> "0" Then
-					$troopSecondArch = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					$troopSecondArch = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondArch, 1) = "x" Then
 						$troopSecondArch = StringLeft($troopSecondArch, StringLen($troopSecondArch) - 1)
 					Else
@@ -930,7 +933,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtNumGiants) <> "0" Then
-					$troopSecondGiant = StringStripWS(ReadText(181 + (2 * 107), 298, 35, $textWindows), 3)
+					$troopSecondGiant = StringStripWS(ReadText(181 + (2 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondGiant, 1) = "x" Then
 						$troopSecondGiant = StringLeft($troopSecondGiant, StringLen($troopSecondGiant) - 1)
 					Else
@@ -939,7 +942,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtNumWallbreakers) <> "0" Then
-					$troopSecondWall = StringStripWS(ReadText(181 + (4 * 107), 298, 35, $textWindows), 3)
+					$troopSecondWall = StringStripWS(ReadText(181 + (4 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondWall, 1) = "x" Then
 						$troopSecondWall = StringLeft($troopSecondWall, StringLen($troopSecondWall) - 1)
 					Else
@@ -948,7 +951,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtGoblins) <> "0" Then
-					$troopSecondGoblin = StringStripWS(ReadText(181 + (3 * 107), 298, 35, $textWindows), 3)
+					$troopSecondGoblin = StringStripWS(ReadText(181 + (3 * 107), 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondGoblin, 1) = "x" Then
 						$troopSecondGoblin = StringLeft($troopSecondGoblin, StringLen($troopSecondGoblin) - 1)
 					Else
@@ -957,7 +960,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtBarbarians) <> "0" Then
-					$troopSecondBarba = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					$troopSecondBarba = StringStripWS(ReadText(181, 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondBarba, 1) = "x" Then
 						$troopSecondBarba = StringLeft($troopSecondBarba, StringLen($troopSecondBarba) - 1)
 					Else
@@ -966,7 +969,7 @@ Func Standard_Train($reset = False)
 				EndIf
 
 				If GUICtrlRead($txtArchers) <> "0" Then
-					$troopSecondArch = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					$troopSecondArch = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopSecondArch, 1) = "x" Then
 						$troopSecondArch = StringLeft($troopSecondArch, StringLen($troopSecondArch) - 1)
 					Else
@@ -1049,7 +1052,7 @@ Func Standard_Train($reset = False)
 			Click($myBarrackPos[$i][0], $myBarrackPos[$i][1]) ;Click Barrack
 			If _Sleep($TrainingDelay) Then ExitLoop
 			$expUIRet[0] = -1
-			$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 108 1 3")
+			$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
 			If $resUI <> $DLLFailed And $resUI <> $DLLTimeout Then
 				If $resUI = $DLLNegative Or $resUI = $DLLError Then
 					; Didn't find button
@@ -1067,14 +1070,14 @@ Func Standard_Train($reset = False)
 				If _Sleep(200) Then ExitLoop
 			Else
 				Click($expUIRet[1], $expUIRet[2]) ;Click Train Troops button
-				_WaitForPixel(720, 150, 740, 170, Hex(0xD80404, 6), 5, 1) ;Finds Red Cross button in new Training popup window
+				_WaitForPixel(720, 30+150, 740, 30+170, Hex(0xD80404, 6), 5, 1) ;Finds Red Cross button in new Training popup window
 				If _Sleep(500) Then ExitLoop
 
 				_CaptureRegion()
-				If _ColorCheck(_GetPixelColor(504, 175), Hex(0xF18082, 6), 20) Then
+				If _ColorCheck(_GetPixelColor(504, 30+175), Hex(0xF18082, 6), 20) Then
 					$stuckcheckneeded = False
 					;Check to see if we are stuck or done with training by trying to locate the "[!] All Camps Full!"
-					$checkFull = _PixelSearch(374, 146, 423, 163, Hex(0xE84D50, 6), 5)
+					$checkFull = _PixelSearch(374, 30+146, 423, 30+163, Hex(0xE84D50, 6), 5)
 					If IsArray($checkFull) Then
 						$barracksCampFull = True
 						$FirstStart = False
@@ -1160,8 +1163,8 @@ Func Standard_Train($reset = False)
 			If ($fullArmy Or $FirstStart) And _GUICtrlComboBox_GetCurSel($cmbTroopComp) <> 8 Then ;Reset troops on first loop, or if army is full to start cooking for next attack
 				_CaptureRegion()
 ;				If Not _ColorCheck(_GetPixelColor(502, 179), Hex(0xFFFFFF, 6), 20) Then
-				If Not _ColorCheck(_GetPixelColor(502, 179), Hex(0xD1D0C2, 6), 20) Then
-					Click(502, 179, 80, 2)
+				If Not _ColorCheck(_GetPixelColor(502, 30+179), Hex(0xD1D0C2, 6), 20) Then
+					Click(502, 30+179, 80, 2)
 				EndIf
 			EndIf
 
@@ -1184,7 +1187,7 @@ Func Standard_Train($reset = False)
 				If $DarkBarrackTroop[$i] = 0 Then
 					$itxtDarkBarrack1 = Floor(($itxtDarkBarrack1 / $totalMinions) * $CurMinion)
 
-					Local $troopMinion = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					Local $troopMinion = StringStripWS(ReadText(181, 30+298, 35, $textWindows), 3)
 					If StringRight($troopMinion, 1) = "x" Then $troopMinion = StringLeft($troopMinion, StringLen($troopMinion) - 1)
 					;SetLog($troopMinion & " Minions training already", $COLOR_BLUE)
 
@@ -1224,7 +1227,7 @@ Func Standard_Train($reset = False)
 				If $DarkBarrackTroop[$i] = 1 Then
 					$itxtDarkBarrack1 = Floor(($itxtDarkBarrack1 / $totalHogs) * $CurHog)
 
-					Local $troopHog = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					Local $troopHog = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopHog, 1) = "x" Then $troopHog = StringLeft($troopHog, StringLen($troopHog) - 1)
 					;SetLog($troopHog & " Hogs training already", $COLOR_BLUE)
 
@@ -1263,7 +1266,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroop[$i] = 2 Then
 					$itxtDarkBarrack1 = Floor(($itxtDarkBarrack1 / $totalValkyries) * $CurValkyrie)
-					Local $troopValkyrie = StringStripWS(ReadText(181 + 107 * 2, 298, 35, $textWindows), 3)
+					Local $troopValkyrie = StringStripWS(ReadText(181 + 107 * 2, 30+298, 35, $textWindows), 3)
 					If StringRight($troopValkyrie, 1) = "x" Then $troopValkyrie = StringLeft($troopValkyrie, StringLen($troopValkyrie) - 1)
 					;SetLog($troopValkyrie & " Valkyries training already", $COLOR_BLUE)
 
@@ -1306,7 +1309,7 @@ Func Standard_Train($reset = False)
 				$itxtDarkBarrack1Next = GUICtrlRead($txtDarkBarrack1Next)
 				If $DarkBarrackTroopNext[$i] = 0 Then
 					$itxtDarkBarrack1Next = Floor(($itxtDarkBarrack1Next / $totalMinions) * $CurMinion)
-					Local $troopMinion = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					Local $troopMinion = StringStripWS(ReadText(181, 30+298, 35, $textWindows), 3)
 					If StringRight($troopMinion, 1) = "x" Then $troopMinion = StringLeft($troopMinion, StringLen($troopMinion) - 1)
 					;SetLog($troopMinion & " Minions training already", $COLOR_BLUE)
 
@@ -1345,7 +1348,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroopNext[$i] = 1 Then
 					$itxtDarkBarrack1Next = Floor(($itxtDarkBarrack1Next / $totalHogs) * $CurHog)
-					Local $troopHog = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					Local $troopHog = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopHog, 1) = "x" Then $troopHog = StringLeft($troopHog, StringLen($troopHog) - 1)
 					;SetLog($troopHog & " Hogs training already", $COLOR_BLUE)
 
@@ -1384,7 +1387,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroopNext[$i] = 2 Then
 					$itxtDarkBarrack1Next = Floor(($itxtDarkBarrack1Next / $totalValkyries) * $CurValkyrie)
-					Local $troopValkyrie = StringStripWS(ReadText(181 + 107 * 2, 298, 35, $textWindows), 3)
+					Local $troopValkyrie = StringStripWS(ReadText(181 + 107 * 2, 30+298, 35, $textWindows), 3)
 					If StringRight($troopValkyrie, 1) = "x" Then $troopValkyrie = StringLeft($troopValkyrie, StringLen($troopValkyrie) - 1)
 					;SetLog($troopValkyrie & " Valkyries training already", $COLOR_BLUE)
 
@@ -1427,7 +1430,7 @@ Func Standard_Train($reset = False)
 				$itxtDarkBarrack2 = GUICtrlRead($txtDarkBarrack2)
 				If $DarkBarrackTroop[$i] = 0 Then
 					$itxtDarkBarrack2 = Ceiling(($itxtDarkBarrack2 / $totalMinions) * $CurMinion)
-					Local $troopMinion2 = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					Local $troopMinion2 = StringStripWS(ReadText(181, 30+298, 35, $textWindows), 3)
 					If StringRight($troopMinion2, 1) = "x" Then $troopMinion2 = StringLeft($troopMinion2, StringLen($troopMinion2) - 1)
 					;SetLog($troopMinion2 & " Minions training already", $COLOR_BLUE)
 
@@ -1466,7 +1469,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroop[$i] = 1 Then
 					$itxtDarkBarrack2 = Ceiling(($itxtDarkBarrack2 / $totalHogs) * $CurHog)
-					Local $troopHog2 = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					Local $troopHog2 = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopHog2, 1) = "x" Then $troopHog2 = StringLeft($troopHog2, StringLen($troopHog2) - 1)
 					;SetLog($troopHog2 & " Hogs training already", $COLOR_BLUE)
 
@@ -1506,7 +1509,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroop[$i] = 2 Then
 					$itxtDarkBarrack2 = Ceiling(($itxtDarkBarrack2 / $totalValkyries) * $CurValkyrie)
-					Local $troopValkyrie2 = StringStripWS(ReadText(181 + 107 * 2, 298, 35, $textWindows), 3)
+					Local $troopValkyrie2 = StringStripWS(ReadText(181 + 107 * 2, 30+298, 35, $textWindows), 3)
 					If StringRight($troopValkyrie2, 1) = "x" Then $troopValkyrie2 = StringLeft($troopValkyrie2, StringLen($troopValkyrie2) - 1)
 					;SetLog($troopValkyrie2 & " Valkyries training already", $COLOR_BLUE)
 
@@ -1549,7 +1552,7 @@ Func Standard_Train($reset = False)
 				$itxtDarkBarrack2Next = GUICtrlRead($txtDarkBarrack2Next)
 				If $DarkBarrackTroopNext[$i] = 0 Then
 					$itxtDarkBarrack2Next = Ceiling(($itxtDarkBarrack2Next / $totalMinions) * $CurMinion)
-					Local $troopMinion2 = StringStripWS(ReadText(181, 298, 35, $textWindows), 3)
+					Local $troopMinion2 = StringStripWS(ReadText(181, 30+298, 35, $textWindows), 3)
 					If StringRight($troopMinion2, 1) = "x" Then $troopMinion2 = StringLeft($troopMinion2, StringLen($troopMinion2) - 1)
 					;SetLog($troopMinion2 & " Minions training already", $COLOR_BLUE)
 
@@ -1588,7 +1591,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroopNext[$i] = 1 Then
 					$itxtDarkBarrack2Next = Ceiling(($itxtDarkBarrack2Next / $totalHogs) * $CurHog)
-					Local $troopHog2 = StringStripWS(ReadText(181 + 107, 298, 35, $textWindows), 3)
+					Local $troopHog2 = StringStripWS(ReadText(181 + 107, 30+298, 35, $textWindows), 3)
 					If StringRight($troopHog2, 1) = "x" Then $troopHog2 = StringLeft($troopHog2, StringLen($troopHog2) - 1)
 					;SetLog($troopHog2 & " Hogs training already", $COLOR_BLUE)
 
@@ -1627,7 +1630,7 @@ Func Standard_Train($reset = False)
 
 				If $DarkBarrackTroopNext[$i] = 2 Then
 					$itxtDarkBarrack2Next = Ceiling(($itxtDarkBarrack2Next / $totalValkyries) * $CurValkyrie)
-					Local $troopValkyrie2 = StringStripWS(ReadText(181 + 107 * 2, 298, 35, $textWindows), 3)
+					Local $troopValkyrie2 = StringStripWS(ReadText(181 + 107 * 2, 30+298, 35, $textWindows), 3)
 					If StringRight($troopValkyrie2, 1) = "x" Then $troopValkyrie2 = StringLeft($troopValkyrie2, StringLen($troopValkyrie2) - 1)
 					;SetLog($troopValkyrie2 & " Valkyries training already", $COLOR_BLUE)
 
@@ -1684,7 +1687,7 @@ Func Standard_Train($reset = False)
 				Click($myDarkBarrackPos[$i][0], $myDarkBarrackPos[$i][1]) ;Click Dark Barrack
 				If _Sleep($TrainingDelay) Then ExitLoop
 				$expUIRet[0] = -1
-				$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 108 1 3")
+				$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
 				If $resUI <> $DLLFailed And $resUI <> $DLLTimeout Then
 					If $resUI = $DLLNegative Or $resUI = $DLLError Then
 						; Didn't find button
@@ -1702,13 +1705,13 @@ Func Standard_Train($reset = False)
 					If _Sleep(500) Then ExitLoop
 				Else
 					Click($expUIRet[1], $expUIRet[2]) ;Click Train Troops button
-					_WaitForPixel(720, 150, 740, 170, Hex(0xD80404, 6), 5, 1) ;Finds Red Cross button in new Training popup window
+					_WaitForPixel(720, 30+150, 740, 30+170, Hex(0xD80404, 6), 5, 1) ;Finds Red Cross button in new Training popup window
 					If _Sleep(500) Then ExitLoop
 
 					_CaptureRegion()
-					If _ColorCheck(_GetPixelColor(504, 175), Hex(0xF18082, 6), 20) Then
+					If _ColorCheck(_GetPixelColor(504, 30+175), Hex(0xF18082, 6), 20) Then
 						;Check to see if we are stuck or done with training by trying to locate the "[!] All Camps Full!"
-						$checkFull = _PixelSearch(374, 146, 423, 163, Hex(0xE84D50, 6), 5)
+						$checkFull = _PixelSearch(374, 30+146, 423, 30+163, Hex(0xE84D50, 6), 5)
 						If IsArray($checkFull) Then
 							$barracksCampFull = True
 							$FirstStart = False
@@ -1767,7 +1770,7 @@ Func Standard_MakeSpells()
 
 		SetLog(GetLangText("msgMakingSpell") & GUICtrlRead($cmbSpellCreate) & " x " & $SpellCount, $COLOR_BLUE)
 
-		Click(220 + _GUICtrlComboBox_GetCurSel($cmbSpellCreate) * 106, 320, $SpellCount)
+		Click(220 + _GUICtrlComboBox_GetCurSel($cmbSpellCreate) * 106, 30+320, $SpellCount)
 		If _Sleep(500) Then Return
 		$spellsstarted = True
 		$NeedsToBrew = False

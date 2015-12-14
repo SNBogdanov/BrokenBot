@@ -42,8 +42,9 @@ Func GetResources($MidAttack = 0) ;Reads resources
 			SetLog(StringFormat("(%3d) [%s]:%7d [%s]:%7d [%s]: %4d",$SearchCount,GetLangText("msgGoldinitial"),$RetVal[2],GetLangText("msgElixirinitial"),$RetVal[3],GetLangText("msgDarkElixinitial"),$RetVal[4]), $COLOR_BLUE)
 ;			SetLog("Skipping Base...", $COLOR_BLUE)
 			$RetVal[6] = True
-			Return $RetVal
+;			Return $RetVal
 		EndIf
+		Return $RetVal
 	EndIf
 
 	If $MidAttack > 0 Then

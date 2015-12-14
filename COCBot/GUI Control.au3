@@ -7,7 +7,7 @@ _GDIPlus_Startup()
 _Crypt_Startup()
 
 Global Const $64Bit = StringInStr(@OSArch, "64") > 0
-Global Const $DEFAULT_HEIGHT = 720
+Global Const $DEFAULT_HEIGHT = 780
 Global Const $DEFAULT_WIDTH = 860
 Global $Initiate = 0
 Global Const $REGISTRY_KEY_DIRECTORY = "HKEY_LOCAL_MACHINE\SOFTWARE\BlueStacks\Guests\Android\FrameBuffer\0"
@@ -523,9 +523,9 @@ Func btnFindWall()
 		FindWall()
 		ExitLoop
 	WEnd
-	GUICtrlSetState($chkWalls, $GUI_ENABLE)
-	GUICtrlSetState($UseGold, $GUI_ENABLE)
-	GUICtrlSetState($UseElixir, $GUI_ENABLE)
+;	GUICtrlSetState($chkWalls, $GUI_ENABLE)
+;	GUICtrlSetState($UseGold, $GUI_ENABLE)
+;	GUICtrlSetState($UseElixir, $GUI_ENABLE)
 	$Running = False
 EndFunc   ;==>btnFindWall
 

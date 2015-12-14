@@ -29,21 +29,21 @@ Func UpgradeHeroes()
 			Click($QueenPos[0], $QueenPos[1]) ;Click Queen Altar
 			If _Sleep(500) Then Return
 				_CaptureRegion()
-				  If _ColorCheck(_GetPixelColor(605, 570), Hex(0xD8EC71, 6), 20) Then ; Finds Heal button
+				  If _ColorCheck(_GetPixelColor(605, 60+570), Hex(0xD8EC71, 6), 20) Then ; Finds Heal button
 					QueenUpgrade()
-					ElseIf _ColorCheck(_GetPixelColor(595, 570), Hex(0xE70A12, 6), 20) Then ; Red numbers
+					ElseIf _ColorCheck(_GetPixelColor(595, 60+570), Hex(0xE70A12, 6), 20) Then ; Red numbers
 						SetLog(GetLangText("msgNotEnoughDEAQ"), $COLOR_ORANGE)
 						If _Sleep(1000) Then Return
 						ClickP($TopLeftClient, 2)
 					Else
-						If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+						If _ColorCheck(_GetPixelColor(554, 60+570), Hex(0xC8EE6A, 6), 20) Then ; Green color
 						SetLog(GetLangText("msgQueenUpgrading"), $COLOR_ORANGE)
 					    If _Sleep(1000) Then Return
 						ClickP($TopLeftClient, 2)
 						Else
-						Click(604, 592) ;Click Upgrade Button
+						Click(604, 60+592) ;Click Upgrade Button
 						If _Sleep(2000) Then Return
-						Click(578, 512) ;Click Confirm Button
+						Click(578, 60+512) ;Click Confirm Button
 						If _Sleep(500) Then Return
 							_CaptureRegion()
 						If _ColorCheck(_GetPixelColor(743, 152), Hex(0xE51016, 6), 20) Then ;red arrow
@@ -82,21 +82,21 @@ Func UpgradeHeroes()
 			Click($KingPos[0], $KingPos[1]) ;Click King Altar
 			If _Sleep(500) Then Return
 				_CaptureRegion()
-					If _ColorCheck(_GetPixelColor(605, 570), Hex(0xD8EC71, 6), 20) Then ; Finds Heal button
+					If _ColorCheck(_GetPixelColor(605, 60+570), Hex(0xD8EC71, 6), 20) Then ; Finds Heal button
 						KingUpgrade()
-					ElseIf _ColorCheck(_GetPixelColor(595, 570), Hex(0xE70A12, 6), 20) Then ; Red numbers
+					ElseIf _ColorCheck(_GetPixelColor(595, 60+570), Hex(0xE70A12, 6), 20) Then ; Red numbers
 						SetLog(GetLangText("msgNotEnoughDEK"), $COLOR_ORANGE)
 						If _Sleep(1000) Then Return
 						ClickP($TopLeftClient, 2)
 					Else
-						If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+						If _ColorCheck(_GetPixelColor(554, 60+570), Hex(0xC8EE6A, 6), 20) Then ; Green color
 						SetLog(GetLangText("msgKingUpgrading"), $COLOR_ORANGE)
 					    If _Sleep(1000) Then Return
 						ClickP($TopLeftClient, 2)
 						Else
-						Click(604, 592) ;Click Upgrade Button
+						Click(604, 60+592) ;Click Upgrade Button
 						If _Sleep(2000) Then Return
-						Click(578, 512) ;Click Confirm Button
+						Click(578, 60+512) ;Click Confirm Button
 						If _Sleep(500) Then Return
 							_CaptureRegion()
 						If _ColorCheck(_GetPixelColor(743, 152), Hex(0xE51016, 6), 20) Then ;red arrow
@@ -126,23 +126,23 @@ EndFunc
 
 Func KingUpgrade()
 _CaptureRegion()
-If _ColorCheck(_GetPixelColor(501, 570), Hex(0xE70A12, 6), 20) Then ; Red numbers
+If _ColorCheck(_GetPixelColor(501, 60+570), Hex(0xE70A12, 6), 20) Then ; Red numbers
 	SetLog(GetLangText("msgNotEnoughDEK"), $COLOR_ORANGE)
 	If _Sleep(1000) Then Return
 	ClickP($TopLeftClient, 2)
 Else
-	If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+	If _ColorCheck(_GetPixelColor(554, 60+570), Hex(0xC8EE6A, 6), 20) Then ; Green color
 		SetLog(GetLangText("msgKingUpgrading"), $COLOR_ORANGE)
 		If _Sleep(1000) Then Return
 		ClickP($TopLeftClient, 2)
 		Return
 	EndIf
-	Click(504, 592) ;Click Upgrade Button
+	Click(504, 60+592) ;Click Upgrade Button
 	If _Sleep(2000) Then Return
-	Click(578, 512) ;Click Confirm Button
+	Click(578, 60+512) ;Click Confirm Button
 	If _Sleep(500) Then Return
 		_CaptureRegion()
-	If _ColorCheck(_GetPixelColor(743, 152), Hex(0xE51016, 6), 20) Then ;red arrow
+	If _ColorCheck(_GetPixelColor(743, 30+152), Hex(0xE51016, 6), 20) Then ;red arrow
 		SetLog(GetLangText("msgHeroesMaxLvl"), $COLOR_RED)
 		ClickP($TopLeftClient) ; Click Away
 		GUICtrlSetState($chkUpgradeKing, $GUI_UNCHECKED)
@@ -157,23 +157,23 @@ EndFunc
 
 Func QueenUpgrade()
 _CaptureRegion()
-If _ColorCheck(_GetPixelColor(501, 570), Hex(0xE70A12, 6), 20) Then ; Red numbers
+If _ColorCheck(_GetPixelColor(501, 60+570), Hex(0xE70A12, 6), 20) Then ; Red numbers
 	SetLog(GetLangText("msgNotEnoughDEAQ"), $COLOR_ORANGE)
 	If _Sleep(1000) Then Return
 	ClickP($TopLeftClient, 2)
 Else
-	If _ColorCheck(_GetPixelColor(554, 570), Hex(0xC8EE6A, 6), 20) Then ; Green color
+	If _ColorCheck(_GetPixelColor(554, 60+570), Hex(0xC8EE6A, 6), 20) Then ; Green color
 		SetLog(GetLangText("msgQueenUpgrading"), $COLOR_ORANGE)
 		If _Sleep(1000) Then Return
 		ClickP($TopLeftClient, 2)
 		Return
 	EndIf
-	Click(504, 592) ;Click Upgrade Button
+	Click(504, 60+592) ;Click Upgrade Button
 	If _Sleep(2000) Then Return
-	Click(578, 512) ;Click Confirm Button
+	Click(578, 60+512) ;Click Confirm Button
 	If _Sleep(500) Then Return
 		_CaptureRegion()
-	If _ColorCheck(_GetPixelColor(743, 152), Hex(0xE51016, 6), 20) Then ;red arrow
+	If _ColorCheck(_GetPixelColor(743, 30+152), Hex(0xE51016, 6), 20) Then ;red arrow
 		SetLog(GetLangText("msgHeroesMaxLvl"), $COLOR_RED)
 		ClickP($TopLeftClient) ; Click Away
 		GUICtrlSetState($chkUpgradeKing, $GUI_UNCHECKED)

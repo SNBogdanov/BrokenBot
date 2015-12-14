@@ -59,6 +59,17 @@ Func ChkDisconnection($disconnected = False)
 ;		SetLog(GetLangText("msgMaintenance"), $COLOR_RED)
 		$disconnected = True
 	EndIf
+	If _ImageSearch($breakextended, 0, $x, $y, 80) And Not $disconnected Then
+
+;		SetLog(GetLangText("msgMaintenance"), $COLOR_RED)
+		$disconnected = True
+	EndIf
+	If _ImageSearch($breakending, 0, $x, $y, 80) And Not $disconnected Then
+
+;		SetLog(GetLangText("msgMaintenance"), $COLOR_RED)
+		$disconnected = True
+	EndIf
+	
 	
 	$Message = _PixelSearch(457, 300, 458, 330, Hex(0x33B5E5, 6), 10)
 	If IsArray($Message) And Not $disconnected  And Not $disconnected Then
@@ -96,7 +107,7 @@ EndFunc   ;==>ChkDisconnection
 
 Func ChkHeroesAvailability()
 	Local $result[3]=[False,False,False]
-	Local $Tab[4]=[149, 148, 0xA1CC41, 8]
+	Local $Tab[4]=[149-20, 148+30, 0xA1CC41, 8]
 
 	$KingAvailable = False ; 470, 455 0xEBCB5F
 	$QueenAvailable = False; 529, 455 1. 0x402458 2. 0x7A41D4
@@ -106,24 +117,25 @@ Func ChkHeroesAvailability()
 	Click(150, 550, 2, 100) ; Try To return main page if its on other
 
 	_CaptureRegion()
-	Local $Hero1 = _GetPixelColor(470, 455)
-	Local $Hero2 = _GetPixelColor(529, 455)
+	Local $Hero1 = _GetPixelColor(470-20, 30+455)
+	Local $Hero2 = _GetPixelColor(529-20, 30+455)
 
 
-
-	If _ColorCheck($Hero1, Hex(0xEBCB5F, 6), 8) Then ; king
+SetLog($Hero1)
+SetLog($Hero2)
+;	If _ColorCheck($Hero1, Hex(0xEBCB5F, 6), 8) Then ; king
+	If _ColorCheck($Hero1, Hex(0xFBC2B8, 6), 8) Then ; king
 
 		$KingAvailable = True
-		If _ColorCheck($Hero2, Hex(0x7A41D4, 6), 8) Then $QueenAvailable = True
+		If _ColorCheck($Hero2, Hex(0xBC7174, 6), 8) Then $QueenAvailable = True
 
 
 	Else
 		$KingUG = True
-		If _ColorCheck($Hero1, Hex(0x402458, 6), 8) Then $QueenAvailable = True;queen
+		If _ColorCheck($Hero1, Hex(0x753499, 6), 8) Then $QueenAvailable = True;queen
 
 
 	EndIf
-
 
 
 

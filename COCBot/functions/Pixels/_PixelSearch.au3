@@ -1,6 +1,7 @@
 ;PixelSearch a certain region, works for memory BMP
 
 Func _PixelSearch($iLeft, $iTop, $iRight, $iBottom, $iColor, $iColorVariation)
+;SetLog("_PixelSearch("&$iLeft &","& $iTop &","& $iRight &","& $iBottom &","& $iColor &","&$iColorVariation&")")
 	_CaptureRegion($iLeft, $iTop, $iRight, $iBottom)
 	For $x = $iRight - $iLeft To 0 Step -1
 		For $y = 0 To $iBottom - $iTop

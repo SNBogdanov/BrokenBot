@@ -252,11 +252,11 @@ EndFunc   ;==>getKingPos
 Func dropKing($x = 10, $y = 10, $num = 2)
         If $num <> -1 Then
                 ;         SetLog("Dropping King", $COLOR_BLUE)
-                Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ;Select King
+                Click(68 + (72 * $num) + Random(-5,5,1), 60+595 + Random(-5,5,1)) ;Select King
                 If _Sleep(500) Then Return
                 Click($x, $y)
                 If _Sleep(500) Then Return ;  wait 5 seconds
-                Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ; before activate king power
+                Click(68 + (72 * $num) + Random(-5,5,1), 60+595 + Random(-5,5,1)) ; before activate king power
         EndIf
 EndFunc   ;==>dropKing
 
@@ -276,11 +276,11 @@ EndFunc   ;==>getQueenPos
 Func dropQueen($x = 10, $y = 10, $num = 2)
         If $num <> -1 Then
                 ;         SetLog("Dropping Queen", $COLOR_BLUE)
-                Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ;Select Queen
+                Click(68 + (72 * $num) + Random(-5,5,1), 60+595 + Random(-5,5,1)) ;Select Queen
                 If _Sleep(500) Then Return
                 Click($x, $y)
                 If _Sleep(250) Then Return ;  wait 0.25 seconds
-                Click(68 + (72 * $num) + Random(-5,5,1), 595 + Random(-5,5,1)) ; before activate queen power
+                Click(68 + (72 * $num) + Random(-5,5,1), 60+595 + Random(-5,5,1)) ; before activate queen power
         EndIf
 EndFunc   ;==>dropQueen
 

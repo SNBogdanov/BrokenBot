@@ -11,17 +11,17 @@ Func ReArm()
 
 	ClickP($TopLeftClient, 2, 250); Click away twice with 250ms delay
 	Click($TownHallPos[0], $TownHallPos[1])
-	_WaitForPixel(240, 581, 484, 583, Hex(0x4084B8, 6), 6, 2)
+	_WaitForPixel(240, 60+581, 484, 60+583, Hex(0x4084B8, 6), 6, 2)
 
-	Local $x1 = 240, $y1 = 562, $x2 = 670, $y2 = 600 ;Coordinates for button search
+	Local $x1 = 240, $y1 = 60+562, $x2 = 670, $y2 = 60+600 ;Coordinates for button search
 
 	;Traps
 	Local $offColors[3][3] = [[0x887d79, 24, 34], [0xF3EC55, 69, 7], [0xECEEE9, 77, 0]] ; 2nd pixel brown wrench, 3rd pixel gold, 4th pixel edge of button
 	Local $RearmPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF6F9F2, 6), $offColors, 30) ; first gray/white pixel of button
 	If IsArray($RearmPixel) Then
 		Click($RearmPixel[0] + 20, $RearmPixel[1] + 20) ; Click RearmButton
-		If _WaitForColor(350, 420, Hex(0xC83B10, 6), 20, 1) Then
-			Click(515, 400)
+		If _WaitForColor(350, 30+420, Hex(0xC83B10, 6), 20, 1) Then
+			Click(515, 30+400)
 			If _Sleep(300) Then Return
 			SetLog(GetLangText("msgRearmedTraps"), $COLOR_ORANGE)
 		EndIf
@@ -32,8 +32,8 @@ Func ReArm()
 	Local $XbowPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF4F7F0, 6), $offColors, 30) ; button start
 	If IsArray($XbowPixel) Then
 		Click($XbowPixel[0] + 20, $XbowPixel[1] + 20) ; Click XbowButton
-		If _WaitForColor(350, 420, Hex(0xC83B10, 6), 20, 1) Then
-			Click(515, 400)
+		If _WaitForColor(350, 30+420, Hex(0xC83B10, 6), 20, 1) Then
+			Click(515, 30+400)
 			If _Sleep(300) Then Return
 			SetLog(GetLangText("msgRearmedXBow"), $COLOR_ORANGE)
 		EndIf
@@ -44,8 +44,8 @@ Func ReArm()
 	Local $InfernoPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF4F7F0, 6), $offColors, 30)
 	If IsArray($InfernoPixel) Then
 		Click($InfernoPixel[0] + 20, $InfernoPixel[1] + 20) ; Click InfernoButton
-		If _WaitForColor(350, 420, Hex(0xC83B10, 6), 20, 1) Then
-			Click(515, 400)
+		If _WaitForColor(350, 30+420, Hex(0xC83B10, 6), 20, 1) Then
+			Click(515, 30+400)
 			If _Sleep(300) Then Return
 			SetLog(GetLangText("msgRearmedInferno"), $COLOR_ORANGE)
 		EndIf

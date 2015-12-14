@@ -17,40 +17,43 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 	If _GUICtrlComboBox_GetCurSel($cmbTroopComp) <> 8 And $AttackType = 3 Then $FirstStart = True
 	If _Sleep(1500) Then Return	;wait until number stop changing.
 ;	_CaptureRegion()
-	If _WaitForColorArea(19, 519, 100, 30, Hex(0xEE5056, 6), 50, 2) Then
+	If _WaitForColorArea(19, 60+519, 100, 30, Hex(0xEE5056, 6), 50, 2) Then
 		SetLog("Click End Battle/Surrender")
-		Click(77, 529) ;Click Surrender
+		Click(77, 60+529) ;Click Surrender
 		If _Sleep(500) Then Return
 ;		_CaptureRegion()
 ;		If _WaitForColorArea(280, 372, 130, 50, Hex(0xCF4010, 6), 30, 2) Then
-		If _WaitForColorArea(298, 413, 2, 2, Hex(0xCE4412, 6), 20, 2) Then
+		If _WaitForColorArea(298, 30+413, 2, 2, Hex(0xCE4412, 6), 20, 2) Then
 ;		If _ColorCheck(_GetPixelColor(298, 413), Hex(0xCE4412, 6), 20) Then ; Check for confirm button
-			Click(522, 384) ; Click confirm
+;			SetLog("Click Confirm")
+			Click(522, 30+384) ; Click confirm
 			If _Sleep(500) Then Return
-;			_CaptureRegion()
+			_CaptureRegion()
 ;			If _ColorCheck(_GetPixelColor(425, 531), Hex(0xCDE870, 6), 20) Then ; Check for Return Home button
-			If _WaitForColorArea(425, 531, Hex(0xCDE870, 6), 20,2) Then ; Check for Return Home button
-				Click(428, 544) ;Click Return Home Button
+;			SetLog(_GetPixelColor(425, 30+531))
+			If _WaitForColorArea(425, 30+531, Hex(0xCEE870, 6), 20,2) Then ; Check for Return Home button
+;				SetLog("Click Return Home")
+				Click(428, 30+544) ;Click Return Home Button
 			EndIf
 
 
 		EndIf
 	EndIf
 	$Raid = 0
-	If (_WaitForColor(304, 569, Hex(0x020202, 6), 30, 5) And $AbortSearch = False) Then
+	If (_WaitForColor(304, 60+569, Hex(0x020202, 6), 30, 5) And $AbortSearch = False) Then
 		_CaptureRegion()
 		$Raid = 1
 		;Get Last Raid Resources
-		$LastRaidGold = ReadText(300, 291, 140, $textReturnHome, 0)
-		$LastRaidElixir = ReadText(300, 329, 140, $textReturnHome, 0)
+		$LastRaidGold = ReadText(300, 30+291, 140, $textReturnHome, 0)
+		$LastRaidElixir = ReadText(300, 30+329, 140, $textReturnHome, 0)
 		_CaptureRegion()
-		If _ColorCheck(_GetPixelColor(462, 372), Hex(0xF2D668, 6), 40) Then
+		If _ColorCheck(_GetPixelColor(462, 30+372), Hex(0xF2D668, 6), 40) Then
 			; No DE
 			$LastRaidDarkElixir = 0
-			$LastRaidTrophy = ReadText(380, 367, 60, $textReturnHome, 0)
+			$LastRaidTrophy = ReadText(380, 30+367, 60, $textReturnHome, 0)
 		Else
-			$LastRaidDarkElixir = ReadText(300, 367, 140, $textReturnHome, 0)
-			$LastRaidTrophy = ReadText(380, 403, 60, $textReturnHome, 0)
+			$LastRaidDarkElixir = ReadText(300, 30+367, 140, $textReturnHome, 0)
+			$LastRaidTrophy = ReadText(380, 30+403, 60, $textReturnHome, 0)
 		EndIf
 		$BonusLeagueG=0
 		$BonusLeagueE=0
@@ -117,7 +120,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 			EndIf
 		EndIf
 		If _Sleep(1000) Then Return
-		Click(428, 544) ;Click Return Home Button
+		Click(428, 30+544) ;Click Return Home Button
 	Else
 		checkMainScreen(True)
 	EndIf
@@ -130,6 +133,7 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True, $AbortSearch = False) ;Ret
 		If _Sleep(200) Then Return
 		_CaptureRegion()
 		If _ColorCheck(_GetPixelColor(284, 28), Hex(0x41B1CD, 6), 20) Then
+;		If _ColorCheck(_GetPixelColor(284, 28), Hex(0x42B1CC, 6), 20) Then
 			Return
 		EndIf
 

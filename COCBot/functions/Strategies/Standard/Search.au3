@@ -26,13 +26,13 @@ Func Standard_Search()
 
 
 			; Make sure end battle button is visible
-			If Not _WaitForColorArea(23, 523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then
+			If Not _WaitForColorArea(23, 60+523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then
 				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf
 
 			; Make sure clouds have cleared
-			If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 25) Then 
+			If Not _WaitForColor(1, 60+670, Hex(0x02070D, 6), 50, 25) Then 
 				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf
@@ -198,9 +198,9 @@ Func Standard_Search()
 							EndIf
 						ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 							;DE Storage
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-							$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+							$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
 
 							If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 								If $res = $DLLLicense Then
@@ -293,9 +293,9 @@ Func Standard_Search()
 								EndIf
 							ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 								;DE Storage
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-								$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+								$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
 
 								If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 									If $res = $DLLLicense Then
@@ -363,8 +363,9 @@ Func Standard_Search()
 				GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 				ExitLoop
 			Else
+;				If _Sleep(1500) Then Return -1
 				_CaptureRegion()
-				If _ColorCheck(_GetPixelColor(726, 497), Hex(0xF0AE28, 6), 20) Then
+				If _ColorCheck(_GetPixelColor(726, 60+497), Hex(0xF0AE28, 6), 20) Then
 					If $BaseData[6] = False Then ; if not skipping flag enabled
 
 						; Attack instantly if Attack Now button pressed
@@ -392,9 +393,9 @@ Func Standard_Search()
 									EndIf
 								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 									;DE Storage
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-									$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
 
 									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 										If $res = $DLLLicense Then
@@ -443,9 +444,9 @@ Func Standard_Search()
 									EndIf
 								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 									;DE Storage
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 720)
-									$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 13 1 1")
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 720)
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
 
 									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 										If $res = $DLLLicense Then
@@ -475,12 +476,12 @@ Func Standard_Search()
 					;				  _Sleep(20000)
 						Return -2
 					EndIf
-					Click(750, 500) ;Click Next
+					Click(750, 60+500) ;Click Next
 					$hTimerClickNext = TimerInit()
 					;Take time to do search
 					GUICtrlSetData($lblresultvillagesskipped, GUICtrlRead($lblresultvillagesskipped) + 1)
 					If _Sleep(1000) Then Return -1
-				ElseIf _ColorCheck(_GetPixelColor(23, 523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
+				ElseIf _ColorCheck(_GetPixelColor(23, 60+523), Hex(0xEE5056, 6), 20) Then ;If End battle is available
 					GUICtrlSetState($btnAtkNow, $GUI_DISABLE)
 					SetLog(GetLangText("msgNoNextReturn"), $COLOR_RED)
 					If ChkDisconnection(True) Then Return -2

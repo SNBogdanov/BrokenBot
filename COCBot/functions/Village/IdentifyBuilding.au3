@@ -19,7 +19,7 @@ Global  $UPDarkBarracks[6]= [750000,1250000,1750000,2250000,2750000,3500000]
 Global  $UPLaboratory[8]	= [25000 ,50000	,90000	,270000	,500000	,1000000,2500000,4000000]
 Global  $UPSpellFactory[5]= [200000,400000,800000	,1600000,3200000]
 Global  $UPDarkSpellFactory[3]=[1500000,2500000,3500000]
-Global  $UPTownHall[10]   = [0	 ,1000	,4000	,25000	,150000	,750000	,1200000,2000000,3000000,4000000]
+Global  $UPTownHall[11]   = [0	 ,1000	,4000	,25000	,150000	,750000	,1200000,2000000,3000000,4000000,7000000]
 Global  $UPClanCastle[6]	= [10000 ,100000,800000	,1800000,5000000,7000000]
 Global  $UPWall[11]	= [50    ,1000	,5000	,10000	,30000	,75000	,200000	,500000	,1000000,3000000,4000000]
 Global  $UPBomb[6]	= [400	 ,1000	,10000	,100000	,1000000,1500000]
@@ -32,7 +32,7 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 	$Name=""
 	$UpgradeCost=0
 	$UpgradeResource=0
-	$Location = _WaitForPixel(240, 581, 484, 583, Hex(0x4084B8, 6), 6, 2)
+	$Location = _WaitForPixel(240, 60+581, 484, 60+583, Hex(0x4084B8, 6), 6, 2)
 
 	If Not IsArray($Location) Then
 		SetLog(GetLangText("msgFailedBuilding"), $COLOR_RED)
@@ -40,12 +40,12 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 	Else
 		Click($Location[0], $Location[1])
 		Sleep(500)
-		If Not _WaitForColor(698, 160, Hex(0xD80408, 6), 16, 2) Then
+		If Not _WaitForColor(698, 160+24, Hex(0xD80408, 6), 16, 2) Then
 			SetLog(GetLangText("msgFailedBuilding"), $COLOR_RED)
 			ClickP($TopLeftClient, 2, 250)
 			Return False
 		Else
-			$MenuBar = StringReplace(StringStripWS(ReadText(175, 138, 500, $textWindowTitles),3),"N","n")
+			$MenuBar = StringReplace(StringStripWS(ReadText(175, 30+138, 500, $textWindowTitles),3),"N","n")
 			$Level = Number(StringRegExpReplace($MenuBar,"[^0-9]",""))
 			$MenuBar = StringReplace(StringRegExpReplace($MenuBar,"[0-9]","")," (Level )","")
 			$MenuBar = StringReplace($MenuBar,"lnferno","Inferno")
@@ -297,6 +297,15 @@ Func IdentifyBuilding(ByRef $Name,ByRef $UpgradeCost,ByRef $UpgradeResource)
 			If $res=$IDNO Then $UpgradeResource=1
 		EndIf
 		$UpgradeCost=$UPWall[$Level]
+	ElseIf  $MenuBar =  "GrandWarden" Then
+		$MenuBar =  "Grand Warden"
+		If $Level>= UBound($UPGrandWarden) Then 
+			SetLog(GetLangText("msgMaxedBuilding")&$Level, $COLOR_RED)
+			ClickP($TopLeftClient, 2, 250)
+			Return False
+		EndIf
+		$UpgradeCost=$UPGrandWarden[$Level]
+		$UpgradeResource=1
 	Else 
 		SetLog("Unknown building "&$MenuBar, $COLOR_RED)
 		ClickP($TopLeftClient, 2, 250)

@@ -14,9 +14,8 @@ Func CheckFullSpellFactory()
 
 
 	If _Sleep(100) Then Return
-
 	For $readattempts = 1 To 5
-		$curSpells = GetTroopCapacity(204, 389, 242, 404)
+		$curSpells = GetTroopCapacity(204-20, 30+389, 242-20, 30+404)
 ;		$curSpells = _TesseractReadText(204, 389, 242, 404, "-threshold 55% ")
 		$curSpells = StringStripWS($curSpells, 8)
 

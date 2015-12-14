@@ -17,13 +17,14 @@ Func DropTrophy()
 				PrepareSearch()
 
 				; Make sure end battle button is visible
-				If Not _WaitForColor(36, 523, Hex(0xEE5056, 6), 50, 10) Then
+				If Not _WaitForColor(36, 60+523, Hex(0xEE5056, 6), 50, 10) Then
+SetLog(ChkDisconnection)
 					ChkDisconnection()
 					Return $Result
 				EndIf
 
 				; Make sure clouds have cleared
-				If Not _WaitForColor(1, 670, Hex(0x02070D, 6), 50, 5) Then Return -1
+				If Not _WaitForColor(1, 60+670, Hex(0x02070D, 6), 50, 5) Then Return -1
 				GUICtrlSetData($lblresultsearchcost, _NumberFormat(Number(StringReplace(GUICtrlRead($lblresultsearchcost), " ", "")) + $SearchCost))
 				UpdateStat(-$SearchCost, 0, 0, 0)
 				GUICtrlSetData($lblresultvillagesattacked, GUICtrlRead($lblresultvillagesattacked) + 1)
@@ -35,11 +36,12 @@ Func DropTrophy()
 				$QueenAt = -1
 				$LSpellAt = -1
 				For $i = 0 To 8
+;SetLog("IdentifyTroopKind($i)="&IdentifyTroopKind($i))
 					If IdentifyTroopKind($i) = $eKing Then $KingAt = $i
 					If IdentifyTroopKind($i) = $eQueen Then $QueenAt = $i
 					If IdentifyTroopKind($i) = $eLSpell Then $LSpellAt = $i
 				Next
-
+;				        btnStop()
 				$Zapped = False
 ;~ 				If $LSpellAt <> -1 Then ; If we found a lightning spell
 ;~ 					$DarkElix = 0
@@ -71,7 +73,7 @@ Func DropTrophy()
 					SelectDropTroupe($DropTroop)
 					If _Sleep(200) Then Return $Result
 					_CaptureRegion()
-					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 720, _GDIPlus_ImageGetPixelFormat($hBitmap))
+					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 780, _GDIPlus_ImageGetPixelFormat($hBitmap))
 					SeekEdges()
 					_GDIPlus_ImageDispose($hAttackBitmap)
 					$i = 1
@@ -97,12 +99,12 @@ Func DropTrophy()
 						EndIf
 						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then
 					                If _Sleep(20) Then Return ;  wait 0.2 seconds
-					                Click(68 + (72 * $DropTroop) + Random(-5,5,1), 595 + Random(-5,5,1)) ; before activate king power
+					                Click(68 + (72 * $DropTroop) + Random(-5,5,1), 60+595 + Random(-5,5,1)) ; before activate king power
 						EndIf
 						$DropFailed = False
 						If _Sleep(100) Then Return False
 						_CaptureRegion()
-						If _ColorCheck(_GetPixelColor(733, 499), Hex(0xEBAD28, 6), 20) Then
+						If _ColorCheck(_GetPixelColor(733, 60+499), Hex(0xEBAD28, 6), 20) Then
 							$DropFailed = True
 						EndIf
 						If $DropTroop = $KingAt Or $DropTroop = $QueenAt Then ExitLoop

@@ -16,19 +16,20 @@ Func CheckCostPerSearch()
 		StatusCheck()
 
 		Click($TownHallPos[0], $TownHallPos[1])
-		$Location = _WaitForPixel(240, 581, 484, 583, Hex(0x4084B8, 6), 6, 2)
+		$Location = _WaitForPixel(240, 60+581, 484, 60+583, Hex(0x4084B8, 6), 6, 2)
 
 		If Not IsArray($Location) Then
 			SetLog(GetLangText("msgFailedTH"), $COLOR_RED)
 			Return
 		Else
 			Click($Location[0], $Location[1])
-			If Not _WaitForColor(698, 160, Hex(0xD80408, 6), 16, 2) Then
+;			If Not _WaitForColor(698, 160, Hex(0xD80408, 6), 16, 2) Then
+			If Not _WaitForColor(698, 177, Hex(0xD80408, 6), 16, 2) Then
 				SetLog(GetLangText("msgFailedTH"), $COLOR_RED)
 				ClickP($TopLeftClient, 2, 250)
 				Return
 			Else
-				$MenuBar = StringStripWS(ReadText(175, 138, 500, $textWindowTitles),3)
+				$MenuBar = StringStripWS(ReadText(175, 30+138, 500, $textWindowTitles),3)
 				$THName = StringReplace(StringStripWS($MenuBar,3),"N","n")
 				$THName = StringReplace(StringRegExpReplace($THName,"[0-9]","")," (Level )","")
 				If $THName <> "Town Hall" Then
@@ -57,6 +58,8 @@ Func CheckCostPerSearch()
 				ElseIf $THLevel = "9" Then
 					$SearchCost = 750
 				ElseIf $THLevel = "10" Then
+					$SearchCost = 900
+				ElseIf $THLevel = "11" Then
 					$SearchCost = 1000
 				EndIf
 

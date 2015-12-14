@@ -120,17 +120,17 @@ Func UpgradeMyBuilding($UPx, $UPy, $UPgoldORElixir, $UPname)
 	If _Sleep(500) Then Return False
 
 	If $UPgoldORElixir = 1 Then ; elixir
-		Local $ElixirUpgrade = _PixelSearch(300, 560, 629, 583, Hex(0xF759E8, 6), 10) ;Finds Elixir Upgrade Button
+		Local $ElixirUpgrade = _PixelSearch(300, 60+560, 629, 60+583, Hex(0xF759E8, 6), 10) ;Finds Elixir Upgrade Button
 
 		If IsArray($ElixirUpgrade) Then
 			Click($ElixirUpgrade[0], $ElixirUpgrade[1]) ;Click Upgrade Button
 			If _Sleep(1000) Then Return False
-			Local $UpgradeCheck = _PixelSearch(300, 463, 673, 522, Hex(0xB9E051, 6), 10) ;Confirm Upgrade
+			Local $UpgradeCheck = _PixelSearch(300, 30+463, 67330+, 522, Hex(0xB9E051, 6), 10) ;Confirm Upgrade
 			If IsArray($UpgradeCheck) Then
 				Click($UpgradeCheck[0], $UpgradeCheck[1]) ;Click Upgrade Button
 				If _Sleep(1000) Then Return False
 				_CaptureRegion()
-				If Not _ColorCheck(_GetPixelColor(571, 263), Hex(0xD90404, 6), 20) Then
+				If Not _ColorCheck(_GetPixelColor(571, 30+263), Hex(0xD90404, 6), 20) Then
 					SetLog($UPname & " " & GetLangText("msgUpgradeSuccess"), $COLOR_GREEN)
 					If _Sleep(1000) Then Return True ; because already upgraded
 					ClickP($TopLeftClient, 2)
@@ -152,19 +152,19 @@ Func UpgradeMyBuilding($UPx, $UPy, $UPgoldORElixir, $UPname)
 		EndIf
 	Else
 
-		Local $GoldUpgrade = _PixelSearch(300, 560, 629, 583, Hex(0xF4EE54, 6), 10) ;Finds Gold Upgrade Button
+		Local $GoldUpgrade = _PixelSearch(300, 60+560, 629, 60+583, Hex(0xF4EE54, 6), 10) ;Finds Gold Upgrade Button
 
 
 		If IsArray($GoldUpgrade) Then
 
 			Click($GoldUpgrade[0], $GoldUpgrade[1]) ;Click Upgrade Button
 			If _Sleep(1000) Then Return False
-			Local $UpgradeCheck = _PixelSearch(300, 463, 673, 522, Hex(0xB9E051, 6), 10) ;Confirm Upgrade
+			Local $UpgradeCheck = _PixelSearch(300, 60+463, 673, 60+522, Hex(0xB9E051, 6), 10) ;Confirm Upgrade
 			If IsArray($UpgradeCheck) Then
 				Click($UpgradeCheck[0], $UpgradeCheck[1]) ;Click Upgrade Button
 				If _Sleep(1000) Then Return False
 				_CaptureRegion()
-				If Not _ColorCheck(_GetPixelColor(571, 263), Hex(0xD90404, 6), 20) Then
+				If Not _ColorCheck(_GetPixelColor(571, 30+263), Hex(0xD90404, 6), 20) Then
 					SetLog($UPname & " " & GetLangText("msgUpgradeSuccess"), $COLOR_GREEN)
 					If _Sleep(1000) Then Return True
 					ClickP($TopLeftClient, 2)

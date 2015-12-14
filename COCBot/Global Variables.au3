@@ -302,6 +302,9 @@ Global $collectorPos[17][2] ;Positions of each collectors
 Global $break = @ScriptDir & "\images\break.bmp"
 Global $device = @ScriptDir & "\images\device.bmp"
 Global $maintenance = @ScriptDir & "\images\Maintenance.png"
+Global $breakextended = @ScriptDir & "\images\BreakExtended.jpg"
+Global $breakending = @ScriptDir & "\images\BreakEnding.jpg"
+
 Global $connectionlost = @ScriptDir & "\images\Connection.bmp"
 
 Global $GoldCount = 0, $ElixirCount = 0, $DarkCount = 0, $GemCount = 0, $FreeBuilder = 0, $TropHyCount=0
