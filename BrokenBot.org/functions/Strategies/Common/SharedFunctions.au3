@@ -121,8 +121,8 @@ Func ChkHeroesAvailability()
 	Local $Hero2 = _GetPixelColor(529-20, 30+455)
 
 
-SetLog($Hero1)
-SetLog($Hero2)
+;SetLog($Hero1)
+;SetLog($Hero2)
 ;	If _ColorCheck($Hero1, Hex(0xEBCB5F, 6), 8) Then ; king
 	If _ColorCheck($Hero1, Hex(0xFBC2B8, 6), 8) Then ; king
 

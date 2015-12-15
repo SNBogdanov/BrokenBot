@@ -6,7 +6,7 @@ Global $GlobalColor
 Func ActivateOverlay()
 	$OverlayVisible = True
 	getBSPos()
-	$frmOverlay = GUICreate("", 860, 720, $BSpos[0], $BSpos[1], 0x84000000, BitOR(0x08000088, $WS_EX_LAYERED))
+	$frmOverlay = GUICreate("", 860, 780, $BSpos[0], $BSpos[1], 0x84000000, BitOR(0x08000088, $WS_EX_LAYERED))
 	GUISetBkColor(0xABCDEF)
 	_WinAPI_SetLayeredWindowAttributes($frmOverlay, 0xABCDEF, 255)
 	_WinAPI_SetWindowLong($frmOverlay, -20, BitOR(_WinAPI_GetWindowLong($frmOverlay, -20), 0x00000020))

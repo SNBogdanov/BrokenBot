@@ -196,7 +196,7 @@ Func SeekEdges()
 	Next
 
 	For $loop = 1 To 5
-		$ret = CallHelper("0 0 860 720 BrokenBotRedLineCheck " & $mH & " " & $mS & " " & $ci & " " & $cl & " " & $cr, 3)
+		$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck " & $mH & " " & $mS & " " & $ci & " " & $cl & " " & $cr, 3)
 
 		If $ret = $DLLLicense or $ret = $DLLFailed Or $ret = $DLLTimeout Then
 			If $ret = $DLLLicense Then SetLog(GetLangText("msgLicense"), $COLOR_RED)

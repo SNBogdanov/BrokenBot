@@ -65,7 +65,7 @@ Func runBot() ;Bot that runs everything in order
 		If StatusCheck(True, True, 3) Then Return
 
 		If $FirstStart And IsChecked($chkHelper) Then
-			$ret = CallHelper("0 0 860 720 BrokenBotRedLineCheck 1 1 0 0 0", 10)
+			$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 10)
 			If $ret = $DLLFailed Or $ret = $DLLTimeout Then
 				MsgBox($MB_ICONWARNING + $MB_OK, GetLangText("msgMissing"), GetLangText("msgMissingDLL1") & @CRLF & @CRLF & GetLangText("msgMissingDLL2") & @CRLF & @CRLF & GetLangText("msgMissingDLL3"))
 				GUICtrlSetState($chkHelper, $GUI_UNCHECKED)
@@ -287,8 +287,17 @@ Func runBot() ;Bot that runs everything in order
 				If Not $fullarmy Then Donate_Train()
 				If StatusCheck() Then Return False
 
-				SetLog("Sleep for 1 minute")
-				If _Sleep(60000) Then Return
+				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
+					Click(125,60+695,3,250)
+					SetLog("Unbreakable mode, wait 15 minute", $COLOR_PURPLE)
+					If _Sleep(15*60000) Then Return
+					If StatusCheck() Then Return False
+			    		$Checkrearm = True
+					If DropTrophy() Then ContinueLoop
+				Else
+					SetLog("Sleep for 1 minute")
+					If _Sleep(60000) Then Return
+				EndIf
 			Case $modeDonate
 				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
 					Click(125,60+695,3,250)

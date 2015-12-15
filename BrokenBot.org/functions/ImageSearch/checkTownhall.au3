@@ -4,7 +4,7 @@
 ; You **MAY NOT SOLICIT DONATIONS** from any project which includes any part of the code in this sub-directory without express written consent of BrokenBot.org
 ;
 Func checkTownhall()
-	$res = CallHelper("0 0 860 720 BrokenBotMatchBuilding 1 1 1")
+	$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 1 1 1")
 
 	If $res = $DLLFailed or $res = $DLLTimeout or $res = $DLLError Then
 		SetLog(GetLangText("msgDLLError"), $COLOR_RED)

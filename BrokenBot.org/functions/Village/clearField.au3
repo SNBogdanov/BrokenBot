@@ -12,7 +12,7 @@ Func clearField()
 			Return
 		EndIf
 
-		$res = CallHelper("0 0 860 720 BrokenBotMatchObject 25 5 4")
+		$res = CallHelper("0 0 860 780 BrokenBotMatchObject 25 5 4")
 
 		If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 			If $res = $DLLNegative Then
@@ -40,7 +40,7 @@ Func clearField()
 					Click($ObsX, $ObsY)
 					_Sleep(1000)
 
-					$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 110 1 3")
+					$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 110 1 3")
 
 					If $resUI <> $DLLFailed And $resUI <> $DLLTimeout And $resUI <> $DLLError Then
 						If $resUI = -1 Or $resUI = -2 Then ExitLoop
@@ -53,7 +53,7 @@ Func clearField()
 						Do
 							_Sleep(300)
 
-							$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 111 1 3")
+							$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 111 1 3")
 
 							$expUIRet = StringSplit($resUI, "|", 2)
 							If $expUIRet[0] = -1 Or $expUIRet[0] = -2 Then ExitLoop

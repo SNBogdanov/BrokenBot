@@ -168,7 +168,7 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						If IsChecked($chkHelper) Then
 							$aPos = ControlGetPos($Title, "", "[CLASS:BlueStacksApp; INSTANCE:1]")
 							If IsArray($aPos) Then
-								$ret = CallHelper("0 0 860 720 BrokenBotRedLineCheck 1 1 0 0 0", 5)
+								$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 5)
 								If $ret = $DLLFailed Or $ret = $DLLTimeout Then
 									MsgBox($MB_ICONWARNING + $MB_OK, GetLangText("msgMissing"), GetLangText("msgMissingDLL1") & @CRLF & @CRLF & GetLangText("msgMissingDLL2") & @CRLF & @CRLF & GetLangText("msgMissingDLL3"))
 									GUICtrlSetState($chkHelper, $GUI_UNCHECKED)

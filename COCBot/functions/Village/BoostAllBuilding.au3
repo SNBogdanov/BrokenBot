@@ -126,7 +126,7 @@ EndFunc   ;==>BoostAllBuilding
 Func BoostBuilding()
 	Local $expUIRet[2]
 	$expUIRet[0] = -1
-	$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 101 1 3") ;boost button
+	$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 101 1 3") ;boost button
 	If $resUI <> $DLLFailed And $resUI <> $DLLTimeout And $resUI <> $DLLError Then
 		If $resUI = $DLLNegative Then
 			; Didn't find button
@@ -168,7 +168,7 @@ EndFunc   ;==>BoostBuilding
 Func BoostAllBarracks() ; returns bool if button found
 	Local $expUIRet[2]
 	$expUIRet[0] = -1
-	$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 102 1 3") ;boost all button
+	$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 102 1 3") ;boost all button
 	If $resUI <> $DLLFailed And $resUI <> $DLLTimeout And $resUI <> $DLLError Then
 		If $resUI = $DLLNegative Then
 			; Didn't find button
@@ -213,7 +213,7 @@ EndFunc   ;==>BoostAllBarracks
 Func BoostSpells()
 	Local $expUIRet[2]
 	$expUIRet[0] = -1
-	$resUI = CallHelper("0 0 860 720 BrokenBotMatchButton 101 1 3") ;boost button
+	$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 101 1 3") ;boost button
 	If $resUI <> $DLLFailed And $resUI <> $DLLTimeout And $resUI <> $DLLError Then
 		If $resUI = $DLLNegative Then
 			; Didn't find button

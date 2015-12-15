@@ -4,7 +4,7 @@ Global $textConstants[9][2] = [[0, ""], [10, "chatlog"], [12, "mainscreen"], [12
 Func ReadText($x, $y, $width, $type, $leftaligned = 1, $reversed = 0)
 	$height = $textConstants[$type][0]
 	$name = $textConstants[$type][1]
-	$Result = CallHelper("0 0 860 720 BrokenBotReadText " & $x & " " & $y & " " & $width & " " & $height & " " & $type & " " & $leftaligned & " " & $reversed, 3)
+	$Result = CallHelper("0 0 860 780 BrokenBotReadText " & $x & " " & $y & " " & $width & " " & $height & " " & $type & " " & $leftaligned & " " & $reversed, 3)
 	If $Result = $DLLFailed or $Result = $DLLTimeout or $Result = $DLLNegative Then
 		SetLog(GetLangText("msgDLLError"), $COLOR_RED)
 		Return -1
