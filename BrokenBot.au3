@@ -8,7 +8,7 @@
 
 #include <GUIConstants.au3>
 
-$sBotVersion = "3.3.4.00 MOD by SNBogdanov"
+$sBotVersion = "3.3.4.01 MOD by SNBogdanov"
 $sBotTitle = "BrokenBot.org - Break FREE - v" & $sBotVersion
 
 If FileExists(@ScriptDir & "\.developer") Then
@@ -67,13 +67,17 @@ _lstStrategies()
 Global $Delimiter=RegRead("HKCU\Control Panel\International", "sList")
 
 HotKeySet("^!+p", "_ScreenShot")
-If Not RegWrite("HKEY_CURRENT_USER\Environment\", "TESSDATA_PREFIX", "REG_EXPAND_SZ", $tesseract_Path) Then
-	SetLog("Tesseract's language path could not be wiritten registry. _TesseractReadText() might not work")
+$Env=EnvGet("TESSDATA_PREFIX")
+if $Env <> $tesseract_Path Then
+	If Not RegWrite("HKEY_CURRENT_USER\Environment\", "TESSDATA_PREFIX", "REG_EXPAND_SZ", $tesseract_Path) Then
+		SetLog("Tesseract's language path could not be wiritten registry. _TesseractReadText() might not work")
+	EndIf
+
+	EnvSet("TESSDATA_PREFIX",$tesseract_Path)
+	Local $sEnvVar = EnvGet("PATH")
+	EnvSet("PATH", $sEnvVar & ";" & $tesseract_Path)
+	EnvUpdate()
 EndIf
-EnvSet("TESSDATA_PREFIX",$tesseract_Path)
-Local $sEnvVar = EnvGet("PATH")
-EnvSet("PATH", $sEnvVar & ";" & $tesseract_Path)
-EnvUpdate()
 
 $sTimer = TimerInit()
 AdlibRegister("SetTime", 1000)

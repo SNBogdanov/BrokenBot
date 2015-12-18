@@ -30,6 +30,7 @@ Func Standard_Search()
 				If ChkDisconnection() Then Return -2
 				Return -1
 			EndIf
+			$AttackNow=false
 
 			; Make sure clouds have cleared
 			If Not _WaitForColor(1, 60+670, Hex(0x02070D, 6), 50, 25) Then 

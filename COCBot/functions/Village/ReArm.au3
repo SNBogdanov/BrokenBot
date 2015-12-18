@@ -13,7 +13,7 @@ Func ReArm()
 	Click($TownHallPos[0], $TownHallPos[1])
 	_WaitForPixel(240, 60+581, 484, 60+583, Hex(0x4084B8, 6), 6, 2)
 
-	Local $x1 = 240, $y1 = 60+562, $x2 = 670, $y2 = 60+600 ;Coordinates for button search
+	Local $x1 = 240, $y1 = 20+562, $x2 = 670, $y2 = 60+600 ;Coordinates for button search
 
 	;Traps
 	Local $offColors[3][3] = [[0x887d79, 24, 34], [0xF3EC55, 69, 7], [0xECEEE9, 77, 0]] ; 2nd pixel brown wrench, 3rd pixel gold, 4th pixel edge of button
@@ -28,7 +28,8 @@ Func ReArm()
 	EndIf
 
 	;Xbow
-	Local $offColors[3][3] = [[0x8F4B9E, 19, 20], [0xFB5CF4, 70, 7], [0xF0F1EC, 77, 0]]; xbow, elixir, edge
+;	Local $offColors[3][3] = [[0x8F4B9E, 19, 20], [0xFB5CF4, 70, 7], [0xF0F1EC, 77, 0]]; xbow, elixir, edge
+	Local $offColors[3][3] = [[0xB6895D, 19, 20], [0xF256E6, 70, 7], [0xB6C885, 77, 0]]; xbow, elixir, edge
 	Local $XbowPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF4F7F0, 6), $offColors, 30) ; button start
 	If IsArray($XbowPixel) Then
 		Click($XbowPixel[0] + 20, $XbowPixel[1] + 20) ; Click XbowButton

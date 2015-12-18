@@ -23,6 +23,20 @@ Func checkObstacles($Reset= true) ;Checks if something is in the way for mainscr
 		$Checkrearm = True
 		Return True
 	EndIf
+	If _ImageSearch($Inactivity, 0, $x, $y, 80) Then
+		SetLog(GetLangText("msgInactivity"), $COLOR_RED)
+		If _Sleep(200) Then Return ;
+		Click(429, 433);Check for "Take a break" message
+		$Checkrearm = True
+		Return True
+	EndIf
+	If _ImageSearch($PersonalBreak, 0, $x, $y, 80) Then
+		SetLog(GetLangText("msgPersonalBreak"), $COLOR_RED)
+		If _Sleep(3000) Then Return ;
+		Click(429, 433);Check for "Take a break" message
+		$Checkrearm = True
+		Return True
+	EndIf
 
 	If _ImageSearch($connectionlost, 0, $x, $y, 80) Then
 

@@ -132,7 +132,7 @@ Func ChkHeroesAvailability()
 
 	Else
 		$KingUG = True
-		If _ColorCheck($Hero1, Hex(0x753499, 6), 8) Then $QueenAvailable = True;queen
+		If _ColorCheck($Hero1, Hex(0x8440A0, 6), 8) Then $QueenAvailable = True;queen
 
 
 	EndIf

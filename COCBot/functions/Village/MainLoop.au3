@@ -282,18 +282,20 @@ Func runBot() ;Bot that runs everything in order
 				WEnd
 			Case $modeDonateTrain
 				$fullarmy = Donate_CheckArmyCamp()
-				If StatusCheck() Then Return False
+				If StatusCheck(False) Then Return False
 
-				If Not $fullarmy Then Donate_Train()
-				If StatusCheck() Then Return False
+				Donate_Train()
+				If StatusCheck(False) Then Return False
+				ClickP($TopLeftClient) ;Click Away
+				If _Sleep(500) Then Return False
 
 				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
+					If DropTrophy() Then ContinueLoop
 					Click(125,60+695,3,250)
 					SetLog("Unbreakable mode, wait 15 minute", $COLOR_PURPLE)
 					If _Sleep(15*60000) Then Return
-					If StatusCheck() Then Return False
+					If StatusCheck(False) Then Return False
 			    		$Checkrearm = True
-					If DropTrophy() Then ContinueLoop
 				Else
 					SetLog("Sleep for 1 minute")
 					If _Sleep(60000) Then Return
@@ -379,8 +381,8 @@ Func Idle($Plugin) ;Sequence that runs until Full Army
 			If Not $closetofull Then
 				$AfterAttack=False;
 				Click(125,60+695,3,250)
-				SetLog("Unbreakable mode, wait 5 minute", $COLOR_PURPLE)
-				If _Sleep(5*60000) Then Return
+				SetLog("Unbreakable mode, wait 8 minute", $COLOR_PURPLE)
+				If _Sleep(8*60000) Then Return
 				If StatusCheck() Then Return False
 			    $Checkrearm = True
 			    Return True

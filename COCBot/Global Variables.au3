@@ -304,6 +304,8 @@ Global $device = @ScriptDir & "\images\device.bmp"
 Global $maintenance = @ScriptDir & "\images\Maintenance.png"
 Global $breakextended = @ScriptDir & "\images\BreakExtended.jpg"
 Global $breakending = @ScriptDir & "\images\BreakEnding.jpg"
+Global $Inactivity = @ScriptDir & "\images\Inactivity.jpg"
+Global $PersonalBreak = @ScriptDir & "\images\Personal.jpg"
 
 Global $connectionlost = @ScriptDir & "\images\Connection.bmp"
 

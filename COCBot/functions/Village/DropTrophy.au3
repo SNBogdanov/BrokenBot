@@ -18,7 +18,6 @@ Func DropTrophy()
 
 				; Make sure end battle button is visible
 				If Not _WaitForColor(36, 60+523, Hex(0xEE5056, 6), 50, 10) Then
-SetLog(ChkDisconnection)
 					ChkDisconnection()
 					Return $Result
 				EndIf

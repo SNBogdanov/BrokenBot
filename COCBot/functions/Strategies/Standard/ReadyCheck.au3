@@ -107,6 +107,22 @@ Func Standard_miniReadyCheck()
 
 		ChkHeroesAvailability()
 		If StatusCheck(False) Then Return False
+		If IsChecked($chkAnyActivate) And Not IsChecked($chkDeadActivate) Then
+			If (IsChecked($chkKingAvail)  And Not $KingAvailable) OR _
+		   	   (IsChecked($chkQueenAvail) And Not $QueenAvailable) Then Return False
+		EndIf
+		If Not IsChecked($chkAnyActivate) And IsChecked($chkDeadActivate) Then
+			If (IsChecked($chkDeadKingAvail)  And Not $KingAvailable) OR _
+		   	   (IsChecked($chkDeadQueenAvail) And Not $QueenAvailable) Then Return False
+		EndIf
+		If IsChecked($chkAnyActivate) And IsChecked($chkDeadActivate) Then
+			If Not $KingAvailable Then
+				If IsChecked($chkDeadKingAvail) And IsChecked($chkKingAvail) Then Return False
+			EndIf
+			If Not $QueenAvailable Then
+				If IsChecked($chkDeadQueenAvail) And IsChecked($chkQueenAvail) Then Return False
+			EndIf
+		EndIf
 
 		If IsChecked($chkMakeSpells) Then
 			$fullSpellFactory = CheckFullSpellFactory()
@@ -455,10 +471,10 @@ EndFunc   ;==>Standard_GetTrainPos
 Func Standard_TrainIt($TroopKind, $howMuch = 1, $iSleep = 100)
 	$anythingadded = True
 	_CaptureRegion()
-SetLog($TroopKind)
+;SetLog($TroopKind)
 	Local $pos = Standard_GetTrainPos($TroopKind)
 	If IsArray($pos) Then
-SetLog(GetPixelColor($pos))
+;SetLog(_GetPixelColor($pos[0],$pos[1]))
 		If CheckPixel($pos) Then
 			ClickP($pos, $howMuch, 20)
 			If _Sleep($iSleep) Then Return False

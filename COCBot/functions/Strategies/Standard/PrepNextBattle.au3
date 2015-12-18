@@ -2,6 +2,7 @@ Func Standard_PrepNextBattle()
 	;Resetting this flag only after search successful
 	;As this flag will be used in miniReady_Check as well
 	;$stuckCount = 0
+	$AttackNow = False
 	If $ElixirCount <$MinElixirToTrain Then
 		If Not $fullarmy  Then
 			SetLog("Elixir level "&$ElixirCount&" is less then minimum "&$MinElixirToTrain&", skip training", $COLOR_RED)
