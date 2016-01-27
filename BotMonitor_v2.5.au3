@@ -291,7 +291,7 @@ Func CheckStatusText()
 	  ElseIf($intLoopCount = 1) Then
 		 Sleep(180000)	;wait 3 minutes
 	  ElseIf($intLoopCount = 2) Then
-		 Sleep(600000)	;wait 10 minutes
+		 Sleep(900000)	;wait 10 minutes
 	  ElseIf($intLoopCount = 3) Then
 		 SetLogs($strLogFilename, "Bot has stucked, restarting bot . . .")
                  StopStart()

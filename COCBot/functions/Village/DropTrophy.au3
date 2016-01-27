@@ -72,7 +72,8 @@ Func DropTrophy()
 					SelectDropTroupe($DropTroop)
 					If _Sleep(200) Then Return $Result
 					_CaptureRegion()
-					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 780, _GDIPlus_ImageGetPixelFormat($hBitmap))
+;					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 780, _GDIPlus_ImageGetPixelFormat($hBitmap))
+					$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 732, _GDIPlus_ImageGetPixelFormat($hBitmap))
 					SeekEdges()
 					_GDIPlus_ImageDispose($hAttackBitmap)
 					$i = 1

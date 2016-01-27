@@ -7,7 +7,8 @@ _GDIPlus_Startup()
 _Crypt_Startup()
 
 Global Const $64Bit = StringInStr(@OSArch, "64") > 0
-Global Const $DEFAULT_HEIGHT = 780
+;Global Const $DEFAULT_HEIGHT = 780
+Global Const $DEFAULT_HEIGHT = 732
 Global Const $DEFAULT_WIDTH = 860
 Global $Initiate = 0
 Global Const $REGISTRY_KEY_DIRECTORY = "HKEY_LOCAL_MACHINE\SOFTWARE\BlueStacks\Guests\Android\FrameBuffer\0"
@@ -168,7 +169,8 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 						If IsChecked($chkHelper) Then
 							$aPos = ControlGetPos($Title, "", "[CLASS:BlueStacksApp; INSTANCE:1]")
 							If IsArray($aPos) Then
-								$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 5)
+;								$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 5)
+								$ret = CallHelper("0 0 860 732 BrokenBotRedLineCheck 1 1 0 0 0", 5)
 								If $ret = $DLLFailed Or $ret = $DLLTimeout Then
 									MsgBox($MB_ICONWARNING + $MB_OK, GetLangText("msgMissing"), GetLangText("msgMissingDLL1") & @CRLF & @CRLF & GetLangText("msgMissingDLL2") & @CRLF & @CRLF & GetLangText("msgMissingDLL3"))
 									GUICtrlSetState($chkHelper, $GUI_UNCHECKED)
@@ -1087,7 +1089,7 @@ Func UPremove($myIndex )
 
 	Local $ListCount = _GUICtrlListBox_GetCount($lstUPlist)
 	IniDelete($UPConfig, "Building_" & $myIndex)
-	For $i = $myIndex + 2 To $ListCount
+	For $i = $myIndex + 1 To $ListCount
 		IniRenameSection($UPConfig, "Building_" & $i, "Building_" & ($i - 1))
 	Next
 EndFunc   ;==>UPremove

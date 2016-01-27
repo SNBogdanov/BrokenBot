@@ -199,9 +199,12 @@ Func Standard_Search()
 							EndIf
 						ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 							;DE Storage
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-							$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;							$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+;							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+							$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding 13 1 1")
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 723)
 
 							If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 								If $res = $DLLLicense Then
@@ -294,9 +297,12 @@ Func Standard_Search()
 								EndIf
 							ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 								;DE Storage
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-								$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
-								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;								$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+;								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+								$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding 13 1 1")
+								If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 
 								If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 									If $res = $DLLLicense Then
@@ -394,9 +400,12 @@ Func Standard_Search()
 									EndIf
 								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 									;DE Storage
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+;									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+									$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 
 									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 										If $res = $DLLLicense Then
@@ -445,9 +454,12 @@ Func Standard_Search()
 									EndIf
 								ElseIf _GUICtrlComboBox_GetCurSel($cmbFocusedBuilding) = 1 Then
 									;DE Storage
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
-									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;									$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 13 1 1")
+;									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+									$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding 13 1 1")
+									If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 
 									If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 										If $res = $DLLLicense Then

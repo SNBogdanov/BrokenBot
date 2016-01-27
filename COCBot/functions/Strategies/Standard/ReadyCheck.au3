@@ -1068,7 +1068,8 @@ Func Standard_Train($reset = False)
 			Click($myBarrackPos[$i][0], $myBarrackPos[$i][1]) ;Click Barrack
 			If _Sleep($TrainingDelay) Then ExitLoop
 			$expUIRet[0] = -1
-			$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
+;			$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
+			$resUI = CallHelper("0 0 860 732 BrokenBotMatchButton 108 1 3")
 			If $resUI <> $DLLFailed And $resUI <> $DLLTimeout Then
 				If $resUI = $DLLNegative Or $resUI = $DLLError Then
 					; Didn't find button
@@ -1703,7 +1704,8 @@ Func Standard_Train($reset = False)
 				Click($myDarkBarrackPos[$i][0], $myDarkBarrackPos[$i][1]) ;Click Dark Barrack
 				If _Sleep($TrainingDelay) Then ExitLoop
 				$expUIRet[0] = -1
-				$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
+;				$resUI = CallHelper("0 0 860 780 BrokenBotMatchButton 108 1 3")
+				$resUI = CallHelper("0 0 860 732 BrokenBotMatchButton 108 1 3")
 				If $resUI <> $DLLFailed And $resUI <> $DLLTimeout Then
 					If $resUI = $DLLNegative Or $resUI = $DLLError Then
 						; Didn't find button

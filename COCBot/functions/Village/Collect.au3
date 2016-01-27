@@ -9,7 +9,8 @@ Func Collect()
 		Click(1, 1) ;Click Away
 		While 1
 			If _Sleep(300) Or $Running = False Then ExitLoop
-			_CaptureRegion(0, 0, 780)
+;			_CaptureRegion(0, 0, 780)
+			_CaptureRegion(0, 0, 732)
 			If _ImageSearch(@ScriptDir & "\images\Collectors\resimg.png", 1, $collectx, $collecty, 20) Then
 				Click($collectx, $collecty) ;Click collector
 			ElseIf $i >= 20 Then

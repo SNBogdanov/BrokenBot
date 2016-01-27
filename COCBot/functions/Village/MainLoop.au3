@@ -16,6 +16,7 @@ Func runBot() ;Bot that runs everything in order
 		$Text=StringReplace(ReadText(690, 9, 140, 1, 1),"G","6")
 		$Text=StringReplace($Text,"O","0")
 		$MaxGold = Number(StringRegExpReplace($Text,"[^0-9]",""))
+$MaxGold=9500000
 		$Text=StringReplace(ReadText(690, 57, 140, 1, 1),"G","6")
 		$Text=StringReplace($Text,"O","0")
 		$MaxElixir = Number(StringRegExpReplace($Text,"[^0-9]",""))
@@ -65,7 +66,8 @@ Func runBot() ;Bot that runs everything in order
 		If StatusCheck(True, True, 3) Then Return
 
 		If $FirstStart And IsChecked($chkHelper) Then
-			$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 10)
+;			$ret = CallHelper("0 0 860 780 BrokenBotRedLineCheck 1 1 0 0 0", 10)
+			$ret = CallHelper("0 0 860 732 BrokenBotRedLineCheck 1 1 0 0 0", 10)
 			If $ret = $DLLFailed Or $ret = $DLLTimeout Then
 				MsgBox($MB_ICONWARNING + $MB_OK, GetLangText("msgMissing"), GetLangText("msgMissingDLL1") & @CRLF & @CRLF & GetLangText("msgMissingDLL2") & @CRLF & @CRLF & GetLangText("msgMissingDLL3"))
 				GUICtrlSetState($chkHelper, $GUI_UNCHECKED)
@@ -290,7 +292,9 @@ Func runBot() ;Bot that runs everything in order
 				If _Sleep(500) Then Return False
 
 				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
-					If DropTrophy() Then ContinueLoop
+					If $fullarmy Then
+						If DropTrophy() Then ContinueLoop
+					EndIf
 					Click(125,60+695,3,250)
 					SetLog("Unbreakable mode, wait 15 minute", $COLOR_PURPLE)
 					If _Sleep(15*60000) Then Return
@@ -301,7 +305,14 @@ Func runBot() ;Bot that runs everything in order
 					If _Sleep(60000) Then Return
 				EndIf
 			Case $modeDonate
+				$fullarmy = Donate_CheckArmyCamp()
+				If StatusCheck(False) Then Return False
+				ClickP($TopLeftClient) ;Click Away
+				If _Sleep(500) Then Return False
 				If IsChecked($mixmodenormexp) And IsChecked($chkSnipeTrainingEnable) Then
+					If $fullarmy Then
+						If DropTrophy() Then ContinueLoop
+					EndIf
 					Click(125,60+695,3,250)
 					SetLog("Unbreakable mode, wait 15 minute", $COLOR_PURPLE)
 					If _Sleep(15*60000) Then Return

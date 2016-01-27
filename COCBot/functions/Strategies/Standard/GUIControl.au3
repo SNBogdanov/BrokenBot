@@ -26,7 +26,8 @@ Func Standard_btnSearchMode()
 			Local $BSy = ($BSsize[0] > $BSsize[1]) ? $BSsize[1] : $BSsize[0]
 
 			$Running = True
-			If $BSx <> 860 Or $BSy <> 780 Then
+;			If $BSx <> 860 Or $BSy <> 780 Then
+			If $BSx <> 860 Or $BSy <> $DEFAULT_HEIGHT Then
 				RegWrite($REGISTRY_KEY_DIRECTORY, "FullScreen", "REG_DWORD", "0")
 				RegWrite($REGISTRY_KEY_DIRECTORY, "GuestHeight", "REG_DWORD", $DEFAULT_HEIGHT)
 				RegWrite($REGISTRY_KEY_DIRECTORY, "GuestWidth", "REG_DWORD", $DEFAULT_WIDTH)
@@ -79,10 +80,10 @@ Func Standard_chkDeadActivate()
 		GUICtrlSetState($txtDeadMinDarkElixir, $GUI_ENABLE)
 		GUICtrlSetState($chkDeadMeetTrophy, $GUI_ENABLE)
 		GUICtrlSetState($txtDeadMinTrophy, $GUI_ENABLE)
-		GUICtrlSetState($chkDeadMeetTH, $GUI_ENABLE)
-		GUICtrlSetState($cmbDeadTH, $GUI_ENABLE)
-		GUICtrlSetState($chkDeadMeetTHO, $GUI_ENABLE)
-		GUICtrlSetState($chkDeadSnipe, $GUI_ENABLE)
+;		GUICtrlSetState($chkDeadMeetTH, $GUI_ENABLE)
+;		GUICtrlSetState($cmbDeadTH, $GUI_ENABLE)
+;		GUICtrlSetState($chkDeadMeetTHO, $GUI_ENABLE)
+;		GUICtrlSetState($chkDeadSnipe, $GUI_ENABLE)
 		GUICtrlSetState($btnSearchMode, $GUI_ENABLE)
 	Else
 		GUICtrlSetState($chkDeadKingAvail, $GUI_DISABLE)

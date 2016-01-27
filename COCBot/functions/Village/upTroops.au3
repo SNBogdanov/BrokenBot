@@ -20,7 +20,9 @@ Func GetUpLaboratoryPos()
 				_ModifiedSleep(1000)
 				$i += 1
 				_CaptureRegion()
-			Until _ColorCheck(_GetPixelColor(123, 409), Hex(0xAAAAA4, 6), 20) Or $i=20
+			Until _ColorCheck(_GetPixelColor(123, 429), Hex(0xAAAAA4, 6), 20) Or $i=20
+;			Until _ColorCheck(_GetPixelColor(127, 424), Hex(0xAAAAA4, 6), 20) Or $i=20
+;			Until _ColorCheck(_GetPixelColor(123, 409), Hex(0xAAAAA4, 6), 20) Or $i=20
 		EndIf
 		Click(133 + Floor(_GUICtrlComboBox_GetCurSel($cmbLaboratory)/2)*106-Floor(_GUICtrlComboBox_GetCurSel($cmbLaboratory)/12)*636, 330 + Mod(_GUICtrlComboBox_GetCurSel($cmbLaboratory), 2)*115)
 	EndIf
@@ -43,10 +45,10 @@ Func Laboratory()
 	SetLog("Checking Upgrade Troops...")
 	Click($LabPos[0], $LabPos[1]);Click Laboratory
 	If _Sleep(1000) Then Return
-	Click(507, 597) ; Click Button Research
+	Click(507, 60+597) ; Click Button Research
 	If _Sleep(2000) Then Return
 	_CaptureRegion()
-	If _ColorCheck(_GetPixelColor(633, 273), Hex(0x60AC10, 6), 20)  Then
+	If _ColorCheck(_GetPixelColor(633, 10+273), Hex(0x60AC10, 6), 20)  Then
 		SetLog(GetLangText("msgLabWaiting") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabAfter"), $COLOR_RED)
 		If _Sleep(1000) Then Return
 		ClickP($TopLeftClient, 2)
@@ -57,23 +59,23 @@ Func Laboratory()
 	SetLog(GetLangText("msgLabTroopSearch") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabTroopFound"), $COLOR_GREEN)
 	If _Sleep(1000) Then Return
 	_CaptureRegion()
-	If _ColorCheck(_GetPixelColor(535, 506), Hex(0x868686, 6), 20) Or _ColorCheck(_GetPixelColor(580, 511), Hex(0x848484, 6), 20) Then
+	If _ColorCheck(_GetPixelColor(535, 30+506), Hex(0x868686, 6), 20) Or _ColorCheck(_GetPixelColor(580, 30+511), Hex(0x848484, 6), 20) Then
 		SetLog(GetLangText("msgLabWaiting") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabAfter"), $COLOR_RED)
 		If _Sleep(1000) Then Return
 		ClickP($TopLeftClient, 2)
 	Else
-		If _ColorCheck(_GetPixelColor(558, 489), Hex(0xE70A12, 6), 20) Or _ColorCheck(_GetPixelColor(558, 489), Hex(0xE70A12, 6), 20) Then
+		If _ColorCheck(_GetPixelColor(558, 30+489), Hex(0xE70A12, 6), 20) Or _ColorCheck(_GetPixelColor(558, 30+489), Hex(0xE70A12, 6), 20) Then
 			SetLog(GetLangText("msgLabLowElix") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_RED)
 			If _Sleep(1000) Then Return
 			ClickP($TopLeftClient, 2)
 		Else
-			If _ColorCheck(_GetPixelColor(558, 489), Hex(0xE70A12, 6), 20) And _ColorCheck(_GetPixelColor(577, 498), Hex(0x2A2A2A, 6), 20) Then
+			If _ColorCheck(_GetPixelColor(558, 30+489), Hex(0xE70A12, 6), 20) And _ColorCheck(_GetPixelColor(577, 30+498), Hex(0x2A2A2A, 6), 20) Then
 				SetLog(GetLangText("msgLabLowDE") & GUICtrlRead($cmbLaboratory) & "...", $COLOR_RED)
 				If _Sleep(1000) Then Return
 				ClickP($TopLeftClient, 2)
 			Else
-				If _ColorCheck(_GetPixelColor(558, 489), Hex(0xFFFFFF, 6), 20) = True Then
-					Click(558, 489) ; Click Upgrade troops
+				If _ColorCheck(_GetPixelColor(558, 30+489), Hex(0xFFFFFF, 6), 20) = True Then
+					Click(558, 30+489) ; Click Upgrade troops
 					SetLog(GetLangText("msgLabUpgrade") & GUICtrlRead($cmbLaboratory) & GetLangText("msgLabDone"), $COLOR_GREEN)
 					If _Sleep(1000) Then Return
 					ClickP($TopLeftClient, 2)

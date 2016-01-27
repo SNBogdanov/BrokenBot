@@ -2,6 +2,7 @@ Global $myBarrackPos[4][2] = [[250, 30+550], [310, 30+550], [370, 30+550], [430,
 Global $myDarkBarrackPos[2][2] = [[520, 30+550], [580, 30+550]]
 Global $mySpellFactoryPos[2][2] = [[660, 30+550], [720, 30+550]]
 Global $OverviewButton[2] = [38, 587]
+;Global $OverviewButton[2] = [38, 638]
 
 Global $NeedsToBrew = False
 

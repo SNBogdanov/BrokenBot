@@ -81,6 +81,7 @@ $E[3][10] = @ScriptDir & "\images\ELIX4\E12F9.bmp"
 					$Area[$s][$p][0] = _ImageSearch($E[$s][$p], 1, $IS_x[$p][0], $IS_y[$p][0], $Tolerance[$s][$p] + $AdjustTolerance)
 					If $Area[$s][$p][0] > 0 Then
 						$ZC = 1
+				 		SetLog("ImageSearch file E " & $s & " " & $p & " at x: " & $IS_x[$p][0] & " y: " & $IS_y[$p][0], $COLOR_GREEN)
 						ExitLoop (2)
 					EndIf
 				Else

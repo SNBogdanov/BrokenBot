@@ -99,7 +99,9 @@ Func checkObstacles($Reset= true) ;Checks if something is in the way for mainscr
 	EndIf
 	If  _WaitForColor(698, 160+24, Hex(0xD80408, 6), 16, 0.1) Then
 		SetLog("1")
-		ClickP($TopLeftClient, 2, 250)
+;		ClickP($TopLeftClient, 2, 250)
+		Click(698,184) ;Click away If things are open
+;		ClickP($TopLeftClient, 2, 250)
 		Return True
 	EndIf
 
@@ -107,12 +109,12 @@ Func checkObstacles($Reset= true) ;Checks if something is in the way for mainscr
 ;SetLog($i&":"&_GetPixelColor(20+284, $i+28))
 ;Next
 	If _ColorCheck(_GetPixelColor(20+284, 30+28), Hex(0x215B69, 6), 20) Then
-		SetLog("2")
+		SetLog("Click away If things are open")
 		Click(1, 1) ;Click away If things are open
 		Return True
 	EndIf
 	If _ColorCheck(_GetPixelColor(819, 30+55), Hex(0x682764, 6), 20) Then
-		SetLog("3")
+		SetLog("Close dialog")
 		Click(819, 30+55) ;Clicks X
 		Return True
 	EndIf
@@ -123,43 +125,54 @@ Func checkObstacles($Reset= true) ;Checks if something is in the way for mainscr
 	EndIf
 
 	If _ColorCheck(_GetPixelColor(822, 30+48), Hex(0xD80408, 6), 20) Or _ColorCheck(_GetPixelColor(830, 30+59), Hex(0xD80408, 6), 20) Then
-		SetLog("4")
+		SetLog("Close dialog")
 		Click(822, 30+48) ;Clicks X
 		Return True
 	EndIf
 	EndIf
 
 	If _ColorCheck(_GetPixelColor(331, 30+330), Hex(0xF0A03B, 6), 20) Then
-		SetLog("5")
+		SetLog("Close Chat")
 		Click(331, 30+330) ;Clicks chat thing
 		If _Sleep(1000) Then Return
 		Return True
 	EndIf
 
 	If _ColorCheck(_GetPixelColor(20+429, 30+519), Hex(0xB8E35F, 6), 20) Then
-		SetLog("6")
+		SetLog("Defeat or Victory")
 		Click(20+429, 30+519) ;If in that victory or defeat scene
 		Return True
 	EndIf
+	If _ColorCheck(_GetPixelColor(801, 392), Hex(0x882B18, 6), 20) Then
+		SetLog("During Attack")
+		If _Sleep(30000) Then Return ; 1 Minutes
+		ClickP($TopLeftClient) ;Click Away
+		Return True
+	EndIf
 
-	If _ColorCheck(_GetPixelColor(71, 30+530), Hex(0xC00000, 6), 20) Then
-		SetLog("7")
+	If _ColorCheck(_GetPixelColor(71, 60+530), Hex(0xC00000, 6), 20) Then
+		SetLog("End of battle")
 		ReturnHome(False, False) ;If End battle is available
 		Return True
 	EndIf
 
-	If _ColorCheck(_GetPixelColor(36, 30+523), Hex(0xEE5056, 6), 50)  Then
-		SetLog("8")
+	If _ColorCheck(_GetPixelColor(36, 60+523), Hex(0xEE5056, 6), 50)  Then
+		SetLog("End of battle")
 		ReturnHome(False, False) ;If End battle is available ?????
 		Return True
 	EndIf
-	$Message = _PixelSearch(19, 30+565, 104, 30+580, Hex(0xD9DDCF, 6), 10)
-	If IsArray($Message) Then
-		SetLog("9")
-		Click(67, 30+602);Check if Return Home button available
-		If _Sleep(2000) Then Return
+	If _ColorCheck(_GetPixelColor(49, 645), Hex(0x7E2B16, 6), 50)  Then
+		SetLog("Return Home button")
+		Click(67, 60+602);Check if Return Home button available
 		Return True
 	EndIf
+;	$Message = _PixelSearch(19, 60+565, 104, 60+580, Hex(0xD9DDCF, 6), 10)
+;	If IsArray($Message) Then
+;		SetLog("9")
+;		Click(67, 60+602);Check if Return Home button available
+;		If _Sleep(2000) Then Return
+;		Return True
+;	EndIf
 
 	Return False
 EndFunc   ;==>checkObstacles

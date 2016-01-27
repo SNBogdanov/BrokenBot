@@ -21,7 +21,8 @@ Func Initiate()
 		Local $BSy = ($BSsize[0] > $BSsize[1]) ? $BSsize[1] : $BSsize[0]
 
 		$Running = True
-		If $BSx <> 860 Or $BSy <> 780 Then
+;		If $BSx <> 860 Or $BSy <> 780 Then
+		If $BSx <> 860 Or $BSy <> 732 Then
 			RegWrite($REGISTRY_KEY_DIRECTORY, "FullScreen", "REG_DWORD", "0")
 			RegWrite($REGISTRY_KEY_DIRECTORY, "GuestHeight", "REG_DWORD", $DEFAULT_HEIGHT)
 			RegWrite($REGISTRY_KEY_DIRECTORY, "GuestWidth", "REG_DWORD", $DEFAULT_WIDTH)

@@ -40,6 +40,19 @@ Func ReArm()
 		EndIf
 	EndIf
 
+	;Xbow + Eagle Artillery
+	Local $offColors[2][3] = [[0xFF5FF0, 72, -8], [0xB6C885, 77, 0]]; xbow, elixir, edge
+;	Local $offColors[3][3] = [[0xFF5FF0, 19, 20], [0x727FA4, 70, 7], [0xB6C885, 77, 0]]; xbow, elixir, edge
+	Local $XbowPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF4F7F0, 6), $offColors, 30) ; button start
+	If IsArray($XbowPixel) Then
+		Click($XbowPixel[0] + 20, $XbowPixel[1] + 20) ; Click XbowButton
+		If _WaitForColor(350, 30+420, Hex(0xC83B10, 6), 20, 1) Then
+			Click(515, 30+400)
+			If _Sleep(300) Then Return
+			SetLog(GetLangText("msgRearmedXBow"), $COLOR_ORANGE)
+		EndIf
+	EndIf
+
 	;Inferno
 	Local $offColors[3][3] = [[0x8D7477, 19, 20], [0x574460, 70, 7], [0xF0F1EC, 77, 0]]; inferno, dark, edge
 	Local $InfernoPixel = _MultiPixelSearch($x1, $y1, $x2, $y2, 1, 1, Hex(0xF4F7F0, 6), $offColors, 30)

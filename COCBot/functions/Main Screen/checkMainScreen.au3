@@ -9,6 +9,7 @@ Func checkMainScreen($Check = False, $maxDelay = 20) ;Checks if in main screen
 		While _ColorCheck(_GetPixelColor(284, 28), Hex(0x41B1CD, 6), 20) = False
 			$HWnD = WinGetHandle($Title)
 			If (Not checkObstacles()) And (BitAND(GUICtrlGetState($btnStart), $GUI_HIDE)) Then
+;SetLog("checkMainScreen")
 				Click(126, 762, 1, 500)
 				Local $RunApp = StringReplace(_WinAPI_GetProcessFileName(WinGetProcess($Title)), "Frontend", "RunApp")
 				Run($RunApp & " -p com.supercell.clashofclans -a com.supercell.clashofclans.GameApp")

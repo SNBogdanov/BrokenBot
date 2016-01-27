@@ -1,5 +1,6 @@
 Func _ImageSearch($findImage, $resultPosition, ByRef $x, ByRef $y, $Tolerance)
-	Return _ImageSearchArea($findImage, $resultPosition, 0, 0, 840, 780, $x, $y, $Tolerance)
+;	Return _ImageSearchArea($findImage, $resultPosition, 0, 0, 840, 780, $x, $y, $Tolerance)
+	Return _ImageSearchArea($findImage, $resultPosition, 0, 0, 840, 732, $x, $y, $Tolerance)
 EndFunc   ;==>_ImageSearch
 
 Func _ImageSearchArea($findImage, $resultPosition, $x1, $y1, $right, $bottom, ByRef $x, ByRef $y, $Tolerance)

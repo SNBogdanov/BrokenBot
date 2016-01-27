@@ -14,7 +14,8 @@ Func Standard_PrepareAttack($remaining = False, $AttackMethod = 1, $noPrint = Fa
 	Local $iAlgorithm = ($AttackMethod = 0) ? _GUICtrlComboBox_GetCurSel($cmbDeadAlgorithm) : _GUICtrlComboBox_GetCurSel($cmbAlgorithm)
 	If $AttackMethod = 3 Then $iAlgorithm = 9 ; If sniping then have all troops ready
 	Local $BarrackControl
-	If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;	If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+	If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
 	For $i = 0 To 8
 		Local $troopKind = IdentifyTroopKind($i)
 ;SetLog("IdentifyTroopKind:"&$troopKind)

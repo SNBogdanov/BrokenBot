@@ -271,7 +271,8 @@ EndFunc   ;==>Standard_LaunchTroop
 Func Standard_Attack($AttackMethod = 1)
 
 	_CaptureRegion()
-	$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 780, _GDIPlus_ImageGetPixelFormat($hBitmap))
+;	$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 780, _GDIPlus_ImageGetPixelFormat($hBitmap))
+	$hAttackBitmap = _GDIPlus_BitmapCloneArea($hBitmap, 0, 0, 860, 732, _GDIPlus_ImageGetPixelFormat($hBitmap))
 	$Buffer = _GDIPlus_ImageGetGraphicsContext($hAttackBitmap)
 	If $DebugMode = 1 And $Hide = False Then ActivateOverlay()
 	$BufferAvailable = True
@@ -732,9 +733,12 @@ Func Standard_Attack($AttackMethod = 1)
 				If $collector = 15 And Not IsChecked($chkColAtkElix) Then ContinueLoop
 				If $collector = 16 And Not IsChecked($chkColAtkDE) Then ContinueLoop
 				$max = ($collector = 16) ? (3) : (7)
-				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-				$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding " & $collector & " " & $max & " 1")
-				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+;				$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding " & $collector & " " & $max & " 1")
+				$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding " & $collector & " " & $max & " 1")
+;'				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+				If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 
 				If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 					If $res = $DLLLicense Then
@@ -1031,9 +1035,13 @@ Func Standard_Attack($AttackMethod = 1)
 							If $collector = 15 And Not IsChecked($chkColAtkElix) Then ContinueLoop
 							If $collector = 16 And Not IsChecked($chkColAtkDE) Then ContinueLoop
 							$max = ($recheck = 16) ? (3) : (7)
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-							$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding " & $recheck & " " & $max & " 1")
-							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;							$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding " & $recheck & " " & $max & " 1")
+;							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+							$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding " & $recheck & " " & $max & " 1")
+							If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 
 							If $res <> $DLLFailed And $res <> $DLLTimeout And $res <> $DLLError Then
 								If $res = $DLLLicense Then
@@ -1447,9 +1455,12 @@ Func Standard_DropNukes()
 		EndIf
 	Next
 	If $nSpellQty > 0 Then
-		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
-		$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 16 3 1")
-		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+;		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 780)
+;		$res = CallHelper("0 0 860 780 BrokenBotMatchBuilding 16 3 1")
+;		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 780)
+		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", 10000, 10000, 860, 732)
+		$res = CallHelper("0 0 860 732 BrokenBotMatchBuilding 16 3 1")
+		If $OverlayVisible And Not IsChecked($chkBackground) Then WinMove($frmOverlay, "", $BSpos[0], $BSpos[1], 860, 732)
 		$DEDrills = ""
 		If $res <> $DLLFailed and $res <> $DLLTimeout And $res <> $DLLError Then
 			If $res = $DLLLicense Then

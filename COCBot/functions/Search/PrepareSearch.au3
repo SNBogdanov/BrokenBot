@@ -12,10 +12,10 @@ Func PrepareSearch() ;Click attack button and find match button, will break shie
 		; Is shield active?
 	        If _Sleep(1000) Then Return  ;<--give BS a second to load
 ;		If _WaitForColorArea(513, 416, 5, 5, Hex(0x5DAC10, 6), 50, 1) Then
-		If _WaitForColorArea(300, 30+420, 2, 2, Hex(0xC83C10, 6), 5, 1) Then
-			SetLog("Shield is active", $COLOR_RED)
-			Click(513, 30+416)
-		EndIf
+;		If _WaitForColorArea(300, 30+420, 2, 2, Hex(0xC83C10, 6), 5, 1) Then
+;			SetLog("Shield is active", $COLOR_RED)
+;			Click(513, 30+416)
+;		EndIf
 		If _WaitForColorArea(23, 60+523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then Return True
 	Else
 		If _WaitForColorArea(287, 513, 5, 5, Hex(0xF0B028, 6), 50) Then
@@ -23,10 +23,10 @@ Func PrepareSearch() ;Click attack button and find match button, will break shie
 			; Is shield active?
 		        If _Sleep(1000) Then Return  ;<--give BS a second to load
 ;		If _WaitForColorArea(513, 416, 5, 5, Hex(0x5DAC10, 6), 50, 1) Then
-			If _WaitForColorArea(300, 30+420, 2, 2, Hex(0xC83C10, 6), 5, 1) Then
-				SetLog("Shield is active", $COLOR_RED)
-				Click(513, 30+416)
-			EndIf
+;			If _WaitForColorArea(300, 30+420, 2, 2, Hex(0xC83C10, 6), 5, 1) Then
+;				SetLog("Shield is active", $COLOR_RED)
+;				Click(513, 30+416)
+;			EndIf
 			If _WaitForColorArea(23, 60+523, 25, 10, Hex(0xEE5056, 6), 50, 5) Then Return True
 		Else
 			SetLog(GetLangText("msgSearchingMatch")&" failed")
