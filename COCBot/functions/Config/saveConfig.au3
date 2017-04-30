@@ -337,6 +337,11 @@ Func saveConfig() ;Saves the controls settings to the config
 	Else
 		IniWrite($config, "config", "stayalive@"&@ComputerName, 0)
 	EndIf
+	If IsChecked($chkMinimizeTray) Then
+		IniWrite($config, "config", "MinimizeTray@"&@ComputerName, 1)
+	Else
+		IniWrite($config, "config", "MinimizeTray@"&@ComputerName, 0)
+	EndIf
 	If IsChecked($chkSpeedBoost) Then
 		IniWrite($config, "config", "speedboost@"&@ComputerName, 1)
 	Else

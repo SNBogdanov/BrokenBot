@@ -44,6 +44,7 @@ GUIRegisterMsg($WM_COMMAND, "GUIControl")
 GUIRegisterMsg($WM_SYSCOMMAND, "GUIControl")
 GUIRegisterMsg(0x0003, "_WinMoved")
 OnAutoItExitRegister("_PowerResetState")
+GUISetOnEvent($GUI_EVENT_MINIMIZE, 'MinimizeTray', $frmBot) ; Minimize to systray
 
 ; Initialize everything
 DirCreate($dirLogs)
@@ -127,6 +128,15 @@ While 1
 		btnStart()
 	EndIf
 	Switch TrayGetMsg()
+		Case $tiMinimizeTray
+			If $isMinimizeTray Then
+			   GUISetState(@SW_SHOW, $frmBot)
+			   GUISetState(@SW_RESTORE, $frmBot)
+			   $isMinimizeTray = False
+			Else
+			   GUISetState(@SW_HIDE, $frmBot)
+			   $isMinimizeTray = True
+			EndIf
 		Case $tiAbout
 			MsgBox(64 + $MB_APPLMODAL + $MB_TOPMOST, $sBotTitle, "Clash of Clans Bot" & @CRLF & @CRLF & _
 					"Version: " & $sBotVersion & @CRLF & _

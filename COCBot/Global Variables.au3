@@ -420,3 +420,7 @@ Global $ilblFontName=""
 Global $ilblFontSize=0
 
 Global $ClearAllPushes=0
+
+Global $chkMinimizeTray
+Global $tiMinimizeTray
+Global $isMinimizeTray=False ; whether window is minimized to tray

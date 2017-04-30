@@ -62,8 +62,8 @@ Func readConfig() ;Reads config and sets it to the variables
 	$ichkUpgradeQueen = IniRead($config, "Upgrade", "UpQueen", "0")	;==>upgradequeen
 	$itxtKeepFreeBuilder = IniRead($config, "Upgrade", "KeepFreeBuilder", "1") ;==>FreeBuilderBox
 
-	$iinpUPMinimumGold= IniRead($config, "Upgrade", "UpgradeMinimumGold", "0") 
-	$iinpUPMinimumElixir= IniRead($config, "Upgrade", "UpgradeMinimumElixir", "0") 
+	$iinpUPMinimumGold= IniRead($config, "Upgrade", "UpgradeMinimumGold", "0")
+	$iinpUPMinimumElixir= IniRead($config, "Upgrade", "UpgradeMinimumElixir", "0")
 
 	;Laboratory
 	$ichkLab = IniRead($config, "upgrade", "auto-uptroops", "0")
@@ -74,28 +74,28 @@ Func readConfig() ;Reads config and sets it to the variables
 ;	$ichkUpgrade2 = IniRead($config, "upgrade", "auto-upgrade2", "0")
 ;	$ichkUpgrade3 = IniRead($config, "upgrade", "auto-upgrade3", "0")
 ;
-;	$itxtUpgradeX1 = IniRead($config, "upgrade", "PosX1", "")	
-;	$itxtUpgradeY1 = IniRead($config, "upgrade", "PosY1", "")	
+;	$itxtUpgradeX1 = IniRead($config, "upgrade", "PosX1", "")
+;	$itxtUpgradeY1 = IniRead($config, "upgrade", "PosY1", "")
 ;	if $ichkUpgrade1=0 Or $itxtUpgradeX1 = "" Or $itxtUpgradeY1 ="" Then
 ;		$ichkUpgrade1=0
 ;		$itxtUpgradeX1 = ""
-;		$itxtUpgradeY1 ="" 
+;		$itxtUpgradeY1 =""
 ;	EndIf
-;	$itxtUpgradeX2 = IniRead($config, "upgrade", "PosX2", "")	
-;	$itxtUpgradeY2 = IniRead($config, "upgrade", "PosY2", "")	
+;	$itxtUpgradeX2 = IniRead($config, "upgrade", "PosX2", "")
+;	$itxtUpgradeY2 = IniRead($config, "upgrade", "PosY2", "")
 ;	if $ichkUpgrade2=0 Or $itxtUpgradeX2 = "" Or $itxtUpgradeY2 ="" Then
 ;		$ichkUpgrade2=0
 ;		$itxtUpgradeX2 = ""
-;		$itxtUpgradeY2 ="" 
+;		$itxtUpgradeY2 =""
 ;	EndIf
-;	$itxtUpgradeX3 = IniRead($config, "upgrade", "PosX3", "")	
-;	$itxtUpgradeY3 = IniRead($config, "upgrade", "PosY3", "")	
+;	$itxtUpgradeX3 = IniRead($config, "upgrade", "PosX3", "")
+;	$itxtUpgradeY3 = IniRead($config, "upgrade", "PosY3", "")
 ;	if $ichkUpgrade3=0 Or $itxtUpgradeX3 = "" Or $itxtUpgradeY3 ="" Then
 ;		$ichkUpgrade3=0
 ;		$itxtUpgradeX3 = ""
-;		$itxtUpgradeY3 ="" 
+;		$itxtUpgradeY3 =""
 ;	EndIf
-;	If $ichkUpgrade1 = 1 Then 
+;	If $ichkUpgrade1 = 1 Then
 ;       	GUICtrlSetState($chkUpgrade1, $GUI_CHECKED)
 ;		GUICtrlSetState($btnLocateUp1, $GUI_ENABLE)
 ;	Else
@@ -105,7 +105,7 @@ Func readConfig() ;Reads config and sets it to the variables
 ;	GUICtrlSetData($txtUpgradeX1, $itxtUpgradeX1)
 ;	GUICtrlSetData($txtUpgradeY1, $itxtUpgradeY1)
 ;
-;	If $ichkUpgrade2 = 1 Then 
+;	If $ichkUpgrade2 = 1 Then
 ;	        GUICtrlSetState($chkUpgrade2, $GUI_CHECKED)
 ;		GUICtrlSetState($btnLocateUp2, $GUI_ENABLE)
 ;	Else
@@ -115,7 +115,7 @@ Func readConfig() ;Reads config and sets it to the variables
 ;	GUICtrlSetData($txtUpgradeX2, $itxtUpgradeX2)
 ;	GUICtrlSetData($txtUpgradeY2, $itxtUpgradeY2)
 ;
-;	If $ichkUpgrade3 = 1 Then 
+;	If $ichkUpgrade3 = 1 Then
 ;	        GUICtrlSetState($chkUpgrade3, $GUI_CHECKED)
 ;		GUICtrlSetState($btnLocateUp3, $GUI_ENABLE)
 ;	Else
@@ -184,7 +184,7 @@ Func readConfig() ;Reads config and sets it to the variables
 	Else
 		GUICtrlSetState($chkBackground, $GUI_UNCHECKED)
 	EndIf
-	$ichkForceBS=IniRead($config, "config", "ForceBS@"&@ComputerName, "0") 
+	$ichkForceBS=IniRead($config, "config", "ForceBS@"&@ComputerName, "0")
 	If IniRead($config, "config", "chkUpdate@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkUpdate, $GUI_CHECKED)
 	Else
@@ -194,6 +194,11 @@ Func readConfig() ;Reads config and sets it to the variables
 		GUICtrlSetState($chkStayAlive, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkStayAlive, $GUI_UNCHECKED)
+	EndIf
+	If IniRead($config, "config", "MinimizeTray@"&@ComputerName, "0") = 1 Then
+		GUICtrlSetState($chkMinimizeTray, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkMinimizeTray, $GUI_UNCHECKED)
 	EndIf
 	If IniRead($config, "config", "speedboost@"&@ComputerName, "0") = 1 Then
 		GUICtrlSetState($chkSpeedBoost, $GUI_CHECKED)
